@@ -1,0 +1,9 @@
+.center-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*# sourceMappingURL=landing-page.component.css.map */

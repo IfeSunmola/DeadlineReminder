@@ -1,0 +1,33 @@
+<div class="container-fluid center-container col-xl-10 col-xxl-8 px-4 py-5">
+	<div class="row align-items-center g-lg-5 py-5">
+		<div class="col-lg-7 text-bg-dark text-center text-lg-start">
+			<h1 class="display-4 fw-bold lh-1 mb-3">Due Date Reminder</h1>
+
+			<p class="col-lg-10 fs-4">Do you want to keep getting reminders for upcoming due dates? And ignore all of them till there's
+				only
+				30 minutes left? Sign up now to get access to this life changing feature.</p>
+		</div>
+
+		<div class="col-md-10 mx-auto col-lg-5">
+			<ul activeId="login" ngbNav #nav="ngbNav" class="justify-content-around">
+				<li ngbNavItem="login" class="">
+					<a ngbNavLink class="btn btn-primary link-light">Login</a>
+					<ng-template ngbNavContent>
+						<app-login-form></app-login-form>
+					</ng-template>
+				</li>
+
+				<li ngbNavItem="create-account">
+					<a ngbNavLink class="btn  btn-primary link-light">Create an Account</a>
+					<ng-template ngbNavContent>
+						<app-register-form></app-register-form>
+					</ng-template>
+				</li>
+			</ul>
+
+			<!--Displays the forms-->
+			<div [ngbNavOutlet]="nav" class="mt-5"></div>
+
+		</div>
+	</div>
+</div>
