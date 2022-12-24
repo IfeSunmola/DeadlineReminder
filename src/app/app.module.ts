@@ -7,19 +7,23 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LoginFormComponent } from './landing-page/login-form/login-form.component';
 import { RegisterFormComponent } from './landing-page/register-form/register-form.component';
+import { UserLandingPageComponent } from './user-landing-page/user-landing-page.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
     LoginFormComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    UserLandingPageComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    NgbModule
-  ],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		NgbModule,
+		FormsModule
+	],
   providers: [],
   bootstrap: [AppComponent]
 })
