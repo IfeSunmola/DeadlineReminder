@@ -6,9 +6,17 @@ $primary: #00406C;
 $secondary: #00253E;
 $light: #ffffff;
 $dark: #00111C;
+$info: #00131f;
+
 @import "../node_modules/bootstrap/scss/bootstrap";
 
-// Then add additional custom code here
 body {
   background-color: $dark;
+}
+
+//To change the color of AM/PM in the new deadline form. It's supposed to be in user-landing-page.component.scss but it doesn't work there.
+// I've spent two days on this already. Leaving it here.
+:root ngb-timepicker fieldset div .ngb-tp-meridian button {
+  background-color: white;
+  color: black;
 }
