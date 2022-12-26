@@ -27,16 +27,18 @@
 				<h4 class="modal-title text-center " id="modal-basic-title">Add New Deadline</h4>
 			</div>
 
-			<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+			<button type="button" class="btn-close btn-close-light" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
 		</div>
 
 		<div class="modal-body">
-			<form class="p-4 p-md-5 rounded-3">
+			<!--			<form class="p-4 p-md-5 rounded-3">-->
+			<form>
 				<!--Start Title-->
 				<div class="mb-3 row">
 					<label for="deadlineTitle" class="col-sm-3 col-form-label">Title</label>
 					<div class="col-sm-9">
-						<input type="text" class="form-control" id="deadlineTitle">
+						<input [(ngModel)]="title" name="title" ngbAutoFocus type="text" class="form-control" id="deadlineTitle"
+							   placeholder="Research Essay">
 					</div>
 				</div>
 				<!--End Title-->
@@ -45,8 +47,9 @@
 				<div class="mb-3 row">
 					<label class="col-sm-3 col-form-label">Due Date</label>
 					<div class="col-sm-9">
-						<input autocomplete="off" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()" class="form-control"
-							   [minDate]="minDate" placeholder="Due On..." name="datePicker" [(ngModel)]="model"/>
+						<input [(ngModel)]="dueDate" name="datePicker" autocomplete="off" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()"
+							   class="form-control"
+							   [minDate]="minDate" placeholder="Due On..."/>
 					</div>
 				</div>
 				<!--End Date-->
@@ -55,68 +58,41 @@
 				<div class="mb-3 row time-picker">
 					<label class="col-sm-3 col-form-label">Time</label>
 					<div class="col-sm-9">
-						<ngb-timepicker name="timePicker" [(ngModel)]="minTime" [meridian]="true"
+						<ngb-timepicker [(ngModel)]="dueTime" name="timePicker" [meridian]="true"
 										[spinners]="false"></ngb-timepicker>
 					</div>
 				</div>
 				<!--End Time-->
 
-				<!--Start Remind Me-->
-				<div class="mb-3 row">
-					<label class="col-sm-3 col-form-label">Remind Me</label>
-					<div class="col-sm-9">
-						<div class="input-group mb-3">
-							<select class="form-select" aria-label="Default select example">
-								<option selected>Select one</option>
-								<option value="1">30 minutes</option>
-								<option value="2">1 hour</option>
-								<option value="3">2 hours</option>
-								<option value="4">2 hours</option>
-								<option value="5">3 hours</option>
-								<option value="6">4 hours</option>
-							</select>
-							<span class="form-control">Before</span>
+				<!--Start How early ...-->
+				<div class="mb-3 row text-center">
+					<div class="col">
+						How early do you want to be reminded?
+					</div>
+				</div>
+				<!--End How early ...-->
+
+				<!--Start showing checkboxes-->
+				<div class="mb-3 row gy-2">
+					<div class="col-6 col-sm-4" *ngFor="let option of options">
+						<div class="row">
+							<div class="col-1">
+								<input [checked]="option.isChecked" class="form-check-input" type="checkbox" id="{{option.name}}"
+									   value="{{option.name}}">
+							</div>
+							<div class="col">
+								<label class="form-check-label" for="{{option.name}}">{{option.name}}</label>
+							</div>
 						</div>
 					</div>
 				</div>
-				<!--End Remind Me-->
+				<!--End showing checkboxes-->
 			</form>
 		</div>
 
 		<div class="modal-footer d-flex justify-content-evenly">
 			<button type="button" class="btn btn-primary btn-lg" (click)="modal.close('Save click')">Save</button>
-			<button type="button" class="btn btn-outline-dark btn-lg" (click)="modal.close('Cancel Button')">Cancel</button>
+			<button type="button" class="btn btn-outline-light btn-lg" (click)="modal.close('Cancel Button')">Cancel</button>
 		</div>
 	</div>
 </ng-template>
-
-
-<!--<div class="col-sm-6 col-md-6 col-lg-6 btn-group">-->
-<!--	<input type="checkbox" class="btn-check" id="1" autocomplete="off">-->
-<!--	<label class="btn btn-outline-primary text-light" for="1">30 MINUTES BEFORE</label>-->
-<!--</div>-->
-
-<!--<div class="col-sm-6 col-md-6 col-lg-6 btn-group">-->
-<!--	<input type="checkbox" class="btn-check" id="2" autocomplete="off">-->
-<!--	<label class="btn btn-outline-primary text-light" for="2">30 MINUTES BEFORE</label>-->
-<!--</div>-->
-
-<!--<div class="col-sm-6 col-md-6 col-lg-6 btn-group">-->
-<!--	<input type="checkbox" class="btn-check" id="3" autocomplete="off">-->
-<!--	<label class="btn btn-outline-primary text-light" for="3">30 MINUTES BEFORE</label>-->
-<!--</div>-->
-
-<!--<div class="col-sm-6 col-md-6 col-lg-6 btn-group">-->
-<!--	<input type="checkbox" class="btn-check" id="4" autocomplete="off">-->
-<!--	<label class="btn btn-outline-primary text-light" for="4">30 MINUTES BEFORE</label>-->
-<!--</div>-->
-
-<!--<div class="col-sm-6 col-md-6 col-lg-6 btn-group">-->
-<!--	<input type="checkbox" class="btn-check" id="5" autocomplete="off">-->
-<!--	<label class="btn btn-outline-primary text-light" for="5">30 MINUTES BEFORE</label>-->
-<!--</div>-->
-
-<!--<div class="col-sm-6 col-md-6 col-lg-6 btn-group">-->
-<!--	<input type="checkbox" class="btn-check" id="6" autocomplete="off">-->
-<!--	<label class="btn btn-outline-primary text-light" for="6">30 MINUTES BEFORE</label>-->
-<!--</div>-->
