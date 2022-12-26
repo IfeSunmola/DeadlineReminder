@@ -1,0 +1,7 @@
+/*Needed to center the 'Deadline Reminder' when the screen goes below 767*/
+@media only screen and (max-width: 767px) {
+  .header-center {
+    width: 100%;
+    text-align: center;
+  }
+}
