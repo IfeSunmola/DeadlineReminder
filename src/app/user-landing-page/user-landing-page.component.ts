@@ -1,5 +1,5 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDateStruct, NgbModal, NgbModalRef, NgbTimeStruct} from "@ng-bootstrap/ng-bootstrap";
 import {Option} from "./Option";
 import {FormBuilder} from "@angular/forms";
 
@@ -9,12 +9,13 @@ import {FormBuilder} from "@angular/forms";
 	styleUrls: ['./user-landing-page.component.scss']
 })
 export class UserLandingPageComponent implements OnInit {
-	minDate: any = {year: 0, month: 0, day: 0};
+	minDate!: { year: number, month: number, day: number }; // is updated in openAddDeadlineModal
 
+	// Form Data
 	options: Option[] = []
-	title: string = "";
-	dueDate: string = "";
-	dueTime: string = "";
+	title!: string;
+	dueDate!: NgbDateStruct;
+	dueTime!: NgbTimeStruct;
 
 
 	constructor(private modalService: NgbModal) {
@@ -40,5 +41,14 @@ export class UserLandingPageComponent implements OnInit {
 		this.modalService.open(content, {centered: true});
 	}
 
+	onSubmit(modal: NgbModalRef, newDeadlineForm: HTMLFormElement) {
+		console.log("Form has been submitted. Payload: ");
+		console.log(`Title:  ${this.title}`);
+		console.log(`Due Date:  ${this.dueDate.day}/${this.dueDate.month}/${this.dueDate.year}`);
+		console.log(`Due Time:  ${this.dueTime.hour}:${this.dueTime.minute}`);
+
+		newDeadlineForm.reset()
+		modal.close();
+	}
 }
 

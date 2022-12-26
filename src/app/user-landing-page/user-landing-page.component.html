@@ -31,8 +31,7 @@
 		</div>
 
 		<div class="modal-body">
-			<!--			<form class="p-4 p-md-5 rounded-3">-->
-			<form>
+			<form (ngSubmit)="onSubmit(modal, newDeadlineForm)" #newDeadlineForm id="newDeadlineForm">
 				<!--Start Title-->
 				<div class="mb-3 row">
 					<label for="deadlineTitle" class="col-sm-3 col-form-label">Title</label>
@@ -47,7 +46,7 @@
 				<div class="mb-3 row">
 					<label class="col-sm-3 col-form-label">Due Date</label>
 					<div class="col-sm-9">
-						<input [(ngModel)]="dueDate" name="datePicker" autocomplete="off" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()"
+						<input (keydown)="d.open()" [(ngModel)]="dueDate" name="datePicker" autocomplete="off" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()"
 							   class="form-control"
 							   [minDate]="minDate" placeholder="Due On..."/>
 					</div>
@@ -91,7 +90,7 @@
 		</div>
 
 		<div class="modal-footer d-flex justify-content-evenly">
-			<button type="button" class="btn btn-primary btn-lg" (click)="modal.close('Save click')">Save</button>
+			<button type="submit" form="newDeadlineForm" class="btn btn-primary btn-lg">Save</button>
 			<button type="button" class="btn btn-outline-light btn-lg" (click)="modal.close('Cancel Button')">Cancel</button>
 		</div>
 	</div>
