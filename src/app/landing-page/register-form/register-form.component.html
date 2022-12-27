@@ -1,21 +1,25 @@
 <form class="p-4 p-md-5 border rounded-3">
 	<div class="form-floating mb-3">
-		<input type="text" class="form-control" id="firstName" placeholder="Toph">
+		<input type="text" class="form-control" id="firstName" placeholder="Toph" name="firstName"
+			   [(ngModel)]="newRegister.firstName">
 		<label for="firstName">First Name</label>
 	</div>
 
 	<div class="form-floating mb-3">
-		<input type="email" class="form-control" id="email" placeholder="name@example.com">
+		<input type="email" class="form-control" id="email" placeholder="name@example.com" name="email"
+			   [(ngModel)]="newRegister.email">
 		<label for="email">Email address</label>
 	</div>
 
 	<div class="form-floating mb-3">
-		<input type="password" class="form-control" id="password" placeholder="Password">
+		<input type="password" class="form-control" id="password" placeholder="Password" name="password"
+			   [(ngModel)]="newRegister.password">
 		<label for="password">Password</label>
 	</div>
 
 	<div class="form-floating mb-3">
-		<input type="password" class="form-control" id="confirmPassword" placeholder="Password, again ...">
+		<input type="password" class="form-control" id="confirmPassword" placeholder="Password, again ..." name="confirmPassword"
+			   [(ngModel)]="newRegister.confirmPassword">
 		<label for="confirmPassword">Password, again </label>
 	</div>
 
