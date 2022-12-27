@@ -1,3 +1,5 @@
+<app-new-deadline #newDeadlineComponentRef></app-new-deadline> <!--Is shown when the user clicks add new deadline-->
+
 <nav class="navbar navbar-expand-md mb-3 bg-secondary ">
 	<div class="container-fluid">
 		<div class="header-center d-md-flex justify-content-md-start d-sm-flex justify-content-sm-center">
@@ -5,12 +7,9 @@
 		</div>
 
 		<div [ngbCollapse]="false" class="collapse navbar-collapse">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0
-      d-md-flex justify-content-md-end
-      text-center
-      w-100">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0 d-md-flex justify-content-md-end text-center w-100">
 				<li class="nav-item me-md-5 mt-3 mt-md-0">
-					<button class="btn btn-primary btn-lg" (click)="openAddDeadlineModal(content)">Add New Deadline</button>
+					<button class="btn btn-primary btn-lg" (click)="openNewDeadlineModal(newDeadlineComponentRef)">Add New Deadline</button>
 				</li>
 				<li class="nav-item ms-md-0 mt-3 mt-md-0">
 					<button class="btn btn-primary btn-lg">Your Account</button>
@@ -19,79 +18,3 @@
 		</div>
 	</div>
 </nav>
-
-<ng-template #content let-modal>
-	<div class="bg-secondary text-bg-secondary">
-		<div class="modal-header">
-			<div class="d-flex justify-content-center w-100">
-				<h4 class="modal-title text-center " id="modal-basic-title">Add New Deadline</h4>
-			</div>
-
-			<button type="button" class="btn-close btn-close-light" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-		</div>
-
-		<div class="modal-body">
-			<form (ngSubmit)="onSubmit(modal, newDeadlineForm)" #newDeadlineForm id="newDeadlineForm">
-				<!--Start Title-->
-				<div class="mb-3 row">
-					<label for="deadlineTitle" class="col-sm-3 col-form-label">Title</label>
-					<div class="col-sm-9">
-						<input [(ngModel)]="title" name="title" ngbAutoFocus type="text" class="form-control" id="deadlineTitle"
-							   placeholder="Research Essay">
-					</div>
-				</div>
-				<!--End Title-->
-
-				<!--Start Date-->
-				<div class="mb-3 row">
-					<label class="col-sm-3 col-form-label">Due Date</label>
-					<div class="col-sm-9">
-						<input (keydown)="d.open()" [(ngModel)]="dueDate" name="datePicker" autocomplete="off" ngbDatepicker #d="ngbDatepicker" (click)="d.toggle()"
-							   class="form-control"
-							   [minDate]="minDate" placeholder="Due On..."/>
-					</div>
-				</div>
-				<!--End Date-->
-
-				<!--Start Time-->
-				<div class="mb-3 row time-picker">
-					<label class="col-sm-3 col-form-label">Time</label>
-					<div class="col-sm-9">
-						<ngb-timepicker [(ngModel)]="dueTime" name="timePicker" [meridian]="true"
-										[spinners]="false"></ngb-timepicker>
-					</div>
-				</div>
-				<!--End Time-->
-
-				<!--Start How early ...-->
-				<div class="mb-3 row text-center">
-					<div class="col">
-						How early do you want to be reminded?
-					</div>
-				</div>
-				<!--End How early ...-->
-
-				<!--Start showing checkboxes-->
-				<div class="mb-3 row gy-2">
-					<div class="col-6 col-sm-4" *ngFor="let option of options">
-						<div class="row">
-							<div class="col-1">
-								<input [checked]="option.isChecked" class="form-check-input" type="checkbox" id="{{option.name}}"
-									   value="{{option.name}}">
-							</div>
-							<div class="col">
-								<label class="form-check-label" for="{{option.name}}">{{option.name}}</label>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--End showing checkboxes-->
-			</form>
-		</div>
-
-		<div class="modal-footer d-flex justify-content-evenly">
-			<button type="submit" form="newDeadlineForm" class="btn btn-primary btn-lg">Save</button>
-			<button type="button" class="btn btn-outline-light btn-lg" (click)="modal.close('Cancel Button')">Cancel</button>
-		</div>
-	</div>
-</ng-template>
