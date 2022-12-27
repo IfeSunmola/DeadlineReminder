@@ -3,4 +3,5 @@ export class RegisterData {
 	email: string = "";
 	password: string = "";
 	confirmPassword: string = "";
+	agreedToTerms: boolean = false;
 }
