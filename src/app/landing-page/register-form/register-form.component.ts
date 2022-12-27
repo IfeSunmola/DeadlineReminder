@@ -7,5 +7,5 @@ import {RegisterData} from "./register-data";
 	styleUrls: ['./register-form.component.scss']
 })
 export class RegisterFormComponent {
-	newRegister: RegisterData = new RegisterData();
+	registerData: RegisterData = new RegisterData();
 }
