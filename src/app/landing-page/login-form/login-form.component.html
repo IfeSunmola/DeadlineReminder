@@ -1,0 +1,18 @@
+<form class="p-4 p-md-5 border rounded-3">
+	<div class="form-floating mb-3">
+		<input type="email" class="form-control" id="email" placeholder="name@example.com" name="email" [(ngModel)]="loginData.email">
+		<label for="email">Email address</label>
+	</div>
+
+	<div class="form-floating mb-3">
+		<input type="password" class="form-control" id="password" placeholder="Password" name="password" [(ngModel)]="loginData.password">
+		<label for="password">Password</label>
+	</div>
+
+	<div class="form-check form-switch  mb-3">
+		<input checked class="form-check-input" value="remember-me" type="checkbox" name="rememberMe" [(ngModel)]="loginData.rememberMe">
+		<label class="text-bg-dark form-check-label">Remember me on this device for 14 days</label>
+	</div>
+
+	<button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+</form>
