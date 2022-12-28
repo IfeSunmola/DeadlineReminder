@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 /**
  * This exception will be thrown when the email is not found in the database.
  * <br>
- * Normally, we throw UsernameNotFoundException butm this makes it clear because we use email, not username
+ * Normally, we throw UsernameNotFoundException but this makes it clear because we use email, not username
  *
  * @author Ife Sunmola
  */
