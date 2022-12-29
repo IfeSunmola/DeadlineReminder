@@ -34,6 +34,13 @@ public class AuthController {
 
 	@PostMapping("/generate-token")
 	public String token(Authentication auth) {
+		/*
+		 * For some reason, requests directed to this end point don't actually get here if the user info is wrong.
+		 * Add a logger to print the auth object/name, and you'll notice that if the user info is wrong, the logger
+		 * won't print anything. Why is this happening?
+		 *
+		 * I think it has to do Authentication being passed as an argument.
+		 * */
 		log.info("Token requested for user: {}", auth.getName());
 		String token = accountService.generateToken(auth);
 		log.info("Token granted: {}\n", token);
