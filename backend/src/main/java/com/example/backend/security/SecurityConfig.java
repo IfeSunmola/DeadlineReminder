@@ -22,7 +22,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-	private static final String BASE_AUTH_URL = "/accounts/auth";
+	private static final String BASE_AUTH_URL = "/auth";
 	private static final String[] WHITELISTED_URLS = {
 			BASE_AUTH_URL + "/login",
 			BASE_AUTH_URL + "/register",
