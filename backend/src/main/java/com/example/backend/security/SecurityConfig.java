@@ -1,16 +1,18 @@
 package com.example.backend.security;
 
-import com.example.backend.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * @author Ife Sunmola
@@ -26,30 +28,22 @@ public class SecurityConfig {
 			BASE_AUTH_URL + "/register",
 			BASE_AUTH_URL + "/not-logged-in",
 	};
-	private final AuthAccountService authAccountService;
-	private final JwtFilter jwtFilter;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf().disable() //TODO: enable csrf
-				.cors().and()
+				.csrf(AbstractHttpConfigurer::disable) //TODO: enable csrf
+				.cors(AbstractHttpConfigurer::disable) //TODO: enable cors
 				.authorizeHttpRequests((requests) -> requests
 						.requestMatchers(WHITELISTED_URLS).permitAll()
 						.anyRequest().authenticated()
 				)
-				.userDetailsService(authAccountService)
-				.sessionManagement((sessionManagement) -> sessionManagement
+				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+				.sessionManagement((session) -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				)
-				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-				.formLogin((form) -> form
-						.loginProcessingUrl("/accounts/auth/login") // This is giving me serious issues. Just don't change it
-						.permitAll()
-				)
-				.logout(LogoutConfigurer::permitAll)
-		;
-
+				.httpBasic(withDefaults())
+				.logout(LogoutConfigurer::permitAll);
 		return http.build();
 	}
 }

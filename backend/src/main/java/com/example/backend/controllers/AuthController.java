@@ -2,17 +2,15 @@ package com.example.backend.controllers;
 
 import com.example.backend.models.Account;
 import com.example.backend.security.AuthAccountService;
-import com.example.backend.security.jwt.JwtUtils;
 import com.example.backend.services.AccountService;
 import com.example.backend.transfer_objects.LoginData;
 import com.example.backend.transfer_objects.RegisterData;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +25,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/accounts/auth")
 @Slf4j
 public class AuthController {
-	private final JwtUtils jwtUtils;
+
 	private final AuthAccountService authAccountService;
-	private final AuthenticationManager authManager;
+
 	private final AccountService accountService;
 
 	@PostMapping("/register")
@@ -39,8 +37,16 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<Account> doLogin(@RequestBody @Valid LoginData loginData) {
-		return new ResponseEntity<>(accountService.doLogin(loginData), HttpStatus.OK);
+	public String doLogin(@RequestBody @Valid LoginData loginData) {
+		return accountService.generateToken(loginData);
+	}
+
+	@PostMapping("/token")
+	public String token(Authentication auth) {
+		log.debug("Token requested for user: {}", auth.getName());
+		String token = accountService.generateToken(auth);
+		log.debug("Token granted: {}", token);
+		return token;
 	}
 
 	@GetMapping("/not-logged-in")
