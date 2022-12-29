@@ -2,13 +2,8 @@ package com.example.backend.services;
 
 import com.example.backend.models.Account;
 import com.example.backend.repos.AccountRepo;
-import com.example.backend.security.AuthAccount;
-import com.example.backend.security.AuthAccountService;
-import com.example.backend.transfer_objects.LoginData;
 import com.example.backend.transfer_objects.RegisterData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -20,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 
 /**
  * Service class.
@@ -32,8 +28,6 @@ import java.time.temporal.ChronoUnit;
 public class AccountService {
 	private final AccountRepo accountRepo;
 	private final BCryptPasswordEncoder passwordEncoder;
-	private final AuthenticationManager authManager;
-	private final AuthAccountService authAccountService;
 	private final JwtEncoder encoder;
 
 	/**
@@ -63,7 +57,7 @@ public class AccountService {
 	 */
 	public Account createAccount(RegisterData registerData) {
 		Account account = new Account(
-				registerData.getEmail(),
+				registerData.getEmail().toLowerCase(Locale.ROOT),
 				passwordEncoder.encode(registerData.getPassword()),
 				true, //TODO: Email verification
 				registerData.isAcceptedTerms(), // should always be true
@@ -72,27 +66,24 @@ public class AccountService {
 		return accountRepo.save(account);
 	}
 
-	public Account doLogin(LoginData loginData) {
-		System.out.println("LoginData: " + loginData);
-		return accountRepo.findByEmail(loginData.getEmail()).orElse(null);
-	}
-
-	public String generateToken(LoginData loginData) {
-		authManager.authenticate( // throws AuthenticationException if authentication fails. Handled by ExceptionHandlerAdvice
-				new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword()));
-
-		AuthAccount account = authAccountService.loadUserByUsername(loginData.getEmail());
-		return null;
-	}
-
-	public String generateToken(Authentication authentication) {
+	/**
+	 * Method to generate a JWT token for a user
+	 *
+	 * @param auth the authentication object
+	 * @return the generated jwt token
+	 */
+	public String generateToken(Authentication auth) {
+		// By default, the tokens will expire 60 seconds past their actual expiration time. This happens to account for clock drift.
+		// See the bean for JwtDecoder for how to remove the delay
+		// HS256 Algorithm also used as default
 		Instant now = Instant.now();
-		String scope = authentication.getAuthorities().toString();
+		String scope = auth.getAuthorities().toString(); // role
+		String email = auth.getName();
 		JwtClaimsSet claims = JwtClaimsSet.builder()
-				.issuer("self")
+				.issuer("My Issuer ID")
 				.issuedAt(now)
-				.expiresAt(now.plus(1, ChronoUnit.HOURS))
-				.subject(authentication.getName())
+				.expiresAt(now.plus(1, ChronoUnit.MINUTES))
+				.subject(email)
 				.claim("scope", scope)
 				.build();
 		return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
