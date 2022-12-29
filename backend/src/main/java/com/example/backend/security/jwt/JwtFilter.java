@@ -21,7 +21,7 @@ import java.io.IOException;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 /**
- * Package protected class that intercepts requests and checks if the request has a valid JWT token. If the token is valid,
+ * class that intercepts requests and checks if the request has a valid JWT token. If the token is valid,
  * the user is authenticated.
  *
  * @author Ife Sunmola
@@ -29,7 +29,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
  */
 @Component
 @RequiredArgsConstructor
-class JwtFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
 	private final JwtUtils jwtUtils;
 	private final AuthAccountService authAccountService;
 
