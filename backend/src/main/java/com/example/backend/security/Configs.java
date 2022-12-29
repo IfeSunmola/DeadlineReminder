@@ -51,6 +51,16 @@ public class Configs {
 
 	@Bean
 	public JwtDecoder jwtDecoder() {
+		/*
+		* https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html#oauth2resourceserver-jwt-validation-clockskew
+		* Removing the delay:
+		* NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(rsaProperties.publicKey()).build();
+			OAuth2TokenValidator<Jwt> withClockSkew = new DelegatingOAuth2TokenValidator<>(
+										new JwtTimestampValidator(Duration.ofSeconds(0)));
+
+		* jwtDecoder.setJwtValidator(withClockSkew);
+		* return jwtDecoder;
+		* */
 		return NimbusJwtDecoder.withPublicKey(rsaProperties.publicKey()).build();
 	}
 
