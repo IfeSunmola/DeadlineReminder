@@ -22,5 +22,5 @@ public class LoginData {
 	private String password;
 
 	@NotNull(message = "True or False is required")
-	private boolean rememberMe;
+	private Boolean rememberMe;
 }
