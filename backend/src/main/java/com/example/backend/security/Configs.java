@@ -17,8 +17,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Contains all security related beans
@@ -69,20 +67,5 @@ public class Configs {
 		JWK jwk = new RSAKey.Builder(rsaProperties.publicKey()).privateKey(rsaProperties.privateKey()).build();
 		JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
 		return new NimbusJwtEncoder(jwkSource);
-	}
-
-	@Bean //TODO: Remove before prod
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-
-				registry.addMapping("/**")
-						.allowedOrigins("*")
-						.allowedMethods("*")
-						.allowedHeaders("*");
-
-			}
-		};
 	}
 }
