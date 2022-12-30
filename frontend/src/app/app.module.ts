@@ -8,8 +8,11 @@ import {LandingPageComponent} from './landing-page/landing-page.component';
 import {LoginFormComponent} from './landing-page/login-form/login-form.component';
 import {RegisterFormComponent} from './landing-page/register-form/register-form.component';
 import {UserLandingPageComponent} from './user-landing-page/user-landing-page.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NewDeadlineComponent} from './user-landing-page/new-deadline/new-deadline.component';
+import {HttpClientModule} from "@angular/common/http";
+import { ErrorPageComponent } from './error-page/error-page.component';
+
 
 @NgModule({
 	declarations: [
@@ -18,13 +21,16 @@ import {NewDeadlineComponent} from './user-landing-page/new-deadline/new-deadlin
 		LoginFormComponent,
 		RegisterFormComponent,
 		UserLandingPageComponent,
-		NewDeadlineComponent
+		NewDeadlineComponent,
+  ErrorPageComponent
 	],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
 		NgbModule,
-		FormsModule
+		FormsModule,
+		HttpClientModule,
+		ReactiveFormsModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent]
