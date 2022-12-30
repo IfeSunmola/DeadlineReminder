@@ -1,12 +1,12 @@
 package com.example.backend;
 
-import com.example.backend.security.RsaProperties;
+import com.example.backend.security.AppProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(RsaProperties.class)
+@EnableConfigurationProperties(AppProperties.class)
 public class BackendApplication {
 
 	public static void main(String[] args) {

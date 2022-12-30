@@ -6,8 +6,10 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
 /**
+ * This class contains App information that is read from application.properties
+ *
  * @author Ife Sunmola
  */
-@ConfigurationProperties(prefix = "rsa")
-public record RsaProperties(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
+@ConfigurationProperties(prefix = "app")
+public record AppProperties(RSAPublicKey publicKey, RSAPrivateKey privateKey, int jwtExpTime, int jwtExpTimeDefault) {
 }
