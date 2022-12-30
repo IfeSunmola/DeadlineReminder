@@ -2,9 +2,13 @@ package com.example.backend.services;
 
 import com.example.backend.models.Account;
 import com.example.backend.repos.AccountRepo;
+import com.example.backend.security.AppProperties;
 import com.example.backend.transfer_objects.RegisterData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -29,6 +33,8 @@ public class AccountService {
 	private final AccountRepo accountRepo;
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final JwtEncoder encoder;
+	private final AuthenticationManager authManager;
+	private final AppProperties appProps;
 
 	/**
 	 * Method to validate the registration data gotten from the front end
@@ -67,22 +73,43 @@ public class AccountService {
 	}
 
 	/**
-	 * Method to generate a JWT token for a user
+	 * Method to authenticate a user and generate a JWT token for them
+	 *
+	 * @param email    the email of the user
+	 * @param password the password of the user
+	 * @return the user's jwt token
+	 */
+	public String authenticateUser(String email, String password, Boolean stayLoggedIn) {
+		Authentication auth = authManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						email,
+						password
+				)
+		);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+		return generateToken(auth, stayLoggedIn);
+	}
+
+	/**
+	 * private method to generate a JWT token for a user
 	 *
 	 * @param auth the authentication object
 	 * @return the generated jwt token
 	 */
-	public String generateToken(Authentication auth) {
-		// By default, the tokens will expire 60 seconds past their actual expiration time. This happens to account for clock drift.
-		// See the bean for JwtDecoder for how to remove the delay
-		// HS256 Algorithm also used as default
+	private String generateToken(Authentication auth, Boolean stayLoggedIn) {
+		/*
+		 * By default, the tokens will expire 60 seconds past their actual expiration time. This happens to account for clock drift.
+		 * See the bean for JwtDecoder for how to remove the delay. HS256 Algorithm also used as default
+		 **/
 		Instant now = Instant.now();
 		String scope = auth.getAuthorities().toString(); // role
 		String email = auth.getName();
+		int expirationTime = stayLoggedIn ? appProps.jwtExpTime() : appProps.jwtExpTimeDefault();
 		JwtClaimsSet claims = JwtClaimsSet.builder()
 				.issuer("My Issuer ID")
 				.issuedAt(now)
-				.expiresAt(now.plus(1, ChronoUnit.MINUTES))
+				.expiresAt(now.plus(expirationTime, ChronoUnit.DAYS))
 				.subject(email)
 				.claim("scope", scope)
 				.build();
