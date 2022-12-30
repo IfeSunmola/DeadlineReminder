@@ -10,10 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Handles exceptions thrown from anywhere in the application (except
+ * for authentication exceptions as it has been handled)
+ *
  * @author Ife Sunmola
  */
 @RestControllerAdvice
-public class ExceptionHandlerAdvice {
+public class GlobalExceptionHandler {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
