@@ -17,6 +17,8 @@ import java.util.Map;
  * <p>
  * Since we aren't using the isLocked feature of spring security, LockedException will never be thrown. However,
  * it is included here for completeness.
+ * <p>
+ * All exceptions are handled by returning a 401 status code and a message
  *
  * @author Ife Sunmola
  */
