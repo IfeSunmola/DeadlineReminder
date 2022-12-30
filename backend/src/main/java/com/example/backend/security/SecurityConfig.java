@@ -7,15 +7,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 /**
  * @author Ife Sunmola
+ * @see <a href="https://github.com/spring-projects/spring-security-samples/tree/main/servlet/spring-boot/java/jwt/login">From Spring Security</a>
  */
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -24,7 +22,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 	private static final String BASE_AUTH_URL = "/auth";
 	private static final String[] WHITELISTED_URLS = {
-			BASE_AUTH_URL + "/login",
+			BASE_AUTH_URL + "/generate-token",
 			BASE_AUTH_URL + "/register",
 			BASE_AUTH_URL + "/not-logged-in",
 	};
@@ -34,6 +32,7 @@ public class SecurityConfig {
 		http
 				.csrf(AbstractHttpConfigurer::disable) //TODO: enable csrf
 				.cors(AbstractHttpConfigurer::disable) //TODO: enable cors
+				.cors().and()
 				.authorizeHttpRequests((requests) -> requests
 						.requestMatchers(WHITELISTED_URLS).permitAll()
 						.anyRequest().authenticated()
@@ -41,9 +40,17 @@ public class SecurityConfig {
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.sessionManagement((session) -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				)
-				.httpBasic(withDefaults())
-				.logout(LogoutConfigurer::permitAll);
+				);
 		return http.build();
 	}
+
+//	@Bean
+//	public CorsRegistration addCorsMappings() {
+//		return new CorsRegistry().addMapping("/**")
+//				.allowedOrigins("http://localhost:4200")
+//				.allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
+//				.allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers")
+//				.exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+//				.allowCredentials(true).maxAge(3600);
+//	}
 }
