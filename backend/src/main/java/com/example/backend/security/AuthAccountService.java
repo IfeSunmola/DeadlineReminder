@@ -1,9 +1,9 @@
 package com.example.backend.security;
 
-import com.example.backend.exceptions.EmailNotFoundException;
 import com.example.backend.repos.AccountRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,14 +23,14 @@ public class AuthAccountService implements UserDetailsService {
 	 *
 	 * @param email the email to load the user by
 	 * @return the AuthAccount if the email associated to it was found
-	 * @throws EmailNotFoundException if the email was not found in the database
+	 * @throws UsernameNotFoundException if the email was not found in the database
 	 * @author Ife Sunmola
 	 */
 	@Override
-	public AuthAccount loadUserByUsername(String email) throws EmailNotFoundException {
+	public AuthAccount loadUserByUsername(String email) throws UsernameNotFoundException {
 		return new AuthAccount(accountRepo.findByEmail(email)
 				.orElseThrow(
-						() -> new EmailNotFoundException("Email '" + email + "' was not found")
+						() -> new UsernameNotFoundException("Email '" + email + "' was not found")
 				)
 		);
 	}
