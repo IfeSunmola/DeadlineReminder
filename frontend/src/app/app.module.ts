@@ -8,6 +8,9 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { UserHomeComponent } from './user-home/user-home.component';
+import { NewDeadlineComponent } from './user-home/new-deadline/new-deadline.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -16,12 +19,15 @@ import { RegisterComponent } from './register/register.component';
     NavbarComponent,
     LoginComponent,
     RegisterComponent,
+    UserHomeComponent,
+    NewDeadlineComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    NgbModule
-  ],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		NgbModule,
+		FormsModule
+	],
   providers: [],
   bootstrap: [AppComponent]
 })

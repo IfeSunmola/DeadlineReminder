@@ -17,9 +17,15 @@ $theme-colors: (
 // Everything else goes here
 
 .center-in-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
   //@extend .justify-content-center;
+}
+
+// Changes the color of the meridian. It needs to be in the global scss
+:root form ngb-timepicker fieldset div .ngb-tp-meridian button {
+  background-color: white;
+  color: black;
 }
