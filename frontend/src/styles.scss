@@ -15,3 +15,11 @@ $theme-colors: (
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // Everything else goes here
+
+.center-in-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+  //@extend .justify-content-center;
+}

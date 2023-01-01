@@ -7,7 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
-import { GetStartedComponent } from './get-started/get-started.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,7 @@ import { GetStartedComponent } from './get-started/get-started.component';
     LandingPageComponent,
     NavbarComponent,
     LoginComponent,
-    GetStartedComponent
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

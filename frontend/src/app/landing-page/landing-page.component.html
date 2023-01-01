@@ -1,7 +1,15 @@
-<div class="container-fluid text-center d-flex align-items-center justify-content-center" style="min-height: 80vh">
-	<main>
-		<h2>Receive regular reminders about upcoming deadlines and still miss it because you where being lazy</h2>
-		<button routerLink="get-started" class="btn btn-lg" style="background-color: #444444; color: #8bc7fa">Get Started</button>
-	</main>
+<div class="container-fluid center-in-screen">
+	<div class="w-100 text-center">
+		<h2 class="text-center">Receive regular reminders about upcoming deadlines and still miss it because you where being lazy</h2>
+
+		<div class="row gy-3 gx-md-5 mt-md-3 text-center">
+			<div class="col-12 col-md-6 text-xxl-end">
+				<button routerLink="login" class="bg-primary text-light btn btn-lg">Log in</button>
+			</div>
+			<div class="col-12 col-md-6 text-xxl-start">
+				<button routerLink="register" class="bg-primary text-light  btn btn-lg">Create your account</button>
+			</div>
+		</div>
+	</div>
 </div>
 <router-outlet></router-outlet>
