@@ -6,8 +6,8 @@ $body-color: #ffffff;
 $theme-colors: (
         "primary": #0E47A1,
         "dark": #444444,
-        "danger": #CF6679,
-        "success": #198754,
+        "danger": red,
+        "success": green,
         "info": #0dcaf0,
         "warning": #ffc107,
         "light": #FFFFFF,
@@ -15,7 +15,8 @@ $theme-colors: (
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 // Everything else goes here
-
+//@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 .center-in-screen {
   display: flex;
   justify-content: center;
