@@ -11,6 +11,7 @@ import { RegisterComponent } from './register/register.component';
 import { UserHomeComponent } from './user-home/user-home.component';
 import { NewDeadlineComponent } from './user-home/new-deadline/new-deadline.component';
 import {FormsModule} from "@angular/forms";
+import { ScreenErrorComponent } from './screen-error/screen-error.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {FormsModule} from "@angular/forms";
     RegisterComponent,
     UserHomeComponent,
     NewDeadlineComponent,
+    ScreenErrorComponent,
   ],
 	imports: [
 		BrowserModule,
