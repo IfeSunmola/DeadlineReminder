@@ -10,7 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserHomeComponent } from './user-home/user-home.component';
 import { NewDeadlineComponent } from './user-home/new-deadline/new-deadline.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ScreenErrorComponent } from './screen-error/screen-error.component';
 
 @NgModule({
@@ -28,7 +28,8 @@ import { ScreenErrorComponent } from './screen-error/screen-error.component';
 		BrowserModule,
 		AppRoutingModule,
 		NgbModule,
-		FormsModule
+		FormsModule,
+		ReactiveFormsModule
 	],
   providers: [],
   bootstrap: [AppComponent]

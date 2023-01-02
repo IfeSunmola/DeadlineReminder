@@ -1,22 +1,62 @@
-<!--<div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 80vh">-->
 <div class="container-fluid center-in-screen">
 	<div>
 		<h2 class="fs-1 text-center">Registration</h2>
-		<form class="row g-3" method="post">
+		<form [formGroup]="registerForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post" novalidate>
 			<div class="col-md-12">
 				<label for="email" class="form-label">Email</label>
-				<input type="email" class="form-control" id="email">
+				<input formControlName="email" type="email" class="form-control" id="email">
+				<ng-container *ngIf="email?.errors && (email?.dirty || email?.touched)">
+					<span class="text-danger" *ngIf="email?.errors?.['required']">Email is required</span>
+					<span class="text-danger" *ngIf="email?.errors?.['email']">Enter a valid email</span>
+				</ng-container>
+				<ng-container *ngIf="email?.valid">
+					<span class="text-success" *ngIf="email?.valid">Looks good
+						<i class="bi text-success bi-hand-thumbs-up fw-bold"></i></span>
+				</ng-container>
 			</div>
 			<div class="col-md-12">
 				<label for="password" class="form-label">Password</label>
-				<input type="password" class="form-control" id="password">
+				<input formControlName="password" type="password" class="form-control" id="password">
+
+				<ng-container *ngIf="password?.errors && (password?.dirty || password?.touched)">
+					<span class="text-danger" *ngIf="password?.errors?.['required']">Password is required</span>
+					<span class="text-danger" *ngIf="password?.errors?.['minlength']">Keep Typing...</span>
+					<span class="text-danger" *ngIf="password?.errors?.['maxlength']">Why's your password that long?</span>
+				</ng-container>
+
+				<ng-container *ngIf="password?.valid">
+					<span class="text-success" *ngIf="password?.valid">Looks even better
+						<i class="bi text-success bi-check2 fw-bold"></i>
+					</span>
+				</ng-container>
+
 			</div>
 			<div class="col-md-12">
 				<label for="confirmPassword" class="form-label">Confirm Password</label>
-				<input type="password" class="form-control" id="confirmPassword">
+				<input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword">
+				<ng-container *ngIf="registerForm?.errors && (confirmPassword?.dirty || confirmPassword?.touched)">
+					<span class="text-danger" *ngIf="registerForm?.hasError('passwordsNotMatching')">Passwords must match</span>
+				</ng-container>
+
+				<ng-container *ngIf="!registerForm?.errors && confirmPassword?.valid && (confirmPassword?.dirty || confirmPassword?.touched)">
+					<span class="text-success" *ngIf="!registerForm?.hasError('passwordsNotMatching')">Fine, you got it
+					</span>
+				</ng-container>
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-check">
+					<input formControlName="acceptedTerms" class="form-check-input bg-dark" type="checkbox" value="" id="acceptedTerms">
+					<label class="form-check-label" for="acceptedTerms">
+						I agree to the terms and conditions that doesn't exist
+					</label>
+				</div>
+				<ng-container *ngIf="acceptedTerms?.errors && (acceptedTerms?.dirty || acceptedTerms?.touched)">
+					<span class="text-danger" *ngIf="acceptedTerms?.errors?.['required']">Gotta accept :(</span>
+				</ng-container>
 			</div>
 			<div class="col-12 text-center">
-				<button type="submit" class="btn btn-primary btn-lg">Register</button>
+				<button [disabled]="registerForm.invalid" type="submit" class="btn btn-primary btn-lg">Continue</button>
 			</div>
 		</form>
 	</div>
