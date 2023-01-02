@@ -4,12 +4,36 @@ import {LandingPageComponent} from "./landing-page/landing-page.component";
 import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {UserHomeComponent} from "./user-home/user-home.component";
+import {VerifyComponent} from "./register/verify/verify.component";
 
 const routes: Routes = [
-	{path: '', component: LandingPageComponent, pathMatch: 'full'},
-	{path: 'login', component: LoginComponent},
-	{path: 'register', component: RegisterComponent},
-	{path: 'me', component: UserHomeComponent},
+	{
+		path: '',
+		title: 'Welcome',
+		component: LandingPageComponent,
+		pathMatch: 'full'
+	},
+	{
+		path: 'login',
+		title: 'Login',
+		component: LoginComponent
+	},
+	{
+		path: 'register',
+		title: 'Register',
+		component: RegisterComponent
+	},
+	{
+		path: 'register/verify',
+		title: 'Verify your account',
+		component: VerifyComponent
+	},
+	{
+		path: 'me',
+		title: 'Your dashboard',
+		component: UserHomeComponent
+	},
+
 ];
 
 @NgModule({

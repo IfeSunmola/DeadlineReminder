@@ -12,6 +12,7 @@ import { UserHomeComponent } from './user-home/user-home.component';
 import { NewDeadlineComponent } from './user-home/new-deadline/new-deadline.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ScreenErrorComponent } from './screen-error/screen-error.component';
+import { VerifyComponent } from './register/verify/verify.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ScreenErrorComponent } from './screen-error/screen-error.component';
     UserHomeComponent,
     NewDeadlineComponent,
     ScreenErrorComponent,
+    VerifyComponent,
   ],
 	imports: [
 		BrowserModule,

@@ -2,6 +2,7 @@
 	<div>
 		<h2 class="fs-1 text-center">Registration</h2>
 		<form [formGroup]="registerForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post" novalidate>
+			<!--Start Email-->
 			<div class="col-md-12">
 				<label for="email" class="form-label">Email</label>
 				<input formControlName="email" type="email" class="form-control" id="email">
@@ -14,6 +15,9 @@
 						<i class="bi text-success bi-hand-thumbs-up fw-bold"></i></span>
 				</ng-container>
 			</div>
+			<!--End Email-->
+
+			<!--Start Password-->
 			<div class="col-md-12">
 				<label for="password" class="form-label">Password</label>
 				<input formControlName="password" type="password" class="form-control" id="password">
@@ -31,6 +35,9 @@
 				</ng-container>
 
 			</div>
+			<!--End Password-->
+
+			<!--Start Confirm Password-->
 			<div class="col-md-12">
 				<label for="confirmPassword" class="form-label">Confirm Password</label>
 				<input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword">
@@ -43,7 +50,9 @@
 					</span>
 				</ng-container>
 			</div>
+			<!--End Confirm Password-->
 
+			<!--Start Accept terms-->
 			<div class="col-md-12">
 				<div class="form-check">
 					<input formControlName="acceptedTerms" class="form-check-input bg-dark" type="checkbox" value="" id="acceptedTerms">
@@ -55,9 +64,14 @@
 					<span class="text-danger" *ngIf="acceptedTerms?.errors?.['required']">Gotta accept :(</span>
 				</ng-container>
 			</div>
+			<!--End Accept terms-->
+
+			<!--Submit button-->
 			<div class="col-12 text-center">
 				<button [disabled]="registerForm.invalid" type="submit" class="btn btn-primary btn-lg">Continue</button>
 			</div>
 		</form>
 	</div>
 </div>
+
+<router-outlet></router-outlet>

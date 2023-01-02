@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatchingPasswords} from "../validator";
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'app-register',
@@ -10,32 +11,39 @@ import {MatchingPasswords} from "../validator";
 export class RegisterComponent implements OnInit {
 	registerForm!: FormGroup;
 
+
+	constructor(private router: Router) {
+
+	}
+
 	ngOnInit(): void {
 		const minPassLength = 7;
 		const maxPassLength = 250; // TODO: Check if db can handle encrypted password of this long
+		//TODO: Remove default values
 		this.registerForm = new FormGroup({
-				email: new FormControl('',
+				email: new FormControl('sunmolaife@gmail.com',
 					[
 						Validators.required,
 						Validators.email,
 					]
 				),
 				password: new FormControl(
-					'',
+					'12345678',
 					[
 						Validators.required,
 						Validators.minLength(minPassLength),
 						Validators.maxLength(maxPassLength)
 					]
 				),
-				confirmPassword: new FormControl('',
+				confirmPassword: new FormControl('12345678',
 					[
 						Validators.required,
 						Validators.minLength(minPassLength),
 						Validators.maxLength(maxPassLength)
 					]
 				),
-				acceptedTerms: new FormControl(false,
+				acceptedTerms: new FormControl(
+					true,
 					[
 						Validators.requiredTrue
 					]
@@ -46,6 +54,7 @@ export class RegisterComponent implements OnInit {
 
 	formSubmitted() {
 		console.log(this.registerForm.value);
+		this.router.navigate(['/register/verify']).then();
 	}
 
 	get email() {
