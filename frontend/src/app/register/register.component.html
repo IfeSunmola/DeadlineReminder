@@ -9,6 +9,7 @@
 				<ng-container *ngIf="email?.errors && (email?.dirty || email?.touched)">
 					<span class="text-danger" *ngIf="email?.errors?.['required']">Email is required</span>
 					<span class="text-danger" *ngIf="email?.errors?.['email']">Enter a valid email</span>
+					<span class="text-danger" *ngIf="email?.errors?.['emailInDb']">That email is already registered</span>
 				</ng-container>
 				<ng-container *ngIf="email?.valid">
 					<span class="text-success" *ngIf="email?.valid">Looks good
