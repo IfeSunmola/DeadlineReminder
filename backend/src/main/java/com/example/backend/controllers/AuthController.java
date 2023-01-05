@@ -60,6 +60,13 @@ public class AuthController {
 	}
 
 
+	@PostMapping("/email-exists")
+	// Just found out these methods return status OK by default.
+	// Todo: Remove the response entity if i'm not changing the status code
+	public boolean emailExists(@RequestBody String email) {
+		return accountService.emailExists(email);
+	}
+
 	@GetMapping("/get-user")
 	@PreAuthorize("isAuthenticated()")
 	public String getLoggedInUserEmail(Authentication auth) {

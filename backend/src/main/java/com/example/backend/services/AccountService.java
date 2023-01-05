@@ -37,6 +37,18 @@ public class AccountService {
 	private final AppProperties appProps;
 
 	/**
+	 * Method to simply check if an email exists in the db.
+	 * <p>
+	 * Should be used in the front end before sending the entire request body
+	 *
+	 * @param email the email to check for
+	 * @return True if email exits, false if not
+	 */
+	public boolean emailExists(String email) {
+		return accountRepo.existsByEmail(email);
+	}
+
+	/**
 	 * Method to validate the registration data gotten from the front end
 	 *
 	 * @param registerData the registration data

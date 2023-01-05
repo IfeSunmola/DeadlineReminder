@@ -25,6 +25,7 @@ public class SecurityConfig {
 			BASE_AUTH_URL + "/generate-token",
 			BASE_AUTH_URL + "/register",
 			BASE_AUTH_URL + "/not-logged-in",
+			BASE_AUTH_URL + "/email-exists"
 	};
 
 	@Bean
