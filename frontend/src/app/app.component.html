@@ -1,9 +1,0 @@
-<app-navbar></app-navbar>
-
-<ng-container *ngIf="hasValidScreen">
-	<router-outlet></router-outlet>
-</ng-container>
-
-<ng-container *ngIf="!hasValidScreen">
-	<app-screen-error></app-screen-error>
-</ng-container>
