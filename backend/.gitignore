@@ -1,3 +1,7 @@
+# Personal
+src/main/resources/database/deadline-reminder-db.lock.db
+src/main/resources/database/deadline-reminder-db.trace.db
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

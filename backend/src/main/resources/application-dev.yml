@@ -1,0 +1,32 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:file:./backend/src/main/resources/database/deadline-reminder-db;AUTO_SERVER=TRUE;
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        dialect:
+          storage_engine: innodb
+    open-in-view: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 755773382992-sh6dvs60llk4h5nbvfmg9fm2tmgv354v.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
