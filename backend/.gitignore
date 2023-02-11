@@ -1,6 +1,6 @@
 # Personal
-src/main/resources/database/deadline-reminder-db.lock.db
-src/main/resources/database/deadline-reminder-db.trace.db
+/database/**
+/secrets.json
 
 HELP.md
 target/

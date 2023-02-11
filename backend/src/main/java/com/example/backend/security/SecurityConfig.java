@@ -22,22 +22,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private static final String[] WHITELISTED_URLS = {
+			"/",
 			"/no-auth",
 	};
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-//				.headers().frameOptions().disable().and()
-//				.csrf(AbstractHttpConfigurer::disable) //TODO: enable csrf
-//				.cors(AbstractHttpConfigurer::disable) //TODO: enable cors
-//				.cors().and()
 				.authorizeHttpRequests((requests) -> requests
 						.requestMatchers(new AntPathRequestMatcher("/h2/**")).permitAll()
 						.requestMatchers(WHITELISTED_URLS).permitAll()
 						.anyRequest().authenticated()
 				)
-				.oauth2Login().and()
 				.sessionManagement((session) -> session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				);

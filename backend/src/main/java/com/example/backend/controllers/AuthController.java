@@ -1,22 +1,14 @@
 package com.example.backend.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Ife Sunmola
  */
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 public class AuthController {
-	@GetMapping("/auth")
-	public String authNeeded() {
-		return "YAY! AUTHENTICATED!";
-	}
-
-	@GetMapping("/no-auth")
-	public String noAuthNeeded() {
-		return "NOT AUTHENTICATED!";
-	}
 }
