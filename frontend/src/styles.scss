@@ -1,1 +1,32 @@
-/* You can add global styles to this file, and also import other style files */
+// Add variable overrides after this lin
+
+$body-bg: #212529;
+$body-color: #ffffff;
+
+$theme-colors: (
+        "primary": #0E47A1,
+        "dark": #444444,
+        "danger": red,
+        "success": green,
+        "info": #0dcaf0,
+        "warning": #ffc107,
+        "light": #FFFFFF,
+);
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// Everything else goes here
+//@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+//@import "~bootstrap-icons/font/bootstrap-icons.css";
+.center-in-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  //@extend .justify-content-center;
+}
+
+// Changes the color of the meridian. It needs to be in the global scss
+:root form ngb-timepicker fieldset div .ngb-tp-meridian button {
+  background-color: white;
+  color: black;
+}

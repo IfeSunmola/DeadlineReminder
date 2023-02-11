@@ -1,0 +1,30 @@
+<div class="container-fluid center-in-screen">
+	<div>
+		<h2 class="fs-1 text-center mb-4 ">Verify your account</h2>
+		<form [formGroup]="verifyForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post" novalidate>
+			<div class="col-md-12">
+				<label for="userEmail" class="form-label">Your email</label>
+				<input formControlName="userEmail" readonly type="email" class="form-control" id="userEmail">
+			</div>
+
+			<div class="col-md-12">
+				<label for="code" class="form-label">Verification Code</label>
+				<input formControlName="code" type="email" class="form-control" id="code">
+				<ng-container *ngIf="code?.errors && (code?.dirty || code?.touched)">
+					<span class="text-danger" *ngIf="code?.errors?.['pattern'] ">That format doesn't seem right</span>
+				</ng-container>
+				<ng-container *ngIf="!code?.errors">
+					<span class="text-success">That's better</span>
+				</ng-container>
+			</div>
+
+			<div class="col-12 text-center">
+				<button [disabled]="verifyForm.invalid" type="submit" class="btn btn-primary btn-lg">Continue</button>
+			</div>
+		</form>
+		<div class="mt-4 w-100 text-center">
+			Didn't get the code? <a class="link-info">Resend the email</a>
+		</div>
+	</div>
+
+</div>
