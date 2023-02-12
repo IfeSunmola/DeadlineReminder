@@ -12,10 +12,24 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
-        globally_quoted_identifiers: true
         dialect:
           storage_engine: innodb
+        jdbc:
+          time_zone= UTC
     open-in-view: false
+
+  mail:
+    host: localhost
+    port: 1025
+    username: root
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: localhost
