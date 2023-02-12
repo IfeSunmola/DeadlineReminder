@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Collections;
-import java.util.Map;
-
 /**
  * This class handles exceptions related to authentications. When an authentication exception is
  * thrown from anywhere in the application, it will be handled here
@@ -26,17 +23,17 @@ import java.util.Map;
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class AuthenticationExceptionHandler {
 	@ExceptionHandler(BadCredentialsException.class)
-	public Map<String, String> badCredentials() {
-		return Collections.singletonMap("error", "Invalid username or password");
+	public String badCredentials() {
+		return "Invalid username or password";
 	}
 
 	@ExceptionHandler(LockedException.class)
-	public Map<String, String> lockedAccount() {
-		return Collections.singletonMap("error", "Account is locked");
+	public String lockedAccount() {
+		return "Account is locked";
 	}
 
 	@ExceptionHandler(DisabledException.class)
-	public Map<String, String> disabledAccount() {
-		return Collections.singletonMap("error", "Account is disabled");
+	public String disabledAccount() {
+		return "Account is disabled";
 	}
 }
