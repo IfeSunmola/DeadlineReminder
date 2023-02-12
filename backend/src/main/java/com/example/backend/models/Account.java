@@ -1,23 +1,12 @@
 package com.example.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import java.time.Instant;
+import java.util.Objects;
 
 /**
  * This class represents the Account table in the database.
@@ -32,13 +21,15 @@ import java.time.Instant;
 @Entity
 @Table(name = "accounts")
 @Getter
-@Setter(AccessLevel.PRIVATE)
+@Setter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
 public class Account {
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long accountId;
+
+	protected Account() {
+	}
 
 	@Column(unique = true) @NonNull
 	private String email;
@@ -55,4 +46,23 @@ public class Account {
 
 	@NonNull @Temporal(TemporalType.TIMESTAMP)
 	private Instant dateCreated;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+			return false;
+		}
+		Account account = (Account) o;
+		return accountId != null && Objects.equals(accountId, account.accountId);
+	}
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
+
+
 }
