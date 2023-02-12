@@ -2,25 +2,34 @@
 <div class="container-fluid center-in-screen">
 	<div>
 		<h1 class="fs-1 text-center">Welcome Back</h1>
-		<form class="row g-3" method="post">
+		<form [formGroup]="loginForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post">
 			<div class="col-md-12">
 				<label for="email" class="fs-4 form-label">Email</label>
-				<input type="email" class="form-control " id="email">
+				<input [formControlName]="'email'" type="email" class="form-control " id="email">
+				<ng-container *ngIf="email?.errors && (email?.dirty || email?.touched)">
+					<span class="text-danger" *ngIf="email?.errors?.['required']">Email is required</span>
+					<span class="text-danger" *ngIf="email?.errors?.['email']">Enter a valid email</span>
+				</ng-container>
 			</div>
+
 			<div class="col-md-12">
 				<label for="password" class="fs-4 form-label">Password</label>
-				<input type="password" class="form-control" id="password">
+				<input [formControlName]="'password'" type="password" class="form-control" id="password">
+				<ng-container *ngIf="password?.errors && (password?.dirty || password?.touched)">
+					<span class="text-danger" *ngIf="password?.errors?.['required']">Password is required</span>
+				</ng-container>
 			</div>
+
 			<div class="col-md-12">
 				<div class="form-check">
-					<input class="form-check-input" type="checkbox" value="" id="stayLoggedIn" style="background-color: #444444">
+					<input [formControlName]="'stayLoggedIn'" class="form-check-input" type="checkbox" value="" id="stayLoggedIn" style="background-color: #444444">
 					<label class="form-check-label" for="stayLoggedIn">
 						Stay logged in for 30 days
 					</label>
 				</div>
 			</div>
 			<div class="col-12 text-center">
-				<button type="submit" class="btn btn-primary btn-lg">Login</button>
+				<button [disabled]="loginForm.invalid" type="submit" class="btn btn-primary btn-lg">Login</button>
 			</div>
 		</form>
 	</div>
