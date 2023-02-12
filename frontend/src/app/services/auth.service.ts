@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {API_URL} from "../AppConstants";
 import {RegisterUserResponse} from "../models/register-user-response";
 import {VerifyCodeData} from "../models/verify-code-data";
+import {LoginData} from "../models/login-data";
 
 @Injectable({
 	providedIn: 'root'
@@ -31,5 +32,9 @@ export class AuthService {
 	* */
 	emailExists(email: string): any {
 		return this.http.post(`${this.BASE_URL}/email-exists`, email);
+	}
+
+	login(loginData: LoginData) {
+		return this.http.post(`${this.BASE_URL}/generate-token`, loginData, {responseType: 'text'})
 	}
 }
