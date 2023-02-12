@@ -3,9 +3,11 @@ package com.example.backend.transfer_objects;
 import com.example.backend.transfer_objects.validations.ValidPassword;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * POJO to hold the new account information before storing in the database
@@ -16,8 +18,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class RegisterData {
 	@Email(message = "A valid email is required")
+	@NotBlank(message = "Email is required")
 	private String email;
 
 	@ValidPassword // custom annotation, using default message in ValidPassword.java
