@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailValidator, MatchingPasswords} from "./validator";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
+import {MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../AppConstants";
 
 @Component({
 	selector: 'app-register',
@@ -11,22 +12,20 @@ import {AuthService} from "../services/auth.service";
 })
 export class RegisterComponent implements OnInit {
 	registerForm!: FormGroup;
-	hasErrors: boolean = false;
-	serverErrorMsg: string = "";
-	emailExistsMsg: string = "";
-
+	invalidRequest: boolean = false;
 
 	constructor(private router: Router, private authService: AuthService, private emailValidator: EmailValidator) {
 	}
 
-
 	ngOnInit(): void {
-		const minPassLength = 7;
-		const maxPassLength = 250; // TODO: Check if db can handle encrypted password of this long
+		// show any error messages, clear after so it disappears on refresh
+		this.invalidRequest = localStorage.getItem('invalidRequest') === 'true';
+		localStorage.removeItem('invalidRequest');
+
 		//TODO: Remove default values
 		this.registerForm = new FormGroup({
 				email: new FormControl(
-					'sunmolaife@gmail.com',
+					'fire@waynce.com',
 					{
 						validators: [
 							Validators.required,
@@ -39,18 +38,19 @@ export class RegisterComponent implements OnInit {
 					}
 				),
 				password: new FormControl(
-					'12345678',
+					'dwerrerwwrewewedfdf',
 					[
 						Validators.required,
-						Validators.minLength(minPassLength),
-						Validators.maxLength(maxPassLength)
+						Validators.minLength(MIN_PASSWORD_LENGTH),
+						Validators.maxLength(MAX_PASSWORD_LENGTH)
 					]
 				),
-				confirmPassword: new FormControl('12345678',
+				confirmPassword: new FormControl(
+					'dwerrerwwrewewedfdf',
 					[
 						Validators.required,
-						Validators.minLength(minPassLength),
-						Validators.maxLength(maxPassLength)
+						Validators.minLength(MIN_PASSWORD_LENGTH),
+						Validators.maxLength(MAX_PASSWORD_LENGTH)
 					]
 				),
 				acceptedTerms: new FormControl(
@@ -68,18 +68,14 @@ export class RegisterComponent implements OnInit {
 			.subscribe(
 				{
 					next: (response) => {
-						console.log("In next: " + JSON.stringify(response))
-						console.log("In next: " + response)
-						this.router.navigate(['/register/verify']).then();
+						this.router.navigateByUrl('/register/verify',
+							{state: {email: response.email, codeId: response.codeId}}).then();
 					},
 					error: (error) => {
-						this.hasErrors = true;
-						this.serverErrorMsg = error;
-						this.emailExistsMsg = error.error.email;
-						console.log("Email exists msg " + this.emailExistsMsg);
-					},
-					complete: () => {
-						console.log("In complete");
+						// const obj = JSON.parse(JSON.stringify(error));
+						// console.log(obj.error);
+						this.router.navigateByUrl('/').then();
+						console.log("What did you do? SMH.");
 					}
 				}
 			);

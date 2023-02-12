@@ -1,17 +1,25 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {API_URL} from "../AppConstants";
+import {RegisterUserResponse} from "../models/register-user-response";
+import {VerifyCodeData} from "../models/verify-code-data";
 
 @Injectable({
 	providedIn: 'root'
 })
 export class AuthService {
-	readonly BASE_URL: string = "http://localhost:9191/auth";
+	readonly BASE_URL: string = API_URL + "/auth";
 
 	constructor(private http: HttpClient) {
 	}
 
 	registerUser(user: any) {
-		return this.http.post(`${this.BASE_URL}/register`, user);
+		// the json response will be parsed to RegisterUserResponse
+		return this.http.post<RegisterUserResponse>(`${this.BASE_URL}/register`, user, {responseType: 'json'});
+	}
+
+	verifyCode(verifyCodeData: VerifyCodeData) {
+		return this.http.post(`${this.BASE_URL}/register/verify`, verifyCodeData, {responseType: 'text'})
 	}
 
 	/*
