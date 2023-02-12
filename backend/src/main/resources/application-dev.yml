@@ -33,3 +33,12 @@ spring:
             enable: true
           ssl:
             trust: localhost
+
+# jwt
+app:
+  private-key: classpath:/certs/private.pem
+  public-key: classpath:/certs/public.pem
+  # How long the jwt should be valid for. In hours
+  jwtExpTIme: 86400
+  # When the user doesn't check stayLoggedIn, how long their current token should be valid for. In hours
+  jwtExpTimeDefault: 4
