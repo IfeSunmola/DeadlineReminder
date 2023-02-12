@@ -4,17 +4,26 @@ import com.example.backend.mailsender.EmailSenderService;
 import com.example.backend.models.Account;
 import com.example.backend.models.VerificationCode;
 import com.example.backend.repos.AccountRepo;
+import com.example.backend.security.AppProperties;
 import com.example.backend.transfer_objects.RegisterData;
 import com.example.backend.transfer_objects.VerifyCodeData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Map;
 
@@ -34,6 +43,9 @@ public class AccountService {
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final VerificationCodeService codeService;
 	private final EmailSenderService emailService;
+	private final AppProperties appProps;
+	private final JwtEncoder encoder;
+	private final AuthenticationManager authManager;
 
 	/**
 	 * Method to validate the registration data gotten from the front end
@@ -141,5 +153,37 @@ public class AccountService {
 			log.info("Unhandled request: Verify Code data: {}, Code: {}, Account: {}", data, code, account);
 			return "Unhandled Request"; // redirect to home
 		}
+	}
+
+	// jwt
+	public String authenticateUser(String email, String password, Boolean stayLoggedIn) {
+		Authentication auth = authManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						email,
+						password
+				)
+		);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+
+		return generateToken(auth, stayLoggedIn);
+	}
+
+	private String generateToken(Authentication auth, Boolean stayLoggedIn) {
+		/*
+		 * By default, the tokens will expire 60 seconds past their actual expiration time. This happens to account for clock drift.
+		 * See the bean for JwtDecoder for how to remove the delay. HS256 Algorithm also used as default
+		 **/
+		Instant now = Instant.now();
+		String scope = auth.getAuthorities().toString(); // role
+		String email = auth.getName();
+		int expirationTime = stayLoggedIn ? appProps.getJwtExpTime() : appProps.getJwtExpTimeDefault();
+		JwtClaimsSet claims = JwtClaimsSet.builder()
+				.issuer("My Issuer ID")
+				.issuedAt(now)
+				.expiresAt(now.plus(expirationTime, ChronoUnit.DAYS))
+				.subject(email)
+				.claim("scope", scope)
+				.build();
+		return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 	}
 }

@@ -1,11 +1,14 @@
 package com.example.backend.controllers;
 
 import com.example.backend.services.AccountService;
+import com.example.backend.transfer_objects.LoginData;
 import com.example.backend.transfer_objects.RegisterData;
 import com.example.backend.transfer_objects.VerifyCodeData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +26,14 @@ import java.util.Map;
 public class AuthController {
 	private final AccountService accountService;
 
-	@PostMapping("/email-exists")
-	public boolean emailExists(@RequestBody String email) {
-		return accountService.emailExists(email);
+	@PostMapping(value = "/generate-token")
+	public ResponseEntity<String> token(@RequestBody @Valid LoginData loginData) {
+		log.info("Token requested for user: {}", loginData.getEmail());
+
+		String token = accountService.authenticateUser(loginData.getEmail(), loginData.getPassword(), loginData.getStayLoggedIn());
+
+		log.info("Token granted: {}\n", token);
+		return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
 	@PostMapping("/register")
@@ -37,5 +45,10 @@ public class AuthController {
 	@PostMapping("/register/verify")
 	public String confirmCode(@RequestBody VerifyCodeData data) {
 		return accountService.verifyAccount(data);
+	}
+
+	@PostMapping("/email-exists")
+	public boolean emailExists(@RequestBody String email) {
+		return accountService.emailExists(email);
 	}
 }
