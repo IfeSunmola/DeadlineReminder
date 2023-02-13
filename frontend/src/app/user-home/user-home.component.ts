@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {NewDeadlineComponent} from "./new-deadline/new-deadline.component";
 import {AccountInfo} from "../models/account-info";
 import {AccountService} from "../services/account.service";
+import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'app-user-home',
@@ -11,7 +13,7 @@ import {AccountService} from "../services/account.service";
 export class UserHomeComponent implements OnInit {
 	userInfo: AccountInfo | undefined;
 
-	constructor(private accountService: AccountService) {
+	constructor(private accountService: AccountService, private authService: AuthService, private router: Router) {
 	}
 
 	openNewDeadlineModal(content: NewDeadlineComponent) {
@@ -35,5 +37,10 @@ export class UserHomeComponent implements OnInit {
 
 	get nickname() {
 		return this.userInfo?.nickname
+	}
+
+	logout() {
+		this.authService.logout();
+		this.router.navigateByUrl(`/login`).then();
 	}
 }

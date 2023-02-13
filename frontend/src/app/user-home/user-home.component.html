@@ -9,7 +9,7 @@
 				</button>
 				<div ngbDropdownMenu aria-labelledby="user options dropdown">
 					<button ngbDropdownItem (click)="openNewDeadlineModal(newDeadlineComponentRef)">Create new deadline</button>
-					<button ngbDropdownItem>Logout</button>
+					<button ngbDropdownItem (click)="logout()">Logout</button>
 				</div>
 			</div>
 		</div>

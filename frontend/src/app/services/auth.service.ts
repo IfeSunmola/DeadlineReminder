@@ -35,6 +35,10 @@ export class AuthService {
 		return this.http.post(`${this.BASE_URL}/generate-token`, loginData, {responseType: 'text'})
 	}
 
+	logout() {
+		localStorage.removeItem(AUTH_TOKEN);
+	}
+
 	isAuthenticated(): boolean {
 		// if the AUTH_TOKEN is invalid, a 401 or 403 will be thrown, the AuthInterceptor will redirect to the login page
 		return !!localStorage.getItem(AUTH_TOKEN)
