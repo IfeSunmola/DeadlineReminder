@@ -8,18 +8,19 @@ import {
 import {catchError, Observable, of, throwError} from 'rxjs';
 import {AUTH_TOKEN} from "../AppConstants";
 import {Router} from "@angular/router";
+import {AuthService} from "../services/auth.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-	constructor(private router: Router) {
+	constructor(private router: Router, private authService: AuthService) {
 	}
 
 	private handleAuthError(err: HttpErrorResponse): Observable<any> {
 		//handle your auth error or rethrow. https://stackoverflow.com/a/50970853
 		if (err.status === 401 || err.status === 403) {
 			console.log("AuthInterceptor: UNAUTHORIZED: " + err.status)
-			localStorage.removeItem(AUTH_TOKEN)
+			this.authService.logout();
 			this.router.navigateByUrl(`/login`).then();
 			// if you've caught / handled the error, you don't want to rethrow it unless you also want downstream
 			// consumers to have to handle it as well.
