@@ -5,29 +5,34 @@ import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {UserHomeComponent} from "./user-home/user-home.component";
 import {VerifyComponent} from "./register/verify/verify.component";
-import {AuthGuard} from "./auth.guard";
+import {AuthGuard} from "./guards/auth.guard";
+import {RegisteredGuard} from "./guards/registered.guard";
 
 const routes: Routes = [
 	{
 		path: '',
 		title: 'Welcome',
 		component: HomepageComponent,
-		pathMatch: 'full'
+		pathMatch: 'full',
+		canActivate: [RegisteredGuard]
 	},
 	{
 		path: 'login',
 		title: 'Login',
-		component: LoginComponent
+		component: LoginComponent,
+		canActivate: [RegisteredGuard]
 	},
 	{
 		path: 'register',
 		title: 'Register',
-		component: RegisterComponent
+		component: RegisterComponent,
+		canActivate: [RegisteredGuard]
 	},
 	{
 		path: 'register/verify',
 		title: 'Verify your account',
-		component: VerifyComponent
+		component: VerifyComponent,
+		canActivate: [RegisteredGuard]
 	},
 	{
 		path: 'me',
