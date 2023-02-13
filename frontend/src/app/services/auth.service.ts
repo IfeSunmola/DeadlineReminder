@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {API_URL} from "../AppConstants";
+import {API_URL, AUTH_TOKEN} from "../AppConstants";
 import {RegisterUserResponse} from "../models/register-user-response";
 import {VerifyCodeData} from "../models/verify-code-data";
 import {LoginData} from "../models/login-data";
@@ -20,15 +20,11 @@ export class AuthService {
 	}
 
 	verifyCode(verifyCodeData: VerifyCodeData) {
-		return this.http.post(`${this.BASE_URL}/register/verify`, verifyCodeData, {responseType: 'text'})
+		return this.http.post(`${this.BASE_URL}/register/verify`, verifyCodeData, {responseType: 'text'});
 	}
 
 	/*
-	* I don't want to send the entire request body to the backend if the email already exists
-	* So, First check if the email exists. But, this puts a strain on the database because
-	* the async validator will check the db for the email everytime the user leaves the email field.
-	* I don't think it's that big of an issue, but still.
-	* Use caching to get around this or remove it.
+	* Too expensive, use caching or remove it
 	* */
 	emailExists(email: string): any {
 		return this.http.post(`${this.BASE_URL}/email-exists`, email);
@@ -36,5 +32,10 @@ export class AuthService {
 
 	login(loginData: LoginData) {
 		return this.http.post(`${this.BASE_URL}/generate-token`, loginData, {responseType: 'text'})
+	}
+
+	isAuthenticated(): boolean {
+		// if the AUTH_TOKEN is invalid, a 401 or 403 will be thrown, the AuthInterceptor will redirect to the login page
+		return !!localStorage.getItem(AUTH_TOKEN)
 	}
 }

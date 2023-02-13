@@ -3,6 +3,7 @@ import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {LoginData} from "../models/login-data";
+import {AUTH_TOKEN} from "../AppConstants";
 
 @Component({
 	selector: 'app-login',
@@ -16,18 +17,17 @@ export class LoginComponent implements OnInit {
 	}
 
 	formSubmitted() {
+		localStorage.removeItem(AUTH_TOKEN)
 		const loginData: LoginData = {email: this.email?.value, password: this.password?.value, stayLoggedIn: this.stayLoggedIn?.value}
+
 
 		this.authService.login(loginData).subscribe(
 			{
 				next: (response) => {
 					console.log("Response: " + response)
+					localStorage.setItem(AUTH_TOKEN, response)
 					this.router.navigate(['/me']).then()
 				},
-				// handle unauthorized
-				error: (error) => {
-					console.log("Error: " + error.error)
-				}
 			}
 		)
 	}
