@@ -13,7 +13,8 @@ import {NewDeadlineComponent} from './user-home/new-deadline/new-deadline.compon
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ScreenErrorComponent} from './screen-error/screen-error.component';
 import {VerifyComponent} from './register/verify/verify.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AuthInterceptor} from "./auth-interceptor.service";
 
 @NgModule({
 	declarations: [
@@ -35,7 +36,13 @@ import {HttpClientModule} from "@angular/common/http";
 		ReactiveFormsModule,
 		HttpClientModule,
 	],
-	providers: [],
+	providers: [
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: AuthInterceptor,
+			multi: true
+		}
+	],
 	bootstrap: [AppComponent]
 })
 export class AppModule {

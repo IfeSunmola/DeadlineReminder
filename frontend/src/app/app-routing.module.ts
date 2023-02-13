@@ -5,6 +5,7 @@ import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {UserHomeComponent} from "./user-home/user-home.component";
 import {VerifyComponent} from "./register/verify/verify.component";
+import {AuthGuard} from "./auth.guard";
 
 const routes: Routes = [
 	{
@@ -31,7 +32,8 @@ const routes: Routes = [
 	{
 		path: 'me',
 		title: 'Your dashboard',
-		component: UserHomeComponent
+		component: UserHomeComponent,
+		canActivate: [AuthGuard]
 	},
 
 ];
