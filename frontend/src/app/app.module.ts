@@ -14,7 +14,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ScreenErrorComponent} from './screen-error/screen-error.component';
 import {VerifyComponent} from './register/verify/verify.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {AuthInterceptor} from "./auth-interceptor.service";
+import {AuthInterceptor} from "./interceptors/auth-interceptor.service";
 
 @NgModule({
 	declarations: [

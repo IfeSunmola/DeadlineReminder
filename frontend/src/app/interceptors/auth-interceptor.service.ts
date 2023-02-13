@@ -6,7 +6,7 @@ import {
 	HttpInterceptor, HttpErrorResponse
 } from '@angular/common/http';
 import {catchError, Observable, of, throwError} from 'rxjs';
-import {AUTH_TOKEN} from "./AppConstants";
+import {AUTH_TOKEN} from "../AppConstants";
 import {Router} from "@angular/router";
 
 @Injectable()
