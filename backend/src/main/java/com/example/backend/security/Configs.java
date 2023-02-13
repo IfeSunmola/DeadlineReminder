@@ -13,10 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.*;
+
+import java.time.Duration;
 
 /**
  * Contains all security related beans
@@ -59,8 +60,16 @@ public class Configs {
 
 		* jwtDecoder.setJwtValidator(withClockSkew);
 		* return jwtDecoder;
+		*
+		* Leaving the delay:
+		* return NimbusJwtDecoder.withPublicKey(appProps.getPublicKey()).build();
 		* */
-		return NimbusJwtDecoder.withPublicKey(appProps.getPublicKey()).build();
+		NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(appProps.getPublicKey()).build();
+		OAuth2TokenValidator<Jwt> withClockSkew = new DelegatingOAuth2TokenValidator<>(
+				new JwtTimestampValidator(Duration.ofSeconds(0)));
+
+		jwtDecoder.setJwtValidator(withClockSkew);
+		return jwtDecoder;
 	}
 
 	@Bean
