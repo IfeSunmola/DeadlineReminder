@@ -19,6 +19,11 @@
       "name": "app.jwtExpTimeDefault",
       "type": "java.lang.String",
       "description": "Description for app.jwtExpTimeDefault."
+    },
+    {
+      "name": "app.frontend-site",
+      "type": "java.lang.String",
+      "description": "Description for app.frontend-site."
     }
   ]
 }
