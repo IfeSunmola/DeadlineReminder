@@ -4,6 +4,7 @@ import {API_URL, AUTH_TOKEN} from "../AppConstants";
 import {RegisterUserResponse} from "../models/register-user-response";
 import {VerifyCodeData} from "../models/verify-code-data";
 import {LoginData} from "../models/login-data";
+import {RegisterData} from "../models/register-data";
 
 @Injectable({
 	providedIn: 'root'
@@ -14,9 +15,9 @@ export class AuthService {
 	constructor(private http: HttpClient) {
 	}
 
-	registerUser(user: any) {
+	registerUser(registerData: RegisterData) {
 		// the json response will be parsed to RegisterUserResponse
-		return this.http.post<RegisterUserResponse>(`${this.BASE_URL}/register`, user, {responseType: 'json'});
+		return this.http.post<RegisterUserResponse>(`${this.BASE_URL}/register`, registerData, {responseType: 'json'});
 	}
 
 	verifyCode(verifyCodeData: VerifyCodeData) {
