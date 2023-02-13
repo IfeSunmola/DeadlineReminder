@@ -83,11 +83,12 @@ public class AccountService {
 	 * @return the newly created account
 	 */
 	public Map<String, String> createAccount(RegisterData registerData) {
+		//TODO: Email verification
 		Account savedAccount = accountRepo.save(
 				new Account(
 						registerData.getEmail().toLowerCase(Locale.ROOT),
 						passwordEncoder.encode(registerData.getPassword()),
-						false, //TODO: Email verification
+						true,
 						registerData.isAcceptedTerms(), // should always be true
 						Instant.now()
 				)
@@ -180,7 +181,7 @@ public class AccountService {
 		JwtClaimsSet claims = JwtClaimsSet.builder()
 				.issuer("My Issuer ID")
 				.issuedAt(now)
-				.expiresAt(now.plus(expirationTime, ChronoUnit.DAYS))
+				.expiresAt(now.plus(expirationTime, ChronoUnit.HOURS))
 				.subject(email)
 				.claim("scope", scope)
 				.build();
