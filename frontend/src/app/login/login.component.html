@@ -1,6 +1,20 @@
 <!--<div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 80vh">-->
 <div class="container-fluid center-in-screen">
 	<div>
+		<!--Start messages-->
+		<ngb-alert *ngIf="normalLogout" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{NORMAL_LOGOUT_MESSAGE}}
+		</ngb-alert>
+
+		<ngb-alert *ngIf="expiredSession" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{EXPIRED_SESSION_MESSAGE}}
+		</ngb-alert>
+
+		<ngb-alert *ngIf="loginNeeded" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{LOGIN_NEEDED_MESSAGE}}
+		</ngb-alert>
+		<!--End messages-->
+
 		<h1 class="fs-1 text-center">Welcome Back</h1>
 		<form [formGroup]="loginForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post">
 			<div class="col-md-12">
@@ -22,7 +36,8 @@
 
 			<div class="col-md-12">
 				<div class="form-check">
-					<input [formControlName]="'stayLoggedIn'" class="form-check-input" type="checkbox" value="" id="stayLoggedIn" style="background-color: #444444">
+					<input [formControlName]="'stayLoggedIn'" class="form-check-input" type="checkbox" value="" id="stayLoggedIn"
+						   style="background-color: #444444">
 					<label class="form-check-label" for="stayLoggedIn">
 						Stay logged in for 30 days
 					</label>
