@@ -6,7 +6,7 @@ import {
 	HttpInterceptor, HttpErrorResponse
 } from '@angular/common/http';
 import {catchError, Observable, of, throwError} from 'rxjs';
-import {AUTH_TOKEN} from "../AppConstants";
+import {AUTH_TOKEN, EXPIRED_SESSION} from "../AppConstants";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
 
@@ -20,10 +20,9 @@ export class AuthInterceptor implements HttpInterceptor {
 		//handle your auth error or rethrow. https://stackoverflow.com/a/50970853
 		if (err.status === 401 || err.status === 403) {
 			console.log("AuthInterceptor: UNAUTHORIZED: " + err.status)
+			localStorage.setItem(EXPIRED_SESSION, "true");
 			this.authService.logout();
 			this.router.navigateByUrl(`/login`).then();
-			// if you've caught / handled the error, you don't want to rethrow it unless you also want downstream
-			// consumers to have to handle it as well.
 			return of(err.message); // or EMPTY may be appropriate here
 		}
 		return throwError(() => err);

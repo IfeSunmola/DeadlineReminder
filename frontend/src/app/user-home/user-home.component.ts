@@ -4,6 +4,7 @@ import {AccountInfo} from "../models/account-info";
 import {AccountService} from "../services/account.service";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import {NORMAL_LOGOUT} from "../AppConstants";
 
 @Component({
 	selector: 'app-user-home',
@@ -41,6 +42,7 @@ export class UserHomeComponent implements OnInit {
 
 	logout() {
 		this.authService.logout();
+		localStorage.setItem(NORMAL_LOGOUT, "true");
 		this.router.navigateByUrl(`/login`).then();
 	}
 }

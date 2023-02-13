@@ -9,3 +9,11 @@ export const MIN_PASSWORD_LENGTH = 8
 export const MAX_PASSWORD_LENGTH = 250
 export const MAX_NICKNAME_LENGTH = 10
 export const AUTH_TOKEN = "AuthToken"
+// login stuff
+export const LOGIN_NEEDED = "loginNeeded"
+export const LOGIN_NEEDED_MESSAGE = "Login is needed for that page"
+// Logout stuff
+export const NORMAL_LOGOUT = "normalLogout"
+export const NORMAL_LOGOUT_MESSAGE = "Logout Successful"
+export const EXPIRED_SESSION = "expiredSession"
+export const EXPIRED_SESSION_MESSAGE = "Your session has expired. Please login again."
