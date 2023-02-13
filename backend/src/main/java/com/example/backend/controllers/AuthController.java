@@ -11,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -22,7 +25,6 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:4200/")
 public class AuthController {
 	private final AccountService accountService;
 
@@ -37,8 +39,10 @@ public class AuthController {
 	}
 
 	@PostMapping("/register")
-	public Map<String, String> register(@RequestBody @Valid RegisterData registerData, BindingResult result) throws MethodArgumentNotValidException, NoSuchMethodException {
-		accountService.validateData(registerData, result); // throws exception if there are errors
+	public Map<String, String> register(@RequestBody @Valid RegisterData registerData, BindingResult result)
+			throws MethodArgumentNotValidException, NoSuchMethodException {
+		// throws exception if there are errors, exception is handled with AuthenticationExceptionHandler
+		accountService.validateData(registerData, result);
 		return accountService.createAccount(registerData);
 	}
 
