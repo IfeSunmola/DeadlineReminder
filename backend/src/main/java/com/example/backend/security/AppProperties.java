@@ -20,4 +20,5 @@ public class AppProperties {
 	private final RSAPrivateKey privateKey;
 	private final int jwtExpTime;
 	private final int jwtExpTimeDefault;
+	private final String frontendSite;
 }
