@@ -16,19 +16,20 @@ export class AuthInterceptor implements HttpInterceptor {
 	}
 
 	private handleAuthError(err: HttpErrorResponse): Observable<any> {
-		//handle your auth error or rethrow
+		//handle your auth error or rethrow. https://stackoverflow.com/a/50970853
 		if (err.status === 401 || err.status === 403) {
-			//navigate /delete cookies or whatever
 			console.log("AuthInterceptor: UNAUTHORIZED: " + err.status)
+			localStorage.removeItem(AUTH_TOKEN)
 			this.router.navigateByUrl(`/login`).then();
-			// if you've caught / handled the error, you don't want to rethrow it unless you also want downstream consumers to have to handle it as well.
+			// if you've caught / handled the error, you don't want to rethrow it unless you also want downstream
+			// consumers to have to handle it as well.
 			return of(err.message); // or EMPTY may be appropriate here
 		}
 		return throwError(() => err);
 	}
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-		// Intercept, add the jwt token, send off
+		// Intercept, add the jwt bearer token, send off
 		const authToken = localStorage.getItem(AUTH_TOKEN)
 		if (authToken) {
 			const clonedRequest = request.clone({
