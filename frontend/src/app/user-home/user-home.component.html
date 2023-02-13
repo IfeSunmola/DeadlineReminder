@@ -1,9 +1,17 @@
 <app-new-deadline #newDeadlineComponentRef></app-new-deadline> <!--Is shown when the user clicks add new deadline-->
 
-<div class="row mt-3 p-3">
-	<div class="col text-start">
-		<button class="btn btn-lg btn-dark" (click)="openNewDeadlineModal(newDeadlineComponentRef)">
-			Add new deadline
-		</button>
+<div class="container-fluid">
+	<div class="row mt-3 text-center">
+		<div class="col">
+			<div ngbDropdown placement="auto" class="d-inline-block">
+				<button type="button" class="text-bg-dark btn btn-outline-dark" id="userOptionsDropdown" ngbDropdownToggle>
+					Hi, {{nickname}}
+				</button>
+				<div ngbDropdownMenu aria-labelledby="user options dropdown">
+					<button ngbDropdownItem (click)="openNewDeadlineModal(newDeadlineComponentRef)">Create new deadline</button>
+					<button ngbDropdownItem>Logout</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
