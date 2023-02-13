@@ -20,6 +20,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class RegisterData {
+	@NotBlank(message = "Nickname is required")
+	private String nickname;
+
 	@Email(message = "A valid email is required")
 	@NotBlank(message = "Email is required")
 	private String email;

@@ -1,9 +1,9 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailValidator, MatchingPasswords} from "./validator";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
-import {MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../AppConstants";
+import {MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../AppConstants";
 
 @Component({
 	selector: 'app-register',
@@ -24,6 +24,16 @@ export class RegisterComponent implements OnInit {
 
 		//TODO: Remove default values
 		this.registerForm = new FormGroup({
+				nickname: new FormControl(
+					'Ife',
+					{
+						validators: [
+							Validators.required,
+							Validators.maxLength(MAX_NICKNAME_LENGTH),
+						],
+					}
+				),
+
 				email: new FormControl(
 					'fire@waynce.com',
 					{
@@ -64,7 +74,8 @@ export class RegisterComponent implements OnInit {
 	}
 
 	formSubmitted() {
-		this.authService.registerUser(this.registerForm.value)
+		const registerData = this.registerForm.value;
+		this.authService.registerUser(registerData)
 			.subscribe(
 				{
 					next: (response) => {
@@ -79,6 +90,10 @@ export class RegisterComponent implements OnInit {
 					}
 				}
 			);
+	}
+
+	get nickname() {
+		return this.registerForm.get('nickname');
 	}
 
 	get email() {

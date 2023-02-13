@@ -86,6 +86,7 @@ public class AccountService {
 		//TODO: Email verification
 		Account savedAccount = accountRepo.save(
 				new Account(
+						registerData.getNickname(),
 						registerData.getEmail().toLowerCase(Locale.ROOT),
 						passwordEncoder.encode(registerData.getPassword()),
 						true,

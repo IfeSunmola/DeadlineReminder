@@ -7,4 +7,5 @@ export const INVALID_REQUEST = "InvalidRequest";
 // TODO: Check if db can handle encrypted password of this long
 export const MIN_PASSWORD_LENGTH = 8
 export const MAX_PASSWORD_LENGTH = 250
+export const MAX_NICKNAME_LENGTH = 10
 export const AUTH_TOKEN = "AuthToken"

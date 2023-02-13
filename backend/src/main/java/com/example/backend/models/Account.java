@@ -31,6 +31,9 @@ public class Account {
 	protected Account() {
 	}
 
+	@NonNull
+	private String nickname;
+
 	@Column(unique = true) @NonNull
 	private String email;
 

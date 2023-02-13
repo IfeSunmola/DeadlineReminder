@@ -3,8 +3,24 @@
 </ng-container>
 <div class="container-fluid center-in-screen">
 	<div>
-		<h2 class="fs-1 text-center">Registration</h2>
+		<h2 class="fs-1 text-center mt-2 ">Registration</h2>
 		<form [formGroup]="registerForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post" novalidate>
+
+			<!--Start Nickname-->
+			<div class="col-md-12">
+				<label for="nickname" class="form-label">Nickname</label>
+				<input formControlName="nickname" type="text" class="form-control" id="nickname">
+				<ng-container *ngIf="nickname?.errors && (nickname?.dirty || nickname?.touched)">
+					<span class="text-danger" *ngIf="nickname?.errors?.['required']">Nickname is required</span>
+				</ng-container>
+				<ng-container *ngIf="nickname?.valid">
+					<span class="text-success" *ngIf="nickname?.valid">Looks good
+						<i class="bi text-success bi-hand-thumbs-up fw-bold"></i></span>
+				</ng-container>
+			</div>
+			<!--End Nickname-->
+
+
 			<!--Start Email-->
 			<div class="col-md-12">
 				<label for="email" class="form-label">Email</label>
