@@ -22,25 +22,7 @@ export class AuthInterceptor implements HttpInterceptor {
 			// All 401s and 403 should return "error" message
 			const errorMessage = err.error.error
 			if (errorMessage === DISABLED_ACCOUNT) {
-				const email = err.error.email
-				console.log("1 AuthInterceptor: UNAUTHORIZED, DISABLED: " + err.error)
-				this.authService.logout() // shouldn't really do anything since the user isn't logged-in anyway
-				localStorage.setItem(DISABLED_ACCOUNT, "true")
-
-				this.authService.sendVerificationCode(email).subscribe(
-					{
-						next: (response) => {
-							if (response.email !== email) { // random safeguard
-								console.log("AuthInterceptor: sendVerificationCode: email mismatch")
-								this.router.navigate(['/login']).then()
-							}
-							else {
-								this.router.navigateByUrl('/register/verify',
-									{state: {email: response.email, codeId: response.codeId}}).then();
-							}
-						}
-					}
-				)
+				this.handleDisabledAccount(err)
 			}
 			else {
 				console.log("2 AuthInterceptor: UNAUTHORIZED: " + err.error.error)
@@ -51,6 +33,28 @@ export class AuthInterceptor implements HttpInterceptor {
 			return of(err.message); // or EMPTY may be appropriate here
 		}
 		return throwError(() => err);
+	}
+
+	private handleDisabledAccount(error: HttpErrorResponse) {
+		const email = error.error.email
+		console.log("1 AuthInterceptor: UNAUTHORIZED, DISABLED: " + error.error)
+		this.authService.logout() // shouldn't really do anything since the user isn't logged-in anyway
+		localStorage.setItem(DISABLED_ACCOUNT, "true")
+
+		this.authService.sendVerificationCode(email).subscribe(
+			{
+				next: (response) => {
+					if (response.email !== email) { // random safeguard
+						console.log("AuthInterceptor: sendVerificationCode: email mismatch")
+						this.router.navigate(['/login']).then()
+					}
+					else {
+						this.router.navigateByUrl('/register/verify',
+							{state: {email: response.email, codeId: response.codeId}}).then();
+					}
+				}
+			}
+		)
 	}
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
