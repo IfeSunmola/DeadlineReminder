@@ -6,7 +6,7 @@ import {LoginData} from "../models/login-data";
 import {
 	AUTH_TOKEN,
 	EXPIRED_SESSION,
-	EXPIRED_SESSION_MESSAGE,
+	EXPIRED_SESSION_MESSAGE, INVALID_SESSION, INVALID_SESSION_MESSAGE,
 	LOGIN_NEEDED,
 	LOGIN_NEEDED_MESSAGE,
 	NORMAL_LOGOUT,
@@ -29,6 +29,9 @@ export class LoginComponent implements OnInit {
 	// user is not logged in, tries to access a protected route, from AuthGuard
 	loginNeeded: boolean = false;
 	readonly LOGIN_NEEDED_MESSAGE = LOGIN_NEEDED_MESSAGE
+	// user was already logged in but the jwt became invalid
+	invalidSession: boolean = false;
+	readonly INVALID_SESSION_MESSAGE = INVALID_SESSION_MESSAGE
 
 
 	constructor(private authService: AuthService, private router: Router) {
@@ -49,7 +52,7 @@ export class LoginComponent implements OnInit {
 		)
 	}
 
-	ngOnInit(): void {
+	private initMessages() {
 		this.normalLogout = localStorage.getItem(NORMAL_LOGOUT) === "true"
 		localStorage.removeItem(NORMAL_LOGOUT)
 
@@ -58,6 +61,13 @@ export class LoginComponent implements OnInit {
 
 		this.loginNeeded = localStorage.getItem(LOGIN_NEEDED) === "true"
 		localStorage.removeItem(LOGIN_NEEDED)
+
+		this.invalidSession = localStorage.getItem(INVALID_SESSION) === "true"
+		localStorage.removeItem(INVALID_SESSION)
+	}
+
+	ngOnInit(): void {
+		this.initMessages()
 
 		this.loginForm = new FormGroup(
 			{
