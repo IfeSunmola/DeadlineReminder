@@ -5,8 +5,9 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {LoginData} from "../models/login-data";
 import {
 	AUTH_TOKEN,
-	EXPIRED_SESSION,
-	EXPIRED_SESSION_MESSAGE, INVALID_CREDENTIALS, INVALID_SESSION, INVALID_SESSION_MESSAGE,
+	INVALID_CREDENTIALS,
+	INVALID_SESSION,
+	INVALID_SESSION_MESSAGE,
 	LOGIN_NEEDED,
 	LOGIN_NEEDED_MESSAGE,
 	NORMAL_LOGOUT,
@@ -23,9 +24,6 @@ export class LoginComponent implements OnInit {
 	// user logged out normally
 	normalLogout: boolean = false;
 	readonly NORMAL_LOGOUT_MESSAGE = NORMAL_LOGOUT_MESSAGE
-	// jwt token has expired, from AuthInterceptor
-	expiredSession: boolean = false;
-	readonly EXPIRED_SESSION_MESSAGE = EXPIRED_SESSION_MESSAGE
 	// user is not logged in, tries to access a protected route, from AuthGuard
 	loginNeeded: boolean = false;
 	readonly LOGIN_NEEDED_MESSAGE = LOGIN_NEEDED_MESSAGE
@@ -57,9 +55,6 @@ export class LoginComponent implements OnInit {
 	private initMessages() {
 		this.normalLogout = localStorage.getItem(NORMAL_LOGOUT) === "true"
 		localStorage.removeItem(NORMAL_LOGOUT)
-
-		this.expiredSession = localStorage.getItem(EXPIRED_SESSION) === "true"
-		localStorage.removeItem(EXPIRED_SESSION)
 
 		this.loginNeeded = localStorage.getItem(LOGIN_NEEDED) === "true"
 		localStorage.removeItem(LOGIN_NEEDED)

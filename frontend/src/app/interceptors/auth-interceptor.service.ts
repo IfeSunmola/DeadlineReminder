@@ -1,12 +1,7 @@
 import {Injectable} from '@angular/core';
-import {
-	HttpRequest,
-	HttpHandler,
-	HttpEvent,
-	HttpInterceptor, HttpErrorResponse
-} from '@angular/common/http';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {catchError, Observable, of, throwError} from 'rxjs';
-import {AUTH_TOKEN, DISABLED_ACCOUNT, EXPIRED_SESSION} from "../AppConstants";
+import {AUTH_TOKEN, DISABLED_ACCOUNT, INVALID_CREDENTIALS, INVALID_SESSION} from "../AppConstants";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
 
@@ -16,19 +11,44 @@ export class AuthInterceptor implements HttpInterceptor {
 	constructor(private router: Router, private authService: AuthService) {
 	}
 
+	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+		// Intercept, add the jwt bearer token, send off
+		const authToken = localStorage.getItem(AUTH_TOKEN)
+		if (authToken) {
+			const clonedRequest = request.clone({
+				setHeaders: {
+					Authorization: `Bearer ${authToken}`
+				}
+			})
+			return next.handle(clonedRequest).pipe(catchError(x => this.handleAuthError(x)));
+		}
+		else {
+			return next.handle(request).pipe(catchError(x => this.handleAuthError(x)));
+		}
+	}
+
 	private handleAuthError(err: HttpErrorResponse): Observable<any> {
 		// https://stackoverflow.com/a/50970853
 		if (err.status === 401 || err.status === 403) {
-			// All 401s and 403 should return "error" message
-			const errorMessage = err.error.error
-			if (errorMessage === DISABLED_ACCOUNT) {
-				this.handleDisabledAccount(err)
+			if (err.error === null) { // no error message inside "error" json -> Request could not reach the backend controller because of invalid jwt
+				localStorage.setItem(INVALID_SESSION, "true")
+				this.authService.logout()
+				this.router.navigateByUrl("/login").then()
 			}
-			else {
-				console.log("2 AuthInterceptor: UNAUTHORIZED: " + err.error.error)
-				localStorage.setItem(EXPIRED_SESSION, "true");
-				this.authService.logout();
-				this.router.navigateByUrl(`/login`).then();
+			else { // request reached the backend controller
+				// All 401s and 403 that reached backend controller should have an "error" json value
+				const errorMessage = err.error.error
+				if (errorMessage === DISABLED_ACCOUNT) {
+					this.handleDisabledAccount(err)
+				}
+				else if (errorMessage == INVALID_CREDENTIALS) {
+					this.handleInvalidCredentials(err)
+				}
+				else {
+					console.log("AuthInterceptor: UNAUTHORIZED: UNKNOWN ERROR: " + JSON.stringify(err))
+					this.authService.logout()
+					this.router.navigateByUrl("/").then()
+				}
 			}
 			return of(err.message); // or EMPTY may be appropriate here
 		}
@@ -57,19 +77,12 @@ export class AuthInterceptor implements HttpInterceptor {
 		)
 	}
 
-	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-		// Intercept, add the jwt bearer token, send off
-		const authToken = localStorage.getItem(AUTH_TOKEN)
-		if (authToken) {
-			const clonedRequest = request.clone({
-				setHeaders: {
-					Authorization: `Bearer ${authToken}`
-				}
-			})
-			return next.handle(clonedRequest).pipe(catchError(x => this.handleAuthError(x)));
-		}
-		else {
-			return next.handle(request).pipe(catchError(x => this.handleAuthError(x)));
-		}
+	private handleInvalidCredentials(error: HttpErrorResponse) {
+		console.log("Error: " + error.error.error)
+		localStorage.setItem(INVALID_CREDENTIALS, "true")
+		// refresh page https://stackoverflow.com/a/49509706
+		this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+			this.router.navigate(["/login"]));
 	}
+
 }

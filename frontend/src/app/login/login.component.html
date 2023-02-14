@@ -6,10 +6,6 @@
 			{{NORMAL_LOGOUT_MESSAGE}}
 		</ngb-alert>
 
-		<ngb-alert *ngIf="expiredSession" type="primary" [dismissible]="false" class="text-center mb-4">
-			{{EXPIRED_SESSION_MESSAGE}}
-		</ngb-alert>
-
 		<ngb-alert *ngIf="loginNeeded" type="primary" [dismissible]="false" class="text-center mb-4">
 			{{LOGIN_NEEDED_MESSAGE}}
 		</ngb-alert>
