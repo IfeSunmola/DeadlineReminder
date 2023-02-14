@@ -22,13 +22,14 @@
 
 			<!--Start Email-->
 			<div class="col-md-12">
-				<label for="email" class="form-label">Email</label>
+				<label for="email" class="form-label">Email <span class="spinner-border-sm text-white spinner-border"
+																  *ngIf="email?.pending"></span></label>
 				<input formControlName="email" type="email" class="form-control" id="email">
 				<ng-container *ngIf="email?.errors && (email?.dirty || email?.touched)">
 					<span class="text-danger" *ngIf="email?.errors?.['required']">Email is required</span>
 					<span class="text-danger" *ngIf="email?.errors?.['email']">Enter a valid email</span>
-					<span class="text-danger" *ngIf="email?.errors?.['emailInDb']">That email is already registered
-						<a routerLink="/login" class="link-info" >login here</a></span>
+					<span class="text-danger" *ngIf="email?.errors?.['emailInDb']">That email is already registered</span>
+
 				</ng-container>
 				<ng-container *ngIf="email?.valid">
 					<span class="text-success" *ngIf="email?.valid">Looks good
