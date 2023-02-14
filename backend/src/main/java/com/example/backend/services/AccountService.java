@@ -5,12 +5,16 @@ import com.example.backend.models.Account;
 import com.example.backend.models.VerificationCode;
 import com.example.backend.repos.AccountRepo;
 import com.example.backend.security.AppProperties;
+import com.example.backend.transfer_objects.LoginData;
 import com.example.backend.transfer_objects.RegisterData;
 import com.example.backend.transfer_objects.VerifyCodeData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,11 +23,13 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -83,38 +89,43 @@ public class AccountService {
 	 * @return the newly created account
 	 */
 	public Map<String, String> createAccount(RegisterData registerData) {
-		//TODO: Email verification
 		Account savedAccount = accountRepo.save(
 				new Account(
 						registerData.getNickname(),
 						registerData.getEmail().toLowerCase(Locale.ROOT),
 						passwordEncoder.encode(registerData.getPassword()),
-						true,
+						false,
 						registerData.isAcceptedTerms(), // should always be true
 						Instant.now()
 				)
 		);
 		System.out.println("Email:  " + savedAccount.getEmail());
+
+		// returns a Map containing email and codeId
+		return sendVerificationEmail(savedAccount);
+	}
+
+	@Transactional
+	public Map<String, String> sendVerificationEmail(Account account) {
 		// delete the verification code the user has before generating a new one
-		if (codeService.accountHasCode(savedAccount)) {
-			codeService.deleteCodeByAccount(savedAccount);
+		if (codeService.accountHasCode(account)) {
+			codeService.deleteCodeByAccount(account);
 		}
-		// generate and send new verification code
-		VerificationCode code = new VerificationCode(savedAccount);
+		VerificationCode code = new VerificationCode(account);
 		Long codeId = codeService.saveCode(code).getCodeId();
-		String emailBody = VERIFY_CODE_HTML.replace("$firstName", savedAccount.getEmail())
+		String emailBody = VERIFY_CODE_HTML.replace("$firstName", account.getNickname())
 				.replace("$verificationCode", code.getCode());
 
 		emailService.sendMail(
 				"Deadline Reminder: Activate your account",
 				"donotreply@deadline-reminder.com",
-				savedAccount.getEmail(),
+				account.getEmail(),
 				"donotreply@deadline-reminder.com",
 				emailBody
 		);
 
 		log.info("Code sent: {}, created at: {} expires at {}", code.getCode(), code.getDateCreated().toString(), code.getExpiryDate().toString());
-		return Map.of("email", savedAccount.getEmail(),
+		return Map.of("email", account.getEmail(),
 				"codeId", codeId.toString());
 	}
 
@@ -157,17 +168,36 @@ public class AccountService {
 		}
 	}
 
-	// jwt
-	public String authenticateUser(String email, String password, Boolean stayLoggedIn) {
-		Authentication auth = authManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						email,
-						password
-				)
-		);
-		SecurityContextHolder.getContext().setAuthentication(auth);
+	public Map<String, String> authenticateUser(LoginData loginData) {
+		String email = loginData.getEmail().toLowerCase(Locale.ROOT);
+		String password = loginData.getPassword();
+		boolean stayLoggedIn = loginData.getStayLoggedIn();
 
-		return generateToken(auth, stayLoggedIn);
+		Map<String, String> result = new HashMap<>();
+		result.put("email", email);
+		try {
+			Authentication auth = authManager.authenticate(
+					new UsernamePasswordAuthenticationToken(
+							email,
+							password
+					)
+			);
+			SecurityContextHolder.getContext().setAuthentication(auth);
+			String token = generateToken(auth, stayLoggedIn);
+			result.put("token", token);
+		}
+		catch (BadCredentialsException ex) {
+			result.put("error", "Invalid username or password");
+		}
+
+		catch (DisabledException ex) {
+			result.put("error", "Account is disabled");
+		}
+		catch (LockedException ex) {
+			result.put("error", "Account is locked");
+		}
+
+		return result;
 	}
 
 	private String generateToken(Authentication auth, Boolean stayLoggedIn) {
