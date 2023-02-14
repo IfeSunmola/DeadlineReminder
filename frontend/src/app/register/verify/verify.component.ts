@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {VerifyCodeData} from "../../models/verify-code-data";
-import {EXPIRED, INCORRECT, INVALID_REQUEST, SUCCESS, VERIFY_CODE_LENGTH} from "../../AppConstants";
+import {DISABLED_ACCOUNT, DISABLED_ACCOUNT_MESSAGE, EXPIRED, INCORRECT, INVALID_REQUEST, SUCCESS, VERIFY_CODE_LENGTH} from "../../AppConstants";
 
 @Component({
 	selector: 'app-verify',
@@ -14,7 +14,9 @@ export class VerifyComponent implements OnInit {
 	userEmail: string = "";
 	codeId: number = -1;
 	verifyForm!: FormGroup;
-
+	// user is disabled
+	disabledAccount: boolean = false;
+	readonly DISABLED_ACCOUNT_MESSAGE = DISABLED_ACCOUNT_MESSAGE
 
 	constructor(private router: Router, private authService: AuthService) {
 		this.userEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
@@ -27,6 +29,9 @@ export class VerifyComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.disabledAccount = localStorage.getItem(DISABLED_ACCOUNT) === "true";
+		localStorage.removeItem(DISABLED_ACCOUNT);
+
 		this.verifyForm = new FormGroup({
 			userEmail: new FormControl(
 				this.userEmail
@@ -50,7 +55,6 @@ export class VerifyComponent implements OnInit {
 			// code id wasn't gotten for some reason or the user email is not in the email field
 			// shouldn't execute if nothing fishy is going on
 			this.router.navigateByUrl('/register').then();
-			return
 		}
 
 		this.authService.verifyCode(verifyCodeData).subscribe(
@@ -58,14 +62,17 @@ export class VerifyComponent implements OnInit {
 				next: (response) => {
 					if (response === SUCCESS) {
 						this.router.navigateByUrl('/login').then();
-					} else if (response === INCORRECT) {
+					}
+					else if (response === INCORRECT) {
 						this.code?.setErrors({incorrect: true});
 						console.log("Incorrect code");
-					} else if (response === EXPIRED) {
+					}
+					else if (response === EXPIRED) {
 						this.code?.setErrors({expired: true});
-					} else {
-						localStorage.setItem("invalidRequest", true.toString());
-						this.router.navigateByUrl('/register').then();
+					}
+					else {
+						localStorage.setItem(INVALID_REQUEST, "true");
+						this.router.navigateByUrl('/').then();
 						console.log("Something funny happened: " + response);
 					}
 				},

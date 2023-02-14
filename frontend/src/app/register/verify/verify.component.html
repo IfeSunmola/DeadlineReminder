@@ -1,12 +1,19 @@
 <div class="container-fluid center-in-screen">
 	<div>
+
+		<!--Start messages-->
+		<ngb-alert *ngIf="disabledAccount" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{DISABLED_ACCOUNT_MESSAGE}}
+		</ngb-alert>
+		<!--End messages-->
+
 		<h2 class="fs-1 text-center mb-4 ">Verify your account</h2>
 		<h4 class="fs-6 text-center mb-4">A verification code has been sent to your email</h4>
 
 		<form [formGroup]="verifyForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post" novalidate>
 			<div class="col-md-12">
 				<label for="userEmail" class="form-label">Your email</label>
-				<input formControlName="userEmail" readonly  type="email" class="form-control" id="userEmail">
+				<input formControlName="userEmail" readonly type="email" class="form-control" id="userEmail">
 			</div>
 
 			<div class="col-md-12">

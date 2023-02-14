@@ -6,7 +6,7 @@ import {
 	HttpInterceptor, HttpErrorResponse
 } from '@angular/common/http';
 import {catchError, Observable, of, throwError} from 'rxjs';
-import {AUTH_TOKEN, EXPIRED_SESSION} from "../AppConstants";
+import {AUTH_TOKEN, DISABLED_ACCOUNT, EXPIRED_SESSION} from "../AppConstants";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
 
@@ -17,12 +17,37 @@ export class AuthInterceptor implements HttpInterceptor {
 	}
 
 	private handleAuthError(err: HttpErrorResponse): Observable<any> {
-		//handle your auth error or rethrow. https://stackoverflow.com/a/50970853
+		// https://stackoverflow.com/a/50970853
 		if (err.status === 401 || err.status === 403) {
-			console.log("AuthInterceptor: UNAUTHORIZED: " + err.status)
-			localStorage.setItem(EXPIRED_SESSION, "true");
-			this.authService.logout();
-			this.router.navigateByUrl(`/login`).then();
+			// All 401s and 403 should return "error" message
+			const errorMessage = err.error.error
+			if (errorMessage === DISABLED_ACCOUNT) {
+				const email = err.error.email
+				console.log("1 AuthInterceptor: UNAUTHORIZED, DISABLED: " + err.error)
+				this.authService.logout() // shouldn't really do anything since the user isn't logged-in anyway
+				localStorage.setItem(DISABLED_ACCOUNT, "true")
+
+				this.authService.sendVerificationCode(email).subscribe(
+					{
+						next: (response) => {
+							if (response.email !== email) { // random safeguard
+								console.log("AuthInterceptor: sendVerificationCode: email mismatch")
+								this.router.navigate(['/login']).then()
+							}
+							else {
+								this.router.navigateByUrl('/register/verify',
+									{state: {email: response.email, codeId: response.codeId}}).then();
+							}
+						}
+					}
+				)
+			}
+			else {
+				console.log("2 AuthInterceptor: UNAUTHORIZED: " + err.error.error)
+				localStorage.setItem(EXPIRED_SESSION, "true");
+				this.authService.logout();
+				this.router.navigateByUrl(`/login`).then();
+			}
 			return of(err.message); // or EMPTY may be appropriate here
 		}
 		return throwError(() => err);
@@ -38,7 +63,8 @@ export class AuthInterceptor implements HttpInterceptor {
 				}
 			})
 			return next.handle(clonedRequest).pipe(catchError(x => this.handleAuthError(x)));
-		} else {
+		}
+		else {
 			return next.handle(request).pipe(catchError(x => this.handleAuthError(x)));
 		}
 	}
