@@ -40,9 +40,9 @@ export class LoginComponent implements OnInit {
 
 		this.authService.login(loginData).subscribe(
 			{
-				next: (response) => {
-					console.log("Response: " + response)
-					localStorage.setItem(AUTH_TOKEN, response)
+				next: (response) => { // invalid login will be caught by AuthInterceptor
+					console.log("Response: " + JSON.stringify(response))
+					localStorage.setItem(AUTH_TOKEN, response.token)
 					this.router.navigate(['/me']).then()
 				},
 			}

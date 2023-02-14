@@ -5,6 +5,7 @@ import {RegisterUserResponse} from "../models/register-user-response";
 import {VerifyCodeData} from "../models/verify-code-data";
 import {LoginData} from "../models/login-data";
 import {RegisterData} from "../models/register-data";
+import {GenerateTokenResponse} from "../models/generate-token-response";
 
 @Injectable({
 	providedIn: 'root'
@@ -32,7 +33,7 @@ export class AuthService {
 	}
 
 	login(loginData: LoginData) {
-		return this.http.post(`${this.BASE_URL}/generate-token`, loginData, {responseType: 'text'})
+		return this.http.post <GenerateTokenResponse>(`${this.BASE_URL}/generate-token`, loginData, {responseType: 'json'})
 	}
 
 	logout() {
@@ -42,5 +43,9 @@ export class AuthService {
 	isAuthenticated(): boolean {
 		// if the AUTH_TOKEN is invalid, a 401 or 403 will be thrown, the AuthInterceptor will redirect to the login page
 		return !!localStorage.getItem(AUTH_TOKEN)
+	}
+
+	sendVerificationCode(email: string) {
+		return this.http.post<RegisterUserResponse>(`${this.BASE_URL}/send-verification-email`, email, {responseType: 'json'})
 	}
 }
