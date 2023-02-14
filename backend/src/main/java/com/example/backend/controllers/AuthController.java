@@ -29,21 +29,26 @@ public class AuthController {
 	private final AccountService accountService;
 
 	@PostMapping(value = "/generate-token")
-	public ResponseEntity<String> token(@RequestBody @Valid LoginData loginData) {
+	public ResponseEntity<Map<String, String>> generateToken(@RequestBody @Valid LoginData loginData) {
 		log.info("Token requested for user: {}", loginData.getEmail());
+		Map<String, String> result =
+				accountService.authenticateUser(loginData);
 
-		String token = accountService.authenticateUser(loginData.getEmail(), loginData.getPassword(), loginData.getStayLoggedIn());
-
-		log.info("Token granted: {}\n", token);
-		return new ResponseEntity<>(token, HttpStatus.OK);
+		if (result.containsKey("token")) {
+			log.info("Token granted: {}\n", result);
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		log.info("Token not granted: {}\n", result);
+		return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
 	}
 
 	@PostMapping("/register")
-	public Map<String, String> register(@RequestBody @Valid RegisterData registerData, BindingResult result)
+	public ResponseEntity<Map<String, String>> register(@RequestBody @Valid RegisterData registerData, BindingResult result)
 			throws MethodArgumentNotValidException, NoSuchMethodException {
-		// throws exception if there are errors, exception is handled with AuthenticationExceptionHandler
-		accountService.validateData(registerData, result);
-		return accountService.createAccount(registerData);
+
+		accountService.validateData(registerData, result); // throws exception if there are errors, exception is handled with AuthenticationExceptionHandler
+		Map<String, String> emailAndCodeId = accountService.createAccount(registerData);
+		return new ResponseEntity<>(emailAndCodeId, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/register/verify")
@@ -54,5 +59,12 @@ public class AuthController {
 	@PostMapping("/email-exists")
 	public boolean emailExists(@RequestBody String email) {
 		return accountService.emailExists(email);
+	}
+
+	@PostMapping("/send-verification-email")
+	public ResponseEntity<Map<String, String>> sendVerificationEmail(@RequestBody String email) {
+		log.info("Verification email requested for user: {}", email);
+		Map<String, String> emailAndCodeId = accountService.sendVerificationEmail(accountService.findByEmail(email));
+		return new ResponseEntity<>(emailAndCodeId, HttpStatus.CREATED);
 	}
 }
