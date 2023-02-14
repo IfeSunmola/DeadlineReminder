@@ -14,8 +14,12 @@ export const LOGIN_NEEDED = "loginNeeded"
 export const LOGIN_NEEDED_MESSAGE = "Login is needed for that page"
 export const DISABLED_ACCOUNT = "Account is disabled"
 export const DISABLED_ACCOUNT_MESSAGE = "Verification is needed to access your account"
+export const INVALID_CREDENTIALS = "Invalid username or password"
 // Logout stuff
 export const NORMAL_LOGOUT = "normalLogout"
 export const NORMAL_LOGOUT_MESSAGE = "Logout Successful"
 export const EXPIRED_SESSION = "expiredSession"
 export const EXPIRED_SESSION_MESSAGE = "Your session has expired. Please login again."
+// logged in before
+export const INVALID_SESSION = "invalidSession";
+export const INVALID_SESSION_MESSAGE = "Your session is invalid. Please login again."

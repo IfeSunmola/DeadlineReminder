@@ -6,7 +6,7 @@ import {LoginData} from "../models/login-data";
 import {
 	AUTH_TOKEN,
 	EXPIRED_SESSION,
-	EXPIRED_SESSION_MESSAGE, INVALID_SESSION, INVALID_SESSION_MESSAGE,
+	EXPIRED_SESSION_MESSAGE, INVALID_CREDENTIALS, INVALID_SESSION, INVALID_SESSION_MESSAGE,
 	LOGIN_NEEDED,
 	LOGIN_NEEDED_MESSAGE,
 	NORMAL_LOGOUT,
@@ -32,7 +32,9 @@ export class LoginComponent implements OnInit {
 	// user was already logged in but the jwt became invalid
 	invalidSession: boolean = false;
 	readonly INVALID_SESSION_MESSAGE = INVALID_SESSION_MESSAGE
-
+	// invalid username or password
+	invalidCredentials: boolean = false;
+	readonly INVALID_CREDENTIALS_MESSAGE = INVALID_CREDENTIALS
 
 	constructor(private authService: AuthService, private router: Router) {
 	}
@@ -64,6 +66,9 @@ export class LoginComponent implements OnInit {
 
 		this.invalidSession = localStorage.getItem(INVALID_SESSION) === "true"
 		localStorage.removeItem(INVALID_SESSION)
+
+		this.invalidCredentials = localStorage.getItem(INVALID_CREDENTIALS) === "true"
+		localStorage.removeItem(INVALID_CREDENTIALS)
 	}
 
 	ngOnInit(): void {

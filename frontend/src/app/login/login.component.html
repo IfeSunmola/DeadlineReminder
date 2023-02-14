@@ -17,6 +17,10 @@
 		<ngb-alert *ngIf="invalidSession" type="primary" [dismissible]="false" class="text-center mb-4">
 			{{INVALID_SESSION_MESSAGE}}
 		</ngb-alert>
+
+		<ngb-alert *ngIf="invalidCredentials" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{INVALID_CREDENTIALS_MESSAGE}}
+		</ngb-alert>
 		<!--End messages-->
 
 		<h1 class="fs-1 text-center">Welcome Back</h1>
