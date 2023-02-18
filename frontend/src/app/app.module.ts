@@ -15,6 +15,8 @@ import {ScreenErrorComponent} from './screen-error/screen-error.component';
 import {VerifyComponent} from './register/verify/verify.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/auth-interceptor.service";
+import {LoadingComponent} from './loading/loading.component';
+import {LoadingInterceptor} from "./interceptors/loading.interceptor";
 
 @NgModule({
 	declarations: [
@@ -27,6 +29,7 @@ import {AuthInterceptor} from "./interceptors/auth-interceptor.service";
 		NewDeadlineComponent,
 		ScreenErrorComponent,
 		VerifyComponent,
+		LoadingComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -37,6 +40,11 @@ import {AuthInterceptor} from "./interceptors/auth-interceptor.service";
 		HttpClientModule,
 	],
 	providers: [
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: LoadingInterceptor,
+			multi: true
+		},
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthInterceptor,
