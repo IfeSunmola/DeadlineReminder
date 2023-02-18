@@ -6,6 +6,7 @@ import {VerifyCodeData} from "../models/verify-code-data";
 import {LoginData} from "../models/login-data";
 import {RegisterData} from "../models/register-data";
 import {GenerateTokenResponse} from "../models/generate-token-response";
+import {PasswordResetData} from "../models/password-reset-data";
 
 @Injectable({
 	providedIn: 'root'
@@ -38,6 +39,7 @@ export class AuthService {
 
 	logout() {
 		localStorage.removeItem(AUTH_TOKEN);
+		//TODO: invalidate the token on the server
 	}
 
 	isAuthenticated(): boolean {
@@ -47,5 +49,17 @@ export class AuthService {
 
 	sendVerificationCode(email: string) {
 		return this.http.post<RegisterUserResponse>(`${this.BASE_URL}/send-verification-email`, email, {responseType: 'json'})
+	}
+
+	sendPasswordResetMail(email: string) {
+		return this.http.post(`${this.BASE_URL}/send-reset-password-email`, email)
+	}
+
+	verifyPasswordResetCode(token: string) {
+		return this.http.get(`${this.BASE_URL}/reset-password/verify?token=${token}`, {responseType: 'text'})
+	}
+
+	confirmPasswordReset(passwordResetData: PasswordResetData) {
+		return this.http.put<PasswordResetData>(`${this.BASE_URL}/confirm-reset`, passwordResetData, {responseType: 'json'})
 	}
 }
