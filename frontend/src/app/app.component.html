@@ -2,6 +2,7 @@
 
 <ng-container *ngIf="hasValidScreen">
 	<router-outlet></router-outlet>
+	<app-loading></app-loading>
 </ng-container>
 
 <ng-container *ngIf="!hasValidScreen">
