@@ -2,6 +2,7 @@ package com.example.backend.controllers;
 
 import com.example.backend.services.AccountService;
 import com.example.backend.transfer_objects.LoginData;
+import com.example.backend.transfer_objects.PasswordResetData;
 import com.example.backend.transfer_objects.RegisterData;
 import com.example.backend.transfer_objects.VerifyCodeData;
 import jakarta.validation.Valid;
@@ -11,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -46,7 +44,7 @@ public class AuthController {
 	public ResponseEntity<Map<String, String>> register(@RequestBody @Valid RegisterData registerData, BindingResult result)
 			throws MethodArgumentNotValidException, NoSuchMethodException {
 
-		accountService.validateData(registerData, result); // throws exception if there are errors, exception is handled with AuthenticationExceptionHandler
+		accountService.validateData(registerData, result); // throws exception if there are errors
 		Map<String, String> emailAndCodeId = accountService.createAccount(registerData);
 		return new ResponseEntity<>(emailAndCodeId, HttpStatus.CREATED);
 	}
@@ -66,5 +64,26 @@ public class AuthController {
 		log.info("Verification email requested for user: {}", email);
 		Map<String, String> emailAndCodeId = accountService.sendVerificationEmail(accountService.findByEmail(email));
 		return new ResponseEntity<>(emailAndCodeId, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/send-reset-password-email")
+	public HttpStatus sendResetPasswordEmail(@RequestBody String email) {
+		log.info("Reset password email requested for user: {}", email);
+		accountService.sendResetPasswordEmail(email);
+		return HttpStatus.CREATED;
+	}
+
+	@GetMapping("/reset-password/verify")
+	public String verifyPasswordResetCode(@RequestParam String token) {
+		log.info("Password reset code verification requested for code: {}", token);
+		return accountService.verifyPasswordResetToken(token); // returns the email associated with the code
+	}
+
+	@PutMapping("/confirm-reset")
+	public Map<String, String> confirmPasswordReset(@RequestBody  @Valid PasswordResetData passwordResetData, BindingResult result)
+			throws MethodArgumentNotValidException, NoSuchMethodException {
+		log.info("Reset password requested for user: {}", passwordResetData);
+		accountService.validatePasswordResetData(passwordResetData, result);  // throws exception if there are errors
+		return accountService.confirmPasswordReset(passwordResetData);
 	}
 }

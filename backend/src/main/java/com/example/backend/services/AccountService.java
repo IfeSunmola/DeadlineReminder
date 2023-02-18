@@ -6,16 +6,13 @@ import com.example.backend.models.VerificationCode;
 import com.example.backend.repos.AccountRepo;
 import com.example.backend.security.AppProperties;
 import com.example.backend.transfer_objects.LoginData;
+import com.example.backend.transfer_objects.PasswordResetData;
 import com.example.backend.transfer_objects.RegisterData;
 import com.example.backend.transfer_objects.VerifyCodeData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,7 +30,10 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.example.backend.mailsender.MailBody.PASSWORD_RESET_HTML;
 import static com.example.backend.mailsender.MailBody.VERIFY_CODE_HTML;
+import static com.example.backend.models.VerificationCodeType.EMAIL_VERIFICATION;
+import static com.example.backend.models.VerificationCodeType.PASSWORD_RESET;
 
 /**
  * Service class.
@@ -108,10 +108,8 @@ public class AccountService {
 	@Transactional
 	public Map<String, String> sendVerificationEmail(Account account) {
 		// delete the verification code the user has before generating a new one
-		if (codeService.accountHasCode(account)) {
-			codeService.deleteCodeByAccount(account);
-		}
-		VerificationCode code = new VerificationCode(account);
+		codeService.deleteExistingCode(account);
+		VerificationCode code = new VerificationCode(account, EMAIL_VERIFICATION);
 		Long codeId = codeService.saveCode(code).getCodeId();
 		String emailBody = VERIFY_CODE_HTML.replace("$firstName", account.getNickname())
 				.replace("$verificationCode", code.getCode());
@@ -217,5 +215,97 @@ public class AccountService {
 				.claim("scope", scope)
 				.build();
 		return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+	}
+
+	@Transactional
+	public void sendResetPasswordEmail(String email) {
+		// here, we don't want to give the user any information about whether the email exists or not
+		// so we just return a success message
+		if (!accountRepo.emailExists(email)) {
+			return;
+		}
+		var account = findByEmail(email);
+		// delete the verification code the user has before generating a new one
+		codeService.deleteExistingCode(account);
+		VerificationCode code = new VerificationCode(account, PASSWORD_RESET);
+		String uuid = codeService.saveCode(code).getCode();
+
+		String resetLink = String.format("%s/reset-password/confirm-reset?token=%s", appProps.getFrontendSite(), uuid);
+		String emailBody = PASSWORD_RESET_HTML.replace("$nickname", account.getNickname())
+				.replace("$resetLink", resetLink);
+
+		emailService.sendMail(
+				"Deadline Reminder: Reset your password",
+				"donotreply@deadline-reminder.com",
+				email,
+				"donotreply@deadline-reminder.com",
+				emailBody
+		);
+
+		log.info("Password reset sent. {}", resetLink);
+	}
+
+	private boolean codeIsValid(VerificationCode code) {
+		return code != null && !code.isExpired();
+	}
+
+	public String verifyPasswordResetToken(String token) {
+		VerificationCode code = codeService.findCodeByCode(token);
+		if (codeIsValid(code)) {
+			return code.getOwner().getEmail();
+		}
+		return "Expired";
+	}
+
+	public Map<String, String> confirmPasswordReset(PasswordResetData passwordResetData) {
+		VerificationCode code = codeService.findCodeByCode(passwordResetData.getToken());
+		if (codeIsValid(code)) {
+			Account account = code.getOwner();
+			account.setPassword(passwordEncoder.encode(passwordResetData.getPassword()));
+			accountRepo.save(account);
+			codeService.deleteCode(code);
+			return Map.of("message", "Success");
+		}
+		return Map.of("token", "Expired");
+	}
+
+	public void validatePasswordResetData(PasswordResetData resetData, BindingResult result)
+			throws MethodArgumentNotValidException, NoSuchMethodException {
+		var email = resetData.getEmail() == null ? "" : resetData.getEmail().toLowerCase(Locale.ROOT);
+		var token = resetData.getToken();
+		var password = resetData.getPassword();
+		var confirmPassword = resetData.getConfirmPassword();
+		VerificationCode code = codeService.findCodeByCode(token);
+		var emailFromCode = code == null ? "" : code.getOwner().getEmail();
+
+		if (code == null || code.isExpired()) { // code is expired/invalid
+			result.rejectValue("token", "token.expired", "Invalid token");
+		}
+		// the email linked to the code is not the same as the email in the request || email from request does not exist
+		else if (!email.equals(emailFromCode) || !accountRepo.emailExists(email)) {
+			codeService.deleteExistingCode(code.getOwner());
+			result.rejectValue("email", "email.invalid", "Invalid email");
+		}
+		else if (password == null || password.isBlank()) { // password is empty
+			codeService.deleteExistingCode(code.getOwner());
+			codeService.deleteCode(code);
+			result.rejectValue("password", "password.blank", "Password cannot be blank");
+		}
+		else if (confirmPassword == null || confirmPassword.isBlank()) { // confirm password is empty
+			codeService.deleteExistingCode(code.getOwner());
+			result.rejectValue("confirmPassword", "confirmPassword.blank", "Confirm password cannot be blank");
+		}
+		else if (!password.equals(confirmPassword)) { // passwords don't match
+			codeService.deleteExistingCode(code.getOwner());
+			result.rejectValue("confirmPassword", "confirmPassword.mismatch", "Passwords do not match");
+		}
+
+		if (result.hasFieldErrors()) {
+			MethodParameter methodParameter = new MethodParameter(
+					this.getClass().getMethod("validatePasswordResetData", PasswordResetData.class, BindingResult.class),
+					1
+			);
+			throw new MethodArgumentNotValidException(methodParameter, result);
+		}
 	}
 }
