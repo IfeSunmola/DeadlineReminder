@@ -21,3 +21,6 @@ export const NORMAL_LOGOUT_MESSAGE = "Logout Successful"
 // logged in before
 export const INVALID_SESSION = "invalidSession";
 export const INVALID_SESSION_MESSAGE = "Your session is invalid. Please login again."
+// password reset
+export const PASSWORD_RESET = "passwordResetSuccess"
+export const PASSWORD_RESET_MESSAGE = "If '$userEmail' exists, a password reset link will be sent"

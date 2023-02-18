@@ -17,6 +17,10 @@
 		<ngb-alert *ngIf="invalidCredentials" type="primary" [dismissible]="false" class="text-center mb-4">
 			{{INVALID_CREDENTIALS_MESSAGE}}
 		</ngb-alert>
+
+		<ngb-alert *ngIf="passwordReset" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{PASSWORD_RESET_MESSAGE.replace('$userEmail', passwordResetEmail)}}
+		</ngb-alert>
 		<!--End messages-->
 
 		<h1 class="fs-1 text-center">Welcome Back</h1>
@@ -50,6 +54,11 @@
 			<div class="col-12 text-center">
 				<button [disabled]="loginForm.invalid" type="submit" class="btn btn-primary btn-lg">Login</button>
 			</div>
+			<div class="col-12 text-center">
+				<a class="link-info" style="cursor: pointer" (click)="resetPasswordClicked()">Forgot password?</a>
+			</div>
 		</form>
 	</div>
 </div>
+
+<router-outlet></router-outlet>

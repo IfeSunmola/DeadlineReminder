@@ -11,7 +11,7 @@ import {
 	LOGIN_NEEDED,
 	LOGIN_NEEDED_MESSAGE,
 	NORMAL_LOGOUT,
-	NORMAL_LOGOUT_MESSAGE
+	NORMAL_LOGOUT_MESSAGE, PASSWORD_RESET, PASSWORD_RESET_MESSAGE
 } from "../AppConstants";
 
 @Component({
@@ -22,19 +22,24 @@ import {
 export class LoginComponent implements OnInit {
 	loginForm!: FormGroup
 	// user logged out normally
-	normalLogout: boolean = false;
+	normalLogout = false;
 	readonly NORMAL_LOGOUT_MESSAGE = NORMAL_LOGOUT_MESSAGE
 	// user is not logged in, tries to access a protected route, from AuthGuard
-	loginNeeded: boolean = false;
+	loginNeeded = false;
 	readonly LOGIN_NEEDED_MESSAGE = LOGIN_NEEDED_MESSAGE
 	// user was already logged in but the jwt became invalid
-	invalidSession: boolean = false;
+	invalidSession = false;
 	readonly INVALID_SESSION_MESSAGE = INVALID_SESSION_MESSAGE
 	// invalid username or password
 	invalidCredentials: boolean = false;
 	readonly INVALID_CREDENTIALS_MESSAGE = INVALID_CREDENTIALS
+	// password reset
+	passwordReset = true
+	readonly PASSWORD_RESET_MESSAGE = PASSWORD_RESET_MESSAGE
+	passwordResetEmail = ""
 
 	constructor(private authService: AuthService, private router: Router) {
+		this.passwordResetEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
 	}
 
 	formSubmitted() {
@@ -64,6 +69,9 @@ export class LoginComponent implements OnInit {
 
 		this.invalidCredentials = localStorage.getItem(INVALID_CREDENTIALS) === "true"
 		localStorage.removeItem(INVALID_CREDENTIALS)
+
+		this.passwordReset = localStorage.getItem(PASSWORD_RESET) === "true"
+		localStorage.removeItem(PASSWORD_RESET)
 	}
 
 	ngOnInit(): void {
@@ -105,5 +113,9 @@ export class LoginComponent implements OnInit {
 
 	get stayLoggedIn() {
 		return this.loginForm.get('stayLoggedIn')
+	}
+
+	resetPasswordClicked() {
+		this.router.navigate(['/reset-password']).then()
 	}
 }
