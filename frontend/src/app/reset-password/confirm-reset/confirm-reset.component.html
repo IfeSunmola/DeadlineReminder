@@ -1,0 +1,56 @@
+<div class="container-fluid center-in-screen">
+	<div>
+		<h1 class="fs-1 text-center">Password Reset</h1>
+		<form [formGroup]="confirmResetForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post">
+			<div class="col-md-12">
+				<label for="email" class="fs-4 form-label">Email</label>
+				<input [formControlName]="'email'" type="email" class="form-control " id="email">
+				<ng-container *ngIf="email?.errors && (email?.dirty || email?.touched)">
+					<span class="text-danger" *ngIf="email?.errors?.['required']">Email is required</span>
+					<span class="text-danger" *ngIf="email?.errors?.['email']">Enter a valid email</span>
+					<span class="text-danger" *ngIf="email?.errors?.['incorrect']">Incorrect Email</span>
+				</ng-container>
+			</div>
+
+			<!--Start Password-->
+			<div class="col-md-12">
+				<label for="password" class="form-label">Password</label>
+				<input formControlName="password"  type="password" class="form-control" id="password">
+
+				<ng-container *ngIf="password?.errors && (password?.dirty || password?.touched)">
+					<span class="text-danger" *ngIf="password?.errors?.['required']">Password is required</span>
+					<span class="text-danger" *ngIf="password?.errors?.['minlength']">Keep Typing...</span>
+					<span class="text-danger" *ngIf="password?.errors?.['maxlength']">Why's your password that long?</span>
+					<span class="text-danger" *ngIf="password?.errors?.['error']">Verify your password</span>
+				</ng-container>
+
+				<ng-container *ngIf="password?.valid">
+					<span class="text-success" *ngIf="password?.valid">Looks even better
+						<i class="bi text-success bi-check2 fw-bold"></i>
+					</span>
+				</ng-container>
+
+			</div>
+			<!--End Password-->
+
+			<!--Start Confirm Password-->
+			<div class="col-md-12">
+				<label for="confirmPassword" class="form-label">Confirm Password</label>
+				<input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword">
+				<ng-container *ngIf="confirmResetForm?.errors && (confirmPassword?.dirty || confirmPassword?.touched)">
+					<span class="text-danger" *ngIf="confirmResetForm?.hasError('passwordsNotMatching')">Passwords must match</span>
+				</ng-container>
+
+				<ng-container *ngIf="!confirmResetForm?.errors && confirmPassword?.valid && (confirmPassword?.dirty || confirmPassword?.touched)">
+					<span class="text-success" *ngIf="!confirmResetForm?.hasError('passwordsNotMatching')">Fine, you got it
+					</span>
+				</ng-container>
+			</div>
+			<!--End Confirm Password-->
+
+			<div class="col-12 text-center">
+				<button [disabled]="confirmResetForm.invalid" type="submit" class="btn btn-primary btn-lg">Reset Password</button>
+			</div>
+		</form>
+	</div>
+</div>
