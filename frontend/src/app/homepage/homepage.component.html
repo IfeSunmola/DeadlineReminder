@@ -5,6 +5,10 @@
 			{{INVALID_REQUEST_MESSAGE}}
 		</ngb-alert>
 
+		<ngb-alert *ngIf="invalidResetLink" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{INVALID_RESET_LINK_MESSAGE}}
+		</ngb-alert>
+
 		<h2 class="text-center">Receive regular reminders about upcoming deadlines and still miss it because you where being lazy</h2>
 
 		<div class="row gy-3 gx-md-5 mt-md-3 text-center">
