@@ -21,6 +21,10 @@
 		<ngb-alert *ngIf="passwordReset" type="primary" [dismissible]="false" class="text-center mb-4">
 			{{PASSWORD_RESET_MESSAGE.replace('$userEmail', passwordResetEmail)}}
 		</ngb-alert>
+
+		<ngb-alert *ngIf="passwordChanged" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{PASSWORD_CHANGED_MESSAGE}}
+		</ngb-alert>
 		<!--End messages-->
 
 		<h1 class="fs-1 text-center">Welcome Back</h1>

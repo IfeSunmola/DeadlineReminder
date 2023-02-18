@@ -25,3 +25,7 @@ export const INVALID_SESSION_MESSAGE = "Your session is invalid. Please login ag
 // password reset
 export const PASSWORD_RESET = "passwordResetSuccess"
 export const PASSWORD_RESET_MESSAGE = "If '$userEmail' exists, a password reset link will be sent"
+export const INVALID_RESET_LINK = "invalidRequestLink"
+export const INVALID_RESET_LINK_MESSAGE = "That link is invalid, or has expired"
+export const PASSWORD_CHANGED = "passwordChanged"
+export const PASSWORD_CHANGED_MESSAGE = "Password changed successfully, you can now login"
