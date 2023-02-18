@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
-import {delay, Observable, tap} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {LoadingService} from "../services/loading.service";
 
 @Injectable()
@@ -24,7 +24,6 @@ export class LoadingInterceptor implements HttpInterceptor {
 
 	private handler(next: HttpHandler, request: HttpRequest<unknown>) {
 		return next.handle(request).pipe(
-			delay(6000), // TODO: remove this delay
 			tap(
 				(event) => {
 					if (event instanceof HttpResponse) {
