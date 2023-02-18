@@ -1,5 +1,9 @@
-<div *ngIf="showLoader" class="lds-facebook center-spinner overlay">
-	<div></div>
-	<div></div>
-	<div></div>
-</div>
+<ng-container *ngIf="showLoader">
+	<div class="overlay">
+		<div class="lds-facebook center-spinner overlay">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
+</ng-container>
