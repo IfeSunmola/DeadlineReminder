@@ -22,8 +22,10 @@ public class VerificationCodeService {
 		return codeRepo.existsByOwner(owner);
 	}
 
-	public void deleteCodeByAccount(Account owner) {
-		codeRepo.deleteByOwner(owner);
+	public void deleteExistingCode(Account owner) {
+		if (accountHasCode(owner)) {
+			codeRepo.deleteByOwner(owner);
+		}
 	}
 
 	public void deleteAllCodes() {
@@ -36,5 +38,9 @@ public class VerificationCodeService {
 
 	public void deleteCode(VerificationCode code) {
 		codeRepo.delete(code);
+	}
+
+	public VerificationCode findCodeByCode(String code) {
+		return codeRepo.findByCode(code).orElse(null);
 	}
 }
