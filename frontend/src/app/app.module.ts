@@ -17,6 +17,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/auth-interceptor.service";
 import {LoadingComponent} from './loading/loading.component';
 import {LoadingInterceptor} from "./interceptors/loading.interceptor";
+import {ResetPasswordComponent} from './reset-password/reset-password.component';
+import {ConfirmResetComponent} from './reset-password/confirm-reset/confirm-reset.component';
 
 @NgModule({
 	declarations: [
@@ -30,6 +32,8 @@ import {LoadingInterceptor} from "./interceptors/loading.interceptor";
 		ScreenErrorComponent,
 		VerifyComponent,
 		LoadingComponent,
+		ResetPasswordComponent,
+		ConfirmResetComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -42,14 +46,14 @@ import {LoadingInterceptor} from "./interceptors/loading.interceptor";
 	providers: [
 		{
 			provide: HTTP_INTERCEPTORS,
-			useClass: LoadingInterceptor,
+			useClass: AuthInterceptor,
 			multi: true
 		},
 		{
 			provide: HTTP_INTERCEPTORS,
-			useClass: AuthInterceptor,
+			useClass: LoadingInterceptor,
 			multi: true
-		}
+		},
 	],
 	bootstrap: [AppComponent]
 })
