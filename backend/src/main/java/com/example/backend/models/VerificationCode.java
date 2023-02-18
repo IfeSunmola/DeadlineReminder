@@ -1,11 +1,16 @@
 package com.example.backend.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
+import java.util.UUID;
+
+import static com.example.backend.models.VerificationCodeType.EMAIL_VERIFICATION;
 
 /**
  * @author Ife Sunmola
@@ -28,11 +33,19 @@ public class VerificationCode {
 	private Instant dateCreated;
 	private Instant expiryDate;
 
-	public VerificationCode(Account owner) {
+	public VerificationCode(Account owner, VerificationCodeType type) {
 		this.owner = owner;
-		this.code = generateCode();
 		dateCreated = Instant.now();
 		expiryDate = dateCreated.plus(30, ChronoUnit.MINUTES);
+		if (type == EMAIL_VERIFICATION) {
+			this.code = generateCode();
+		}
+		else if (type == VerificationCodeType.PASSWORD_RESET) {
+			this.code = UUID.randomUUID().toString();
+		}
+		else { //TODO: Handle exceptions elegantly with global exception handler
+			throw new IllegalArgumentException("Invalid VerificationCodeType");
+		}
 	}
 
 	private static String generateCode() {
@@ -48,6 +61,4 @@ public class VerificationCode {
 	public boolean isExpired() {
 		return Instant.now().isAfter(expiryDate);
 	}
-
-
 }
