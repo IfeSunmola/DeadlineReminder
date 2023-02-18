@@ -29,7 +29,7 @@ export class AuthService {
 	* Too expensive, use caching or remove it
 	* */
 	emailExists(email: string): any {
-		return this.http.post(`${this.BASE_URL}/email-exists`, email);
+		return this.http.post(`${this.BASE_URL}/email-exists`, email, {headers: {skip: "true"}});
 	}
 
 	login(loginData: LoginData) {
