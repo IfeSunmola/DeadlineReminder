@@ -7,6 +7,8 @@ import {UserHomeComponent} from "./user-home/user-home.component";
 import {VerifyComponent} from "./register/verify/verify.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {RegisteredGuard} from "./guards/registered.guard";
+import {ResetPasswordComponent} from "./reset-password/reset-password.component";
+import {ConfirmResetComponent} from "./reset-password/confirm-reset/confirm-reset.component";
 
 const routes: Routes = [
 	{
@@ -21,6 +23,18 @@ const routes: Routes = [
 		title: 'Login',
 		component: LoginComponent,
 		canActivate: [RegisteredGuard]
+	},
+	{
+		path: 'reset-password',
+		title: 'Reset your password',
+		component: ResetPasswordComponent,
+		canActivate: [RegisteredGuard],
+	},
+	{
+		path: 'reset-password/confirm-reset',
+		title: 'Reset your password',
+		component: ConfirmResetComponent,
+		canActivate: [RegisteredGuard],
 	},
 	{
 		path: 'register',
