@@ -5,6 +5,7 @@ import com.example.backend.models.VerificationCode;
 import com.example.backend.repos.VerificationCodeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Ife Sunmola
@@ -22,6 +23,7 @@ public class VerificationCodeService {
 		return codeRepo.existsByOwner(owner);
 	}
 
+	@Transactional
 	public void deleteExistingCode(Account owner) {
 		if (accountHasCode(owner)) {
 			codeRepo.deleteByOwner(owner);
