@@ -3,7 +3,7 @@
 		<h1 class="fs-1 text-center">Password Reset</h1>
 		<form [formGroup]="confirmResetForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post">
 			<div class="col-md-12">
-				<label for="email" class="fs-4 form-label">Email</label>
+				<label for="email" class="orm-label">Email</label>
 				<input [formControlName]="'email'" type="email" class="form-control " id="email">
 				<ng-container *ngIf="email?.errors && (email?.dirty || email?.touched)">
 					<span class="text-danger" *ngIf="email?.errors?.['required']">Email is required</span>

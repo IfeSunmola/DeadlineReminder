@@ -34,7 +34,7 @@
 		<h1 class="fs-1 text-center">Welcome Back</h1>
 		<form [formGroup]="loginForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post">
 			<div class="col-md-12">
-				<label for="email" class="fs-4 form-label">Email</label>
+				<label for="email" class="form-label">Email</label>
 				<input [formControlName]="'email'" type="email" class="form-control " id="email">
 				<ng-container *ngIf="email?.errors && (email?.dirty || email?.touched)">
 					<span class="text-danger" *ngIf="email?.errors?.['required']">Email is required</span>
@@ -43,7 +43,7 @@
 			</div>
 
 			<div class="col-md-12">
-				<label for="password" class="fs-4 form-label">Password</label>
+				<label for="password" class="form-label">Password</label>
 				<input [formControlName]="'password'" type="password" class="form-control" id="password">
 				<ng-container *ngIf="password?.errors && (password?.dirty || password?.touched)">
 					<span class="text-danger" *ngIf="password?.errors?.['required']">Password is required</span>
@@ -59,6 +59,7 @@
 					</label>
 				</div>
 			</div>
+
 			<div class="col-12 text-center">
 				<button [disabled]="loginForm.invalid" type="submit" class="btn btn-primary btn-lg">Login</button>
 			</div>
