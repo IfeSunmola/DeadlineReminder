@@ -11,7 +11,6 @@ import {RegisterComponent} from './components/register/register.component';
 import {UserHomeComponent} from './components/user-home/user-home.component';
 import {NewDeadlineComponent} from './components/user-home/new-deadline/new-deadline.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {ScreenErrorComponent} from './components/screen-error/screen-error.component';
 import {VerifyComponent} from './components/register/verify/verify.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/auth-interceptor.service";
@@ -29,7 +28,6 @@ import {ConfirmResetComponent} from './components/reset-password/confirm-reset/c
 		RegisterComponent,
 		UserHomeComponent,
 		NewDeadlineComponent,
-		ScreenErrorComponent,
 		VerifyComponent,
 		LoadingComponent,
 		ResetPasswordComponent,

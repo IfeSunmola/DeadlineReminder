@@ -1,10 +1,18 @@
-<app-navbar></app-navbar>
-
 <ng-container *ngIf="hasValidScreen">
-	<router-outlet></router-outlet>
-	<app-loading></app-loading>
+	<div>
+		<app-navbar></app-navbar>
+		<router-outlet></router-outlet>
+		<app-loading></app-loading>
+	</div>
 </ng-container>
 
+
 <ng-container *ngIf="!hasValidScreen">
-	<app-screen-error></app-screen-error>
+	<div class="center-in-screen">
+		<div id="desktop-frame">
+			<app-navbar></app-navbar>
+			<router-outlet></router-outlet>
+			<app-loading></app-loading>
+		</div>
+	</div>
 </ng-container>
