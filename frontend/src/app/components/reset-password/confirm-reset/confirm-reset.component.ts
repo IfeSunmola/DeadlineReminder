@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {EXPIRED, INVALID_REQUEST, INVALID_RESET_LINK, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, PASSWORD_CHANGED} from "../../AppConstants";
+import {EXPIRED, INVALID_REQUEST, INVALID_RESET_LINK, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, PASSWORD_CHANGED} from "../../../AppConstants";
 import {MatchingPasswords} from "../../register/validator";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
-import {PasswordResetData} from "../../models/password-reset-data";
+import {AuthService} from "../../../services/auth.service";
+import {PasswordResetData} from "../../../models/password-reset-data";
 
 @Component({
 	selector: 'app-confirm-reset',

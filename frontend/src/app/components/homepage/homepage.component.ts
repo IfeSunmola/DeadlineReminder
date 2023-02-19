@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {INVALID_REQUEST, INVALID_REQUEST_MESSAGE, INVALID_RESET_LINK, INVALID_RESET_LINK_MESSAGE} from "../AppConstants";
+import {INVALID_REQUEST, INVALID_REQUEST_MESSAGE, INVALID_RESET_LINK, INVALID_RESET_LINK_MESSAGE} from "../../AppConstants";
 
 @Component({
 	selector: 'app-homepage',

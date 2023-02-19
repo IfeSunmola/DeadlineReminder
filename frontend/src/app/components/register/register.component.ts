@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailValidator, MatchingPasswords} from "./validator";
 import {Router} from "@angular/router";
-import {AuthService} from "../services/auth.service";
-import {MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../AppConstants";
+import {AuthService} from "../../services/auth.service";
+import {MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../../AppConstants";
 
 @Component({
 	selector: 'app-register',

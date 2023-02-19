@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {LoadingService} from "../services/loading.service";
+import {LoadingService} from "../../services/loading.service";
 
 @Component({
 	selector: 'app-loading',

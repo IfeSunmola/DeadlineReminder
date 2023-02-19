@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {LoginData} from "../models/login-data";
+import {LoginData} from "../../models/login-data";
 import {
 	AUTH_TOKEN,
 	INVALID_CREDENTIALS,
@@ -12,7 +12,7 @@ import {
 	LOGIN_NEEDED_MESSAGE,
 	NORMAL_LOGOUT,
 	NORMAL_LOGOUT_MESSAGE, PASSWORD_CHANGED, PASSWORD_CHANGED_MESSAGE, PASSWORD_RESET, PASSWORD_RESET_MESSAGE
-} from "../AppConstants";
+} from "../../AppConstants";
 
 @Component({
 	selector: 'app-login',

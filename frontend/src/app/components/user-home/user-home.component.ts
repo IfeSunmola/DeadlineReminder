@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {NewDeadlineComponent} from "./new-deadline/new-deadline.component";
-import {AccountInfo} from "../models/account-info";
-import {AccountService} from "../services/account.service";
-import {AuthService} from "../services/auth.service";
+import {AccountInfo} from "../../models/account-info";
+import {AccountService} from "../../services/account.service";
+import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
-import {NORMAL_LOGOUT} from "../AppConstants";
+import {NORMAL_LOGOUT} from "../../AppConstants";
 
 @Component({
 	selector: 'app-user-home',

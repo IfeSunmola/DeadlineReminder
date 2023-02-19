@@ -1,6 +1,6 @@
 import {AbstractControl, AsyncValidator, AsyncValidatorFn, ValidationErrors, ValidatorFn} from "@angular/forms";
 import {Injectable} from "@angular/core";
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../../services/auth.service";
 import {catchError, map, Observable, of} from "rxjs";
 
 export const MatchingPasswords: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {

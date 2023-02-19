@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../../services/auth.service";
 import {Router} from "@angular/router";
-import {VerifyCodeData} from "../../models/verify-code-data";
-import {DISABLED_ACCOUNT, DISABLED_ACCOUNT_MESSAGE, EXPIRED, INCORRECT, INVALID_REQUEST, SUCCESS, VERIFY_CODE_LENGTH} from "../../AppConstants";
+import {VerifyCodeData} from "../../../models/verify-code-data";
+import {DISABLED_ACCOUNT, DISABLED_ACCOUNT_MESSAGE, EXPIRED, INCORRECT, INVALID_REQUEST, SUCCESS, VERIFY_CODE_LENGTH} from "../../../AppConstants";
 
 @Component({
 	selector: 'app-verify',
