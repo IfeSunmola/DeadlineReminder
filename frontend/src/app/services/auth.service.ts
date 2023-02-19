@@ -38,13 +38,13 @@ export class AuthService {
 	}
 
 	logout() {
-		localStorage.removeItem(AUTH_TOKEN);
+		this.deleteAuthToken();
 		//TODO: invalidate the token on the server
 	}
 
 	isAuthenticated(): boolean {
 		// if the AUTH_TOKEN is invalid, a 401 or 403 will be thrown, the AuthInterceptor will redirect to the login page
-		return !!localStorage.getItem(AUTH_TOKEN)
+		return this.getAuthToken() != null;
 	}
 
 	sendVerificationCode(email: string) {
@@ -61,5 +61,17 @@ export class AuthService {
 
 	confirmPasswordReset(passwordResetData: PasswordResetData) {
 		return this.http.put<PasswordResetData>(`${this.BASE_URL}/confirm-reset`, passwordResetData, {responseType: 'json'})
+	}
+
+	getAuthToken() {
+		return localStorage.getItem(AUTH_TOKEN);
+	}
+
+	setAuthToken(token: string) {
+		localStorage.setItem(AUTH_TOKEN, token);
+	}
+
+	deleteAuthToken() {
+		localStorage.removeItem(AUTH_TOKEN);
 	}
 }

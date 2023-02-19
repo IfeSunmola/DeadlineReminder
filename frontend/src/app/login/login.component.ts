@@ -46,14 +46,14 @@ export class LoginComponent implements OnInit {
 	}
 
 	formSubmitted() {
-		localStorage.removeItem(AUTH_TOKEN)
+		this.authService.deleteAuthToken()
 		const loginData: LoginData = {email: this.email?.value, password: this.password?.value, stayLoggedIn: this.stayLoggedIn?.value}
 
 		this.authService.login(loginData).subscribe(
 			{
 				next: (response) => { // invalid login will be caught by AuthInterceptor
 					console.log("Response: " + JSON.stringify(response))
-					localStorage.setItem(AUTH_TOKEN, response.token)
+					this.authService.setAuthToken(response.token)
 					this.router.navigate(['/me']).then()
 				},
 			}

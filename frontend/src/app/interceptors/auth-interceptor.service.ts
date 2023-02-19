@@ -13,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 		// Intercept, add the jwt bearer token, send off
-		const authToken = localStorage.getItem(AUTH_TOKEN)
+		const authToken = this.authService.getAuthToken()
 		if (authToken) {
 			const clonedRequest = request.clone({
 				setHeaders: {
