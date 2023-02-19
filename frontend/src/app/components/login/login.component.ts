@@ -4,14 +4,18 @@ import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {LoginData} from "../../models/login-data";
 import {
-	AUTH_TOKEN,
 	INVALID_CREDENTIALS,
 	INVALID_SESSION,
 	INVALID_SESSION_MESSAGE,
 	LOGIN_NEEDED,
 	LOGIN_NEEDED_MESSAGE,
 	NORMAL_LOGOUT,
-	NORMAL_LOGOUT_MESSAGE, PASSWORD_CHANGED, PASSWORD_CHANGED_MESSAGE, PASSWORD_RESET, PASSWORD_RESET_MESSAGE
+	NORMAL_LOGOUT_MESSAGE,
+	PASSWORD_CHANGED,
+	PASSWORD_CHANGED_MESSAGE,
+	PASSWORD_RESET,
+	PASSWORD_RESET_MESSAGE, VERIFIED_SUCCESS,
+	VERIFIED_SUCCESS_MESSAGE
 } from "../../AppConstants";
 
 @Component({
@@ -37,9 +41,12 @@ export class LoginComponent implements OnInit {
 	passwordReset = true
 	readonly PASSWORD_RESET_MESSAGE = PASSWORD_RESET_MESSAGE
 	passwordResetEmail = ""
-	// reset successful
+	// password reset successful
 	passwordChanged = false
 	readonly PASSWORD_CHANGED_MESSAGE = PASSWORD_CHANGED_MESSAGE
+	// verification successful, user can now login
+	verifiedSuccess = false
+	readonly VERIFIED_SUCCESS_MESSAGE = VERIFIED_SUCCESS_MESSAGE
 
 	constructor(private authService: AuthService, private router: Router) {
 		this.passwordResetEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
@@ -78,6 +85,9 @@ export class LoginComponent implements OnInit {
 
 		this.passwordChanged = sessionStorage.getItem(PASSWORD_CHANGED) === "true"
 		sessionStorage.removeItem(PASSWORD_CHANGED)
+
+		this.verifiedSuccess = sessionStorage.getItem(VERIFIED_SUCCESS) === "true"
+		sessionStorage.removeItem(VERIFIED_SUCCESS)
 	}
 
 	ngOnInit(): void {

@@ -3,7 +3,16 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../services/auth.service";
 import {Router} from "@angular/router";
 import {VerifyCodeData} from "../../../models/verify-code-data";
-import {DISABLED_ACCOUNT, DISABLED_ACCOUNT_MESSAGE, EXPIRED, INCORRECT, INVALID_REQUEST, SUCCESS, VERIFY_CODE_LENGTH} from "../../../AppConstants";
+import {
+	DISABLED_ACCOUNT,
+	DISABLED_ACCOUNT_MESSAGE,
+	EXPIRED,
+	INCORRECT,
+	INVALID_REQUEST,
+	SUCCESS,
+	VERIFIED_SUCCESS,
+	VERIFY_CODE_LENGTH
+} from "../../../AppConstants";
 
 @Component({
 	selector: 'app-verify',
@@ -61,6 +70,7 @@ export class VerifyComponent implements OnInit {
 			{
 				next: (response) => {
 					if (response === SUCCESS) {
+						sessionStorage.setItem(VERIFIED_SUCCESS, "true");
 						this.router.navigateByUrl('/login').then();
 					}
 					else if (response === INCORRECT) {
