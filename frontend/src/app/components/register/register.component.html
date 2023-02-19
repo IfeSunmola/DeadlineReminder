@@ -5,17 +5,12 @@
 	<div>
 		<h2 class="fs-1 text-center mt-2 ">Registration</h2>
 		<form [formGroup]="registerForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post" novalidate>
-
 			<!--Start Nickname-->
 			<div class="col-md-12">
 				<label for="nickname" class="form-label">Nickname</label>
 				<input formControlName="nickname" type="text" class="form-control" id="nickname">
 				<ng-container *ngIf="nickname?.errors && (nickname?.dirty || nickname?.touched)">
 					<span class="text-danger" *ngIf="nickname?.errors?.['required']">Nickname is required</span>
-				</ng-container>
-				<ng-container *ngIf="nickname?.valid">
-					<span class="text-success" *ngIf="nickname?.valid">Looks good
-						<i class="bi text-success bi-hand-thumbs-up fw-bold"></i></span>
 				</ng-container>
 			</div>
 			<!--End Nickname-->
@@ -31,10 +26,6 @@
 					<span class="text-danger" *ngIf="email?.errors?.['emailInDb']">That email is already registered</span>
 
 				</ng-container>
-				<ng-container *ngIf="email?.valid">
-					<span class="text-success" *ngIf="email?.valid">Looks good
-						<i class="bi text-success bi-hand-thumbs-up fw-bold"></i></span>
-				</ng-container>
 			</div>
 			<!--End Email-->
 
@@ -48,13 +39,6 @@
 					<span class="text-danger" *ngIf="password?.errors?.['minlength']">Keep Typing...</span>
 					<span class="text-danger" *ngIf="password?.errors?.['maxlength']">Why's your password that long?</span>
 				</ng-container>
-
-				<ng-container *ngIf="password?.valid">
-					<span class="text-success" *ngIf="password?.valid">Looks even better
-						<i class="bi text-success bi-check2 fw-bold"></i>
-					</span>
-				</ng-container>
-
 			</div>
 			<!--End Password-->
 
@@ -64,11 +48,6 @@
 				<input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword">
 				<ng-container *ngIf="registerForm?.errors && (confirmPassword?.dirty || confirmPassword?.touched)">
 					<span class="text-danger" *ngIf="registerForm?.hasError('passwordsNotMatching')">Passwords must match</span>
-				</ng-container>
-
-				<ng-container *ngIf="!registerForm?.errors && confirmPassword?.valid && (confirmPassword?.dirty || confirmPassword?.touched)">
-					<span class="text-success" *ngIf="!registerForm?.hasError('passwordsNotMatching')">Fine, you got it
-					</span>
 				</ng-container>
 			</div>
 			<!--End Confirm Password-->
