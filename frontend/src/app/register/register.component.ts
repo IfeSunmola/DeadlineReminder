@@ -19,8 +19,8 @@ export class RegisterComponent implements OnInit {
 
 	ngOnInit(): void {
 		// show any error messages, clear after so it disappears on refresh
-		this.invalidRequest = localStorage.getItem('invalidRequest') === 'true';
-		localStorage.removeItem('invalidRequest');
+		this.invalidRequest = sessionStorage.getItem('invalidRequest') === 'true';
+		sessionStorage.removeItem('invalidRequest');
 
 		//TODO: Remove default values
 		this.registerForm = new FormGroup({

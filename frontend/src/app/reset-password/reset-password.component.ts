@@ -16,11 +16,11 @@ export class ResetPasswordComponent implements OnInit {
 	}
 
 	formSubmitted() {
-		localStorage.setItem(PASSWORD_RESET, 'true');
+		sessionStorage.setItem(PASSWORD_RESET, 'true');
 		this.authService.sendPasswordResetMail(this.email?.value).subscribe(
 			{
 				next: () => {
-					localStorage.setItem(PASSWORD_RESET, 'true');
+					sessionStorage.setItem(PASSWORD_RESET, 'true');
 					this.router.navigate(['/login'], {state: {email: this.email?.value}}).then();
 				},
 			}

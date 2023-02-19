@@ -42,7 +42,7 @@ export class UserHomeComponent implements OnInit {
 
 	logout() {
 		this.authService.logout();
-		localStorage.setItem(NORMAL_LOGOUT, "true");
+		sessionStorage.setItem(NORMAL_LOGOUT, "true");
 		this.router.navigateByUrl(`/login`).then();
 	}
 }

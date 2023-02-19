@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
 			console.log("AuthGuard: User is authenticated")
 			return true;
 		}
-		localStorage.setItem(LOGIN_NEEDED, "true")
+		sessionStorage.setItem(LOGIN_NEEDED, "true")
 		console.log("AuthGuard: User is not authenticated")
 		this.router.navigate(["/login"]).then()
 		return false;

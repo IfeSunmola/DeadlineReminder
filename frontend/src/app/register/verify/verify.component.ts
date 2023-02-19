@@ -29,8 +29,8 @@ export class VerifyComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.disabledAccount = localStorage.getItem(DISABLED_ACCOUNT) === "true";
-		localStorage.removeItem(DISABLED_ACCOUNT);
+		this.disabledAccount = sessionStorage.getItem(DISABLED_ACCOUNT) === "true";
+		sessionStorage.removeItem(DISABLED_ACCOUNT);
 
 		this.verifyForm = new FormGroup({
 			userEmail: new FormControl(
@@ -71,7 +71,7 @@ export class VerifyComponent implements OnInit {
 						this.code?.setErrors({expired: true});
 					}
 					else {
-						localStorage.setItem(INVALID_REQUEST, "true");
+						sessionStorage.setItem(INVALID_REQUEST, "true");
 						this.router.navigateByUrl('/').then();
 						console.log("Something funny happened: " + response);
 					}

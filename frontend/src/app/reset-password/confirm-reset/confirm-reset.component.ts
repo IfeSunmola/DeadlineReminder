@@ -29,7 +29,7 @@ export class ConfirmResetComponent implements OnInit {
 		this.authService.confirmPasswordReset(passwordResetData).subscribe(
 			(response) => {
 				if (response.token) {
-					localStorage.setItem(INVALID_RESET_LINK, "true")
+					sessionStorage.setItem(INVALID_RESET_LINK, "true")
 					this.router.navigate(['/']).then()
 				}
 				else if (response.email) {
@@ -37,12 +37,12 @@ export class ConfirmResetComponent implements OnInit {
 					console.log("Reset response email: " + response.email)
 				}
 				else if (response.password || response.confirmPassword) {
-					localStorage.setItem(INVALID_REQUEST, "true")
+					sessionStorage.setItem(INVALID_REQUEST, "true")
 					this.router.navigate(['/']).then()
 					console.log("Reset response password: " + response.password)
 				}
 				else { // reset success
-					localStorage.setItem(PASSWORD_CHANGED, "true")
+					sessionStorage.setItem(PASSWORD_CHANGED, "true")
 					this.router.navigate(['/login']).then()
 				}
 
@@ -87,7 +87,7 @@ export class ConfirmResetComponent implements OnInit {
 			params => {
 				const token = params['token'];
 				if (!token) { // token does not exist
-					localStorage.setItem(INVALID_REQUEST, "true")
+					sessionStorage.setItem(INVALID_REQUEST, "true")
 					this.router.navigate(['/']).then()
 					return;
 				}
@@ -96,7 +96,7 @@ export class ConfirmResetComponent implements OnInit {
 				this.authService.verifyPasswordResetCode(token).subscribe(
 					(response) => {
 						if (response === EXPIRED) {
-							localStorage.setItem(INVALID_RESET_LINK, "true")
+							sessionStorage.setItem(INVALID_RESET_LINK, "true")
 							this.router.navigate(['/']).then()
 						}
 						console.log("Email: " + response)

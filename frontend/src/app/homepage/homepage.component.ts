@@ -14,11 +14,11 @@ export class HomepageComponent implements OnInit{
 	readonly INVALID_RESET_LINK_MESSAGE = INVALID_RESET_LINK_MESSAGE
 
 	ngOnInit(): void {
-		this.invalidRequest = localStorage.getItem(INVALID_REQUEST) === "true"
-		localStorage.removeItem(INVALID_REQUEST)
+		this.invalidRequest = sessionStorage.getItem(INVALID_REQUEST) === "true"
+		sessionStorage.removeItem(INVALID_REQUEST)
 
-		this.invalidResetLink = localStorage.getItem(INVALID_RESET_LINK) === "true"
-		localStorage.removeItem(INVALID_RESET_LINK)
+		this.invalidResetLink = sessionStorage.getItem(INVALID_RESET_LINK) === "true"
+		sessionStorage.removeItem(INVALID_RESET_LINK)
 
 	}
 

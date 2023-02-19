@@ -31,7 +31,7 @@ export class AuthInterceptor implements HttpInterceptor {
 		// https://stackoverflow.com/a/50970853
 		if (err.status === 401 || err.status === 403) {
 			if (err.error === null) { // no error message inside "error" json -> Request could not reach the backend controller because of invalid jwt
-				localStorage.setItem(INVALID_SESSION, "true")
+				sessionStorage.setItem(INVALID_SESSION, "true")
 				this.authService.logout()
 				this.router.navigateByUrl("/login").then()
 			}
@@ -59,7 +59,7 @@ export class AuthInterceptor implements HttpInterceptor {
 		const email = error.error.email
 		console.log("1 AuthInterceptor: UNAUTHORIZED, DISABLED: " + error.error)
 		this.authService.logout() // shouldn't really do anything since the user isn't logged-in anyway
-		localStorage.setItem(DISABLED_ACCOUNT, "true")
+		sessionStorage.setItem(DISABLED_ACCOUNT, "true")
 
 		this.authService.sendVerificationCode(email).subscribe(
 			{
@@ -79,7 +79,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
 	private handleInvalidCredentials(error: HttpErrorResponse) {
 		console.log("Error: " + error.error.error)
-		localStorage.setItem(INVALID_CREDENTIALS, "true")
+		sessionStorage.setItem(INVALID_CREDENTIALS, "true")
 		// refresh page https://stackoverflow.com/a/49509706
 		this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
 			this.router.navigate(["/login"]));

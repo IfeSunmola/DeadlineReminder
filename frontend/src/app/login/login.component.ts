@@ -61,23 +61,23 @@ export class LoginComponent implements OnInit {
 	}
 
 	private initMessages() {
-		this.normalLogout = localStorage.getItem(NORMAL_LOGOUT) === "true"
-		localStorage.removeItem(NORMAL_LOGOUT)
+		this.normalLogout = sessionStorage.getItem(NORMAL_LOGOUT) === "true"
+		sessionStorage.removeItem(NORMAL_LOGOUT)
 
-		this.loginNeeded = localStorage.getItem(LOGIN_NEEDED) === "true"
-		localStorage.removeItem(LOGIN_NEEDED)
+		this.loginNeeded = sessionStorage.getItem(LOGIN_NEEDED) === "true"
+		sessionStorage.removeItem(LOGIN_NEEDED)
 
-		this.invalidSession = localStorage.getItem(INVALID_SESSION) === "true"
-		localStorage.removeItem(INVALID_SESSION)
+		this.invalidSession = sessionStorage.getItem(INVALID_SESSION) === "true"
+		sessionStorage.removeItem(INVALID_SESSION)
 
-		this.invalidCredentials = localStorage.getItem(INVALID_CREDENTIALS) === "true"
-		localStorage.removeItem(INVALID_CREDENTIALS)
+		this.invalidCredentials = sessionStorage.getItem(INVALID_CREDENTIALS) === "true"
+		sessionStorage.removeItem(INVALID_CREDENTIALS)
 
-		this.passwordReset = localStorage.getItem(PASSWORD_RESET) === "true"
-		localStorage.removeItem(PASSWORD_RESET)
+		this.passwordReset = sessionStorage.getItem(PASSWORD_RESET) === "true"
+		sessionStorage.removeItem(PASSWORD_RESET)
 
-		this.passwordChanged = localStorage.getItem(PASSWORD_CHANGED) === "true"
-		localStorage.removeItem(PASSWORD_CHANGED)
+		this.passwordChanged = sessionStorage.getItem(PASSWORD_CHANGED) === "true"
+		sessionStorage.removeItem(PASSWORD_CHANGED)
 	}
 
 	ngOnInit(): void {
