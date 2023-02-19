@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
 		this.loginForm = new FormGroup(
 			{
 				email: new FormControl(
-					"sunmolaife@gmail.com",
+					"",
 					{
 						validators: [
 							Validators.required,
@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
 					}
 				),
 				password: new FormControl(
-					"password",
+					"",
 					{
 						validators: [
 							Validators.required

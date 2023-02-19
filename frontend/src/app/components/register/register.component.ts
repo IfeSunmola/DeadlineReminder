@@ -25,7 +25,7 @@ export class RegisterComponent implements OnInit {
 		//TODO: Remove default values
 		this.registerForm = new FormGroup({
 				nickname: new FormControl(
-					'Ife',
+					'',
 					{
 						validators: [
 							Validators.required,
@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
 				),
 
 				email: new FormControl(
-					'fire@waynce.com',
+					'',
 					{
 						validators: [
 							Validators.required,
@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
 					}
 				),
 				password: new FormControl(
-					'dwerrerwwrewewedfdf',
+					'',
 					[
 						Validators.required,
 						Validators.minLength(MIN_PASSWORD_LENGTH),
@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
 					]
 				),
 				confirmPassword: new FormControl(
-					'dwerrerwwrewewedfdf',
+					'',
 					[
 						Validators.required,
 						Validators.minLength(MIN_PASSWORD_LENGTH),
@@ -64,7 +64,7 @@ export class RegisterComponent implements OnInit {
 					]
 				),
 				acceptedTerms: new FormControl(
-					true,
+					false,
 					[
 						Validators.requiredTrue
 					]

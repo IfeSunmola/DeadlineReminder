@@ -54,7 +54,7 @@ export class ConfirmResetComponent implements OnInit {
 		this.validateToken()
 		this.confirmResetForm = new FormGroup({
 				email: new FormControl(
-					"sunmolaife@gmail.com",
+					"",
 					{
 						validators: [
 							Validators.required,
@@ -63,7 +63,7 @@ export class ConfirmResetComponent implements OnInit {
 					}
 				),
 				password: new FormControl(
-					'dwerrerwwrewewedfdf',
+					'',
 					[
 						Validators.required,
 						Validators.minLength(MIN_PASSWORD_LENGTH),
@@ -71,7 +71,7 @@ export class ConfirmResetComponent implements OnInit {
 					]
 				),
 				confirmPassword: new FormControl(
-					'dwerrerwwrewewedfdf',
+					'',
 					[
 						Validators.required,
 						Validators.minLength(MIN_PASSWORD_LENGTH),

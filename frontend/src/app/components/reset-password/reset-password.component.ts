@@ -31,7 +31,7 @@ export class ResetPasswordComponent implements OnInit {
 		this.resetPasswordForm = new FormGroup(
 			{
 				email: new FormControl(
-					"sunmolaife@gmail.com",
+					"",
 					{
 						validators: [
 							Validators.required,
