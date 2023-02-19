@@ -2,6 +2,7 @@
 	<div>
 		<h1 class="fs-1 text-center">Password Reset</h1>
 		<form [formGroup]="confirmResetForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post">
+			<!--Start Email-->
 			<div class="col-md-12">
 				<label for="email" class="orm-label">Email</label>
 				<input [formControlName]="'email'" type="email" class="form-control " id="email">
@@ -11,25 +12,35 @@
 					<span class="text-danger" *ngIf="email?.errors?.['incorrect']">Incorrect Email</span>
 				</ng-container>
 			</div>
+			<!--End Email-->
 
 			<!--Start Password-->
 			<div class="col-md-12">
 				<label for="password" class="form-label">Password</label>
-				<input formControlName="password" type="password" class="form-control" id="password">
-
+				<div class="input-group flex-nowrap col-md-12 ">
+					<input [formControlName]="'password'" [type]="passwordVisible ? 'text' : 'password'" class="form-control" id="password">
+					<span class="input-group-text">
+						<img (click)="togglePasswordVisibility()" alt="show/hide-icon" width="24" height="24" [src]="passwordImg">
+					</span>
+				</div>
 				<ng-container *ngIf="password?.errors && (password?.dirty || password?.touched)">
 					<span class="text-danger" *ngIf="password?.errors?.['required']">Password is required</span>
 					<span class="text-danger" *ngIf="password?.errors?.['minlength']">Keep Typing...</span>
 					<span class="text-danger" *ngIf="password?.errors?.['maxlength']">Why's your password that long?</span>
 				</ng-container>
-
 			</div>
 			<!--End Password-->
 
 			<!--Start Confirm Password-->
 			<div class="col-md-12">
 				<label for="confirmPassword" class="form-label">Confirm Password</label>
-				<input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword">
+				<div class="input-group flex-nowrap col-md-12 ">
+					<input [formControlName]="'confirmPassword'" [type]="confirmPasswordVisible ? 'text' : 'password'" class="form-control"
+						   id="confirmPassword">
+					<span class="input-group-text">
+						<img (click)="toggleConfirmPasswordVisibility()" alt="show/hide-icon" width="24" height="24" [src]="confirmPasswordImg">
+					</span>
+				</div>
 				<ng-container *ngIf="confirmResetForm?.errors && (confirmPassword?.dirty || confirmPassword?.touched)">
 					<span class="text-danger" *ngIf="confirmResetForm?.hasError('passwordsNotMatching')">Passwords must match</span>
 				</ng-container>

@@ -12,6 +12,13 @@ import {MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../
 })
 export class RegisterComponent implements OnInit {
 	registerForm!: FormGroup;
+	// password visibility
+	passwordImg = "assets/hide.png";
+	passwordVisible = false
+	// confirmPassword visibility
+	confirmPasswordImg = "assets/hide.png";
+	confirmPasswordVisible = false;
+
 	invalidRequest: boolean = false;
 
 	constructor(private router: Router, private authService: AuthService, private emailValidator: EmailValidator) {
@@ -110,5 +117,27 @@ export class RegisterComponent implements OnInit {
 
 	get acceptedTerms() {
 		return this.registerForm.get('acceptedTerms');
+	}
+
+	togglePasswordVisibility() {
+		if (this.passwordImg === "assets/hide.png") {
+			this.passwordImg = "assets/show.png";
+			this.passwordVisible = true
+		}
+		else {
+			this.passwordImg = "assets/hide.png";
+			this.passwordVisible = false
+		}
+	}
+
+	toggleConfirmPasswordVisibility() {
+		if (this.confirmPasswordImg === "assets/hide.png") {
+			this.confirmPasswordImg = "assets/show.png";
+			this.confirmPasswordVisible = true
+		}
+		else {
+			this.confirmPasswordImg = "assets/hide.png";
+			this.confirmPasswordVisible = false
+		}
 	}
 }

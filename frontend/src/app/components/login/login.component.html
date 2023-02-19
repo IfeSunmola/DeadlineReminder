@@ -33,6 +33,7 @@
 
 		<h1 class="fs-1 text-center">Welcome Back</h1>
 		<form [formGroup]="loginForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post">
+			<!--Start Email-->
 			<div class="col-md-12">
 				<label for="email" class="form-label">Email</label>
 				<input [formControlName]="'email'" type="email" class="form-control " id="email">
@@ -41,15 +42,24 @@
 					<span class="text-danger" *ngIf="email?.errors?.['email']">Enter a valid email</span>
 				</ng-container>
 			</div>
+			<!--End Email-->
 
+			<!--Start Password-->
 			<div class="col-md-12">
 				<label for="password" class="form-label">Password</label>
-				<input [formControlName]="'password'" type="password" class="form-control" id="password">
+				<div class="input-group flex-nowrap col-md-12 ">
+					<input [formControlName]="'password'" [type]="passwordVisible ? 'text' : 'password'" class="form-control" id="password">
+					<span class="input-group-text">
+						<img (click)="togglePasswordVisibility()" alt="show/hide-icon" width="24" height="24" [src]="passwordImg">
+					</span>
+				</div>
 				<ng-container *ngIf="password?.errors && (password?.dirty || password?.touched)">
 					<span class="text-danger" *ngIf="password?.errors?.['required']">Password is required</span>
 				</ng-container>
 			</div>
+			<!--End Password-->
 
+			<!--Start Remember Me-->
 			<div class="col-md-12">
 				<div class="form-check">
 					<input [formControlName]="'stayLoggedIn'" class="form-check-input" type="checkbox" value="" id="stayLoggedIn"
@@ -59,13 +69,19 @@
 					</label>
 				</div>
 			</div>
+			<!--End Remember Me-->
 
+			<!--Start Login-->
 			<div class="col-12 text-center">
 				<button [disabled]="loginForm.invalid" type="submit" class="btn btn-primary btn-lg">Login</button>
 			</div>
+			<!--End Login-->
+
+			<!--Start Forgot Password-->
 			<div class="col-12 text-center">
 				<a class="link-info" style="cursor: pointer" (click)="resetPasswordClicked()">Forgot password?</a>
 			</div>
+			<!--End Forgot Password-->
 		</form>
 	</div>
 </div>

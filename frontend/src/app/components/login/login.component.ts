@@ -25,6 +25,9 @@ import {
 })
 export class LoginComponent implements OnInit {
 	loginForm!: FormGroup
+	//password visibility
+	passwordImg = "assets/hide.png";
+	passwordVisible = false
 	// user logged out normally
 	normalLogout = false;
 	readonly NORMAL_LOGOUT_MESSAGE = NORMAL_LOGOUT_MESSAGE
@@ -133,5 +136,16 @@ export class LoginComponent implements OnInit {
 
 	resetPasswordClicked() {
 		this.router.navigate(['/reset-password']).then()
+	}
+
+	togglePasswordVisibility() {
+		if (this.passwordImg === "assets/hide.png") {
+			this.passwordImg = "assets/show.png";
+			this.passwordVisible = true
+		}
+		else {
+			this.passwordImg = "assets/hide.png";
+			this.passwordVisible = false
+		}
 	}
 }

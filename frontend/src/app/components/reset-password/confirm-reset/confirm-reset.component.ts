@@ -14,6 +14,12 @@ import {PasswordResetData} from "../../../models/password-reset-data";
 export class ConfirmResetComponent implements OnInit {
 	confirmResetForm!: FormGroup;
 	private confirmToken = "";
+	// password visibility
+	passwordImg = "assets/hide.png";
+	passwordVisible = false
+	// confirmPassword visibility
+	confirmPasswordImg = "assets/hide.png";
+	confirmPasswordVisible = false;
 
 	constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService) {
 	}
@@ -117,4 +123,27 @@ export class ConfirmResetComponent implements OnInit {
 	get confirmPassword() {
 		return this.confirmResetForm.get('confirmPassword');
 	}
+
+	togglePasswordVisibility() {
+		if (this.passwordImg === "assets/hide.png") {
+			this.passwordImg = "assets/show.png";
+			this.passwordVisible = true
+		}
+		else {
+			this.passwordImg = "assets/hide.png";
+			this.passwordVisible = false
+		}
+	}
+
+	toggleConfirmPasswordVisibility() {
+		if (this.confirmPasswordImg === "assets/hide.png") {
+			this.confirmPasswordImg = "assets/show.png";
+			this.confirmPasswordVisible = true
+		}
+		else {
+			this.confirmPasswordImg = "assets/hide.png";
+			this.confirmPasswordVisible = false
+		}
+	}
+
 }
