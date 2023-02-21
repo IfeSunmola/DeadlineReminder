@@ -70,9 +70,10 @@ export class VerifyComponent implements OnInit {
 			{
 				next: (response) => {
 					const message = response.message;
-					if (message === SUCCESS) {
+					if (message === SUCCESS) { // if success, then token was included
 						sessionStorage.setItem(VERIFIED_SUCCESS, "true");
-						this.router.navigateByUrl('/login').then();
+						this.authService.setAuthToken(response.token);
+						this.router.navigateByUrl('/me').then();
 					}
 					else if (message === INCORRECT) {
 						this.code?.setErrors({incorrect: true});
