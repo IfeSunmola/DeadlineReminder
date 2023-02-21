@@ -23,7 +23,7 @@ export class AuthService {
 	}
 
 	verifyCode(verifyCodeData: VerifyCodeData) {
-		return this.http.post(`${this.BASE_URL}/register/verify`, verifyCodeData, {responseType: 'text'});
+		return this.http.post<{message: string}>(`${this.BASE_URL}/register/verify`, verifyCodeData, {responseType: 'json'});
 	}
 
 	/*

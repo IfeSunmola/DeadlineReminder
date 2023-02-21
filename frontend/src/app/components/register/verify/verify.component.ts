@@ -69,15 +69,16 @@ export class VerifyComponent implements OnInit {
 		this.authService.verifyCode(verifyCodeData).subscribe(
 			{
 				next: (response) => {
-					if (response === SUCCESS) {
+					const message = response.message;
+					if (message === SUCCESS) {
 						sessionStorage.setItem(VERIFIED_SUCCESS, "true");
 						this.router.navigateByUrl('/login').then();
 					}
-					else if (response === INCORRECT) {
+					else if (message === INCORRECT) {
 						this.code?.setErrors({incorrect: true});
 						console.log("Incorrect code");
 					}
-					else if (response === EXPIRED) {
+					else if (message === EXPIRED) {
 						this.code?.setErrors({expired: true});
 					}
 					else {

@@ -139,30 +139,30 @@ public class AccountService {
 		return accountRepo.findByEmail(email).orElse(null);
 	}
 
-	public String verifyAccount(VerifyCodeData data) {
+	public Map<String, String> verifyAccount(VerifyCodeData data) {
 		VerificationCode code = codeService.findCodeById(data.codeId());
 		Account account = findByEmail(data.userEmail());
 		// code from db is not null, and the owner of the code is the account that was found by email
 		// and the code is not expired and code from user is equal to code in db
 		if (code == null || account == null) {
-			return "Invalid Request"; // redirect to home
+			return Map.of("message", "Invalid Request"); // redirect to home
 		}
 		else if (code.getOwner().equals(account) && !code.isExpired() && code.getCode().equals(data.codeFromUser())) {
 			account.setEnabled(true);
 			accountRepo.save(account);
 			codeService.deleteCode(code);
-			return "Success";
+			return Map.of("message", "Success");
 		}
 		else if (!code.getCode().equals(data.codeFromUser())) {
-			return "Incorrect";
+			return Map.of("message", "Incorrect");
 		}
 		else if (code.isExpired()) {
 			codeService.deleteCode(code);
-			return "Expired";
+			return Map.of("message", "Expired");
 		}
 		else {
 			log.info("Unhandled request: Verify Code data: {}, Code: {}, Account: {}", data, code, account);
-			return "Unhandled Request"; // redirect to home
+			return Map.of("message", "Unhandled Request");
 		}
 	}
 

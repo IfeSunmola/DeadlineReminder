@@ -50,7 +50,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/register/verify")
-	public String confirmCode(@RequestBody VerifyCodeData data) {
+	public Map<String, String> confirmCode(@RequestBody VerifyCodeData data) {
 		return accountService.verifyAccount(data);
 	}
 
@@ -80,7 +80,7 @@ public class AuthController {
 	}
 
 	@PutMapping("/confirm-reset")
-	public Map<String, String> confirmPasswordReset(@RequestBody  @Valid PasswordResetData passwordResetData, BindingResult result)
+	public Map<String, String> confirmPasswordReset(@RequestBody @Valid PasswordResetData passwordResetData, BindingResult result)
 			throws MethodArgumentNotValidException, NoSuchMethodException {
 		log.info("Reset password requested for user: {}", passwordResetData);
 		accountService.validatePasswordResetData(passwordResetData, result);  // throws exception if there are errors
