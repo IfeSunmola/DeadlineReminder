@@ -1,10 +1,14 @@
 package com.example.backend.security;
 
 import com.example.backend.repos.AccountRepo;
+import com.nimbusds.jose.shaded.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Service class for the AuthAccount class.
@@ -28,9 +32,13 @@ public class AuthAccountService implements UserDetailsService {
 	 */
 	@Override
 	public AuthAccount loadUserByUsername(String email) throws UsernameNotFoundException {
+		Map<String, String> error = new HashMap<>();
+		error.put("email", email);
+		error.put("error", "Invalid username or password");
+		Gson gson = new Gson();
 		return new AuthAccount(accountRepo.findByEmail(email)
 				.orElseThrow(
-						() -> new UsernameNotFoundException("Email '" + email + "' was not found")
+						() -> new UsernameNotFoundException(gson.toJson(error))
 				)
 		);
 	}
