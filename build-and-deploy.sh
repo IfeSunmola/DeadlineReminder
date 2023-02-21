@@ -9,6 +9,7 @@ echo "Pushing backend img..."
 docker push ifesunmola.azurecr.io/backend
 
 # Next frontend
+read -rp "Did you change the api link in AppConstants.ts?"
 echo "Building frontend img..."
 (cd frontend || exit; docker build --no-cache -t ifesunmola.azurecr.io/frontend .)
 echo "Frontend img built"
