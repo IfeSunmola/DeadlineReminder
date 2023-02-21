@@ -12,7 +12,7 @@ export const MAX_NICKNAME_LENGTH = 10
 export const AUTH_TOKEN = "AuthToken"
 // verification success
 export const VERIFIED_SUCCESS = "verificationSuccess"
-export const VERIFIED_SUCCESS_MESSAGE = "Your account has been verified, you can now log in"
+export const VERIFIED_SUCCESS_LOGIN_MESSAGE = "Your account has been verified, you have been logged in"
 // login stuff
 export const LOGIN_NEEDED = "loginNeeded"
 export const LOGIN_NEEDED_MESSAGE = "Login is needed for that page"

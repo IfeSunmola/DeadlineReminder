@@ -4,7 +4,7 @@ import {AccountInfo} from "../../models/account-info";
 import {AccountService} from "../../services/account.service";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
-import {NORMAL_LOGOUT} from "../../AppConstants";
+import {NORMAL_LOGOUT, VERIFIED_SUCCESS, VERIFIED_SUCCESS_LOGIN_MESSAGE} from "../../AppConstants";
 
 @Component({
 	selector: 'app-user-home',
@@ -13,6 +13,9 @@ import {NORMAL_LOGOUT} from "../../AppConstants";
 })
 export class UserHomeComponent implements OnInit {
 	userInfo: AccountInfo | undefined;
+	// verification successful, user has been logged in
+	verifiedSuccess = false
+	readonly VERIFIED_SUCCESS_MESSAGE = VERIFIED_SUCCESS_LOGIN_MESSAGE
 
 	constructor(private accountService: AccountService, private authService: AuthService, private router: Router) {
 	}
@@ -22,6 +25,9 @@ export class UserHomeComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.verifiedSuccess = sessionStorage.getItem(VERIFIED_SUCCESS) === "true"
+		sessionStorage.removeItem(VERIFIED_SUCCESS)
+
 		this.accountService.getAccount().subscribe(
 			{
 				next: (response) => {
@@ -40,7 +46,7 @@ export class UserHomeComponent implements OnInit {
 		return this.userInfo?.nickname
 	}
 
-	logout() {
+	logoutClicked() {
 		this.authService.logout();
 		sessionStorage.setItem(NORMAL_LOGOUT, "true");
 		this.router.navigateByUrl(`/login`).then();
