@@ -18,6 +18,7 @@ import {LoadingComponent} from './components/loading/loading.component';
 import {LoadingInterceptor} from "./interceptors/loading.interceptor";
 import {ResetPasswordComponent} from './components/reset-password/reset-password.component';
 import {ConfirmResetComponent} from './components/reset-password/confirm-reset/confirm-reset.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
 	declarations: [
@@ -32,6 +33,7 @@ import {ConfirmResetComponent} from './components/reset-password/confirm-reset/c
 		LoadingComponent,
 		ResetPasswordComponent,
 		ConfirmResetComponent,
+  PageNotFoundComponent,
 	],
 	imports: [
 		BrowserModule,

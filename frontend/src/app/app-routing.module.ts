@@ -9,6 +9,7 @@ import {AuthGuard} from "./guards/auth.guard";
 import {RegisteredGuard} from "./guards/registered.guard";
 import {ResetPasswordComponent} from "./components/reset-password/reset-password.component";
 import {ConfirmResetComponent} from "./components/reset-password/confirm-reset/confirm-reset.component";
+import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
 
 const routes: Routes = [
 	{
@@ -54,6 +55,12 @@ const routes: Routes = [
 		component: UserHomeComponent,
 		canActivate: [AuthGuard]
 	},
+	{
+		path: '**',
+		title: 'Page not found',
+		pathMatch: 'full',
+		component: PageNotFoundComponent,
+	}
 
 ];
 
