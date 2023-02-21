@@ -3,4 +3,5 @@ export interface PasswordResetData {
 	email: string;
 	password: string;
 	confirmPassword: string;
+	message: string
 }

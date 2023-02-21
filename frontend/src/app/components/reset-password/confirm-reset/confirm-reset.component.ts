@@ -30,28 +30,42 @@ export class ConfirmResetComponent implements OnInit {
 			token: this.confirmToken,
 			email: this.email?.value,
 			password: this.password?.value,
-			confirmPassword: this.confirmPassword?.value
+			confirmPassword: this.confirmPassword?.value,
+			message: ""
 		}
-		this.authService.confirmPasswordReset(passwordResetData).subscribe(
-			(response) => {
-				if (response.token) {
-					sessionStorage.setItem(INVALID_RESET_LINK, "true")
-					this.router.navigate(['/']).then()
-				}
-				else if (response.email) {
-					this.email?.setErrors({incorrect: true});
-					console.log("Reset response email: " + response.email)
-				}
-				else if (response.password || response.confirmPassword) {
-					sessionStorage.setItem(INVALID_REQUEST, "true")
-					this.router.navigate(['/']).then()
-					console.log("Reset response password: " + response.password)
-				}
-				else { // reset success
-					sessionStorage.setItem(PASSWORD_CHANGED, "true")
-					this.router.navigate(['/login']).then()
-				}
 
+		this.authService.confirmPasswordReset(passwordResetData).subscribe(
+			{
+				next: (response) => {
+					console.log("IN NEXT")
+					if (response.message) { // reset success
+						sessionStorage.setItem(PASSWORD_CHANGED, "true")
+						this.router.navigate(['/login']).then()
+					}
+				},
+				error: (error) => {
+					const errorMessage = error.error;
+					console.log("IN ERROR: " + JSON.stringify(errorMessage))
+					if (errorMessage.token) {
+						console.log("Reset response token: " + errorMessage.token)
+						sessionStorage.setItem(INVALID_RESET_LINK, "true")
+						this.router.navigate(['/']).then()
+					}
+					else if (errorMessage.email) {
+						this.email?.setErrors({incorrect: true});
+						console.log("Reset response email: " + errorMessage.email)
+					}
+					else if (errorMessage.password || errorMessage.confirmPassword) {
+						sessionStorage.setItem(INVALID_REQUEST, "true")
+						this.router.navigate(['/']).then()
+						console.log("Reset response password: " + errorMessage.password)
+					}
+					else{
+						console.log("UNHANDLED ERROR: " + JSON.stringify(errorMessage))
+						sessionStorage.setItem(INVALID_REQUEST, "true")
+						this.router.navigate(['/']).then()
+					}
+				}
 			}
 		)
 	}

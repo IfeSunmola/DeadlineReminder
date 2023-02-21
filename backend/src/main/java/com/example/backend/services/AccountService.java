@@ -278,17 +278,16 @@ public class AccountService {
 		VerificationCode code = codeService.findCodeByCode(token);
 		var emailFromCode = code == null ? "" : code.getOwner().getEmail();
 
-		if (code == null || code.isExpired()) { // code is expired/invalid
+		if (code == null || code.isExpired()) { // code was not found/expired
 			result.rejectValue("token", "token.expired", "Invalid token");
 		}
 		// the email linked to the code is not the same as the email in the request || email from request does not exist
 		else if (!email.equals(emailFromCode) || !accountRepo.emailExists(email)) {
-			codeService.deleteExistingCode(code.getOwner());
 			result.rejectValue("email", "email.invalid", "Invalid email");
 		}
+		// the only reason why the below would happen is if the person messed with dev tools. So, I'm deleting the token
 		else if (password == null || password.isBlank()) { // password is empty
 			codeService.deleteExistingCode(code.getOwner());
-			codeService.deleteCode(code);
 			result.rejectValue("password", "password.blank", "Password cannot be blank");
 		}
 		else if (confirmPassword == null || confirmPassword.isBlank()) { // confirm password is empty
