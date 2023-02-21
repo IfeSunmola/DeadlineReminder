@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class AuthenticationExceptionHandler {
 	@ExceptionHandler(BadCredentialsException.class)
-	public String badCredentials() {
-		return "Invalid username or password";
+	public String badCredentials(BadCredentialsException ex) {
+		return ex.getMessage();
 	}
 
 	@ExceptionHandler(DisabledException.class)
-	public String disabledAccount() {
-		return "Account is disabled";
+	public String disabledAccount(DisabledException ex) {
+		return ex.getMessage();
 	}
 }

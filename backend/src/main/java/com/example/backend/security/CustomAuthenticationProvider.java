@@ -1,5 +1,6 @@
 package com.example.backend.security;
 
+import com.nimbusds.jose.shaded.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,6 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Ife Sunmola
@@ -34,17 +38,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		var authAccount = authAccountService.loadUserByUsername(email);
 		var passwordIsValid = passwordEncoder.matches(password, authAccount.getPassword());
 		var accountEnabled = authAccount.isEnabled();
+		// sent back to the client if authentication is not successful
+		Map<String, String> error = new HashMap<>();
+		error.put("email", email);
+		Gson gson = new Gson();
 
-		log.info("Authenticating user: {}", email);
-		log.info("Password: {}", password);
-		log.info("Password from DB: {}", authAccount.getPassword());
+		log.info("Authenticating user/password: {}, {}", email, password);
 
 		// order of if statement is important. Only checking for disabled because everything else would be true
 		if (passwordIsValid && !accountEnabled) { // correct password, but account is disabled
-			throw new DisabledException("Account is disabled");
+			error.put("error", "Account is disabled");
+			throw new DisabledException(gson.toJson(error));
 		}
 		if (!passwordIsValid) { // incorrect password
-			throw new BadCredentialsException("Invalid username or password");
+			error.put("error", "Invalid username or password");
+			throw new BadCredentialsException(gson.toJson(error));
 		}
 		return new UsernamePasswordAuthenticationToken(email, password, authAccount.getAuthorities());
 	}
