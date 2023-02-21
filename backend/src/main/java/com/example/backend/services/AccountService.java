@@ -12,7 +12,8 @@ import com.example.backend.transfer_objects.VerifyCodeData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -171,31 +171,18 @@ public class AccountService {
 		String password = loginData.getPassword();
 		boolean stayLoggedIn = loginData.getStayLoggedIn();
 
-		Map<String, String> result = new HashMap<>();
-		result.put("email", email);
-		try {
-			Authentication auth = authProvider.authenticate(
-					new UsernamePasswordAuthenticationToken(
-							email,
-							password
-					)
-			);
-			SecurityContextHolder.getContext().setAuthentication(auth);
-			String token = generateToken(auth, stayLoggedIn);
-			result.put("token", token);
-		}
-		catch (BadCredentialsException ex) {
-			result.put("error", "Invalid username or password");
-		}
+		// This throws an exception disabled exception or BadCredentialsException. It is handled by AuthenticationExceptionHandler
+		Authentication auth = authProvider.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						email,
+						password
+				)
+		);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		String token = generateToken(auth, stayLoggedIn);
 
-		catch (DisabledException ex) {
-			result.put("error", "Account is disabled");
-		}
-		catch (LockedException ex) {
-			result.put("error", "Account is locked");
-		}
-
-		return result;
+		return Map.of("email", email,
+				"token", token);
 	}
 
 	private String generateToken(Authentication auth, Boolean stayLoggedIn) {
