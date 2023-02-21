@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.backend.AppConstants.NO_PASSWORD_NEEDED;
+
 /**
  * @author Ife Sunmola
  * <p>
@@ -44,6 +46,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		Gson gson = new Gson();
 
 		log.info("Authenticating user/password: {}, {}", email, password);
+
+		// this really isn't ideal, but I need a way to authenticate the user immediately after verifying their account
+		if (password.equals(NO_PASSWORD_NEEDED) && accountEnabled) {
+			log.info("No password needed to authenticated this user");
+			return new UsernamePasswordAuthenticationToken(email, NO_PASSWORD_NEEDED, authAccount.getAuthorities());
+		}
 
 		// order of if statement is important. Only checking for disabled because everything else would be true
 		if (passwordIsValid && !accountEnabled) { // correct password, but account is disabled
