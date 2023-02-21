@@ -1,6 +1,6 @@
 # Personal
 /database/**
-/secrets.json
+src/main/resources/certs-prod
 
 HELP.md
 target/
