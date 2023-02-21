@@ -3,6 +3,7 @@ package com.example.backend.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,6 +29,11 @@ public class AuthenticationExceptionHandler {
 
 	@ExceptionHandler(DisabledException.class)
 	public String disabledAccount(DisabledException ex) {
+		return ex.getMessage();
+	}
+
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public String emailNotFound(UsernameNotFoundException ex) {
 		return ex.getMessage();
 	}
 }
