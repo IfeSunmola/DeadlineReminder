@@ -30,6 +30,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.example.backend.AppConstants.NO_PASSWORD_NEEDED;
 import static com.example.backend.mailsender.MailBody.PASSWORD_RESET_HTML;
 import static com.example.backend.mailsender.MailBody.VERIFY_CODE_HTML;
 import static com.example.backend.models.VerificationCodeType.EMAIL_VERIFICATION;
@@ -151,7 +152,9 @@ public class AccountService {
 			account.setEnabled(true);
 			accountRepo.save(account);
 			codeService.deleteCode(code);
-			return Map.of("message", "Success");
+			String token = loginUserNoPassword(data.userEmail());
+			return Map.of("message", "Success",
+					"token", token);
 		}
 		else if (!code.getCode().equals(data.codeFromUser())) {
 			return Map.of("message", "Incorrect");
@@ -164,6 +167,15 @@ public class AccountService {
 			log.info("Unhandled request: Verify Code data: {}, Code: {}, Account: {}", data, code, account);
 			return Map.of("message", "Unhandled Request");
 		}
+	}
+
+	private String loginUserNoPassword(String email) {
+		log.info("HERE 1");
+		Authentication auth = new UsernamePasswordAuthenticationToken(email, NO_PASSWORD_NEEDED);
+		log.info("HERE 2");
+		SecurityContextHolder.getContext().setAuthentication(authProvider.authenticate(auth));
+		log.info("HERE 3");
+		return generateToken(auth, false);
 	}
 
 	public Map<String, String> authenticateUser(LoginData loginData) {
