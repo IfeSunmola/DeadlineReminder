@@ -434,7 +434,7 @@ public class MailBody {
 			                                                             <tbody>
 			                                                               <tr>
 			                                                                 <td style="line-height: 24px; font-size: 16px; border-radius: 6px; margin: 0;" align="center" bgcolor="#0d6efd">
-			                                                                   <a href="%24resetLink" style="color: #ffffff; font-size: 16px; font-family: Helvetica, Arial, sans-serif; text-decoration: none; border-radius: 6px; line-height: 20px; display: block; font-weight: normal; white-space: nowrap; background-color: #0d6efd; padding: 8px 12px; border: 1px solid #0d6efd;">Reset your password</a>
+			                                                                   <a href="$resetLink" style="color: #ffffff; font-size: 16px; font-family: Helvetica, Arial, sans-serif; text-decoration: none; border-radius: 6px; line-height: 20px; display: block; font-weight: normal; white-space: nowrap; background-color: #0d6efd; padding: 8px 12px; border: 1px solid #0d6efd;">Reset your password</a>
 			                                                                 </td>
 			                                                               </tr>
 			                                                             </tbody>
@@ -478,7 +478,7 @@ public class MailBody {
 			                                                     <tbody>
 			                                                       <tr>
 			                                                         <td class="col-lg-4 text-center" style="line-height: 24px; font-size: 16px; min-height: 1px; font-weight: normal; padding-right: 24px; width: 33.333333%; margin: 0;" align="center" valign="top">
-			                                                           <a class="" href="%24resetLink" style="color: #0d6efd;">$resetLink</a>
+			                                                           <a class="" href="$resetLink" style="color: #0d6efd;">$resetLink</a>
 			                                                         </td>
 			                                                       </tr>
 			                                                     </tbody>
