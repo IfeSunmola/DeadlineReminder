@@ -51,7 +51,7 @@ public class AccountService {
 	private final EmailSenderService emailService;
 	private final AppProperties appProps;
 	private final JwtEncoder encoder;
-	private final AuthenticationManager authManager;
+	private final AuthenticationProvider authProvider;
 
 	/**
 	 * Method to validate the registration data gotten from the front end
@@ -174,7 +174,7 @@ public class AccountService {
 		Map<String, String> result = new HashMap<>();
 		result.put("email", email);
 		try {
-			Authentication auth = authManager.authenticate(
+			Authentication auth = authProvider.authenticate(
 					new UsernamePasswordAuthenticationToken(
 							email,
 							password
