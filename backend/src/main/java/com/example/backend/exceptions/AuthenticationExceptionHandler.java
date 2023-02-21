@@ -3,7 +3,6 @@ package com.example.backend.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,11 +24,6 @@ public class AuthenticationExceptionHandler {
 	@ExceptionHandler(BadCredentialsException.class)
 	public String badCredentials() {
 		return "Invalid username or password";
-	}
-
-	@ExceptionHandler(LockedException.class)
-	public String lockedAccount() {
-		return "Account is locked";
 	}
 
 	@ExceptionHandler(DisabledException.class)
