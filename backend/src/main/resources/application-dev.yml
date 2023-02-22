@@ -1,3 +1,7 @@
+# enable logging for frontend
+logging:
+  level:
+    com.example.backend.controllers.FrontendLoggerController: debug
 spring:
   h2:
     console:
