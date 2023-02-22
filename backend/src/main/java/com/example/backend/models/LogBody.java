@@ -1,7 +1,10 @@
 package com.example.backend.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.Instant;
 
@@ -16,9 +19,8 @@ import java.time.Instant;
 @ToString
 public class LogBody {
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE) private Long logId;
-	private Instant timestamp;
+	private Instant timeStamp;
 	private String logLevel;
 	private String fileName;
-	private long lineNumber;
 	private String message;
 }
