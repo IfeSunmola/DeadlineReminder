@@ -2,6 +2,7 @@ package com.example.backend;
 
 import com.example.backend.security.AppProperties;
 import com.example.backend.services.AccountService;
+import com.example.backend.services.AuthService;
 import com.example.backend.services.VerificationCodeService;
 import com.example.backend.transfer_objects.RegisterData;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @AllArgsConstructor
 @EnableConfigurationProperties(AppProperties.class)
 public class BackendApplication implements CommandLineRunner {
+	private final AuthService authService;
 	private final AccountService accountService;
 	private final VerificationCodeService codeService;
 
@@ -23,16 +25,17 @@ public class BackendApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		codeService.deleteAllCodes();
-		accountService.deleteAllAccounts();
+		if (accountService.getAllAccounts().size() == 0) {
+			codeService.deleteAllCodes();
+			RegisterData data = new RegisterData("Ife", "ifesunmola001@gmail.com", "password", "password", true);
+			authService.createAccount(data);
 
-		RegisterData data = new RegisterData("Ife", "sunmolaife@gmail.com", "password", "password", true);
-		accountService.createAccount(data);
+			RegisterData data1 = new RegisterData("Cassi", "cassi@hearbreaker.com", "password", "password", true);
+			authService.createAccount(data1);
 
-		RegisterData data1 = new RegisterData("Cassi", "cassi@hearbreaker.com", "password", "password", true);
-		accountService.createAccount(data1);
+			RegisterData data2 = new RegisterData("Katara", "katara@waterbender.com", "password", "password", true);
+			authService.createAccount(data2);
+		}
 
-		RegisterData data2 = new RegisterData("Katara", "katara@waterbender.com", "password", "password", true);
-		accountService.createAccount(data2);
 	}
 }
