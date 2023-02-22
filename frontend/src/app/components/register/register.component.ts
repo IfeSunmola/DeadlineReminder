@@ -3,7 +3,9 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailValidator, MatchingPasswords} from "./validator";
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
-import {MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../../AppConstants";
+import {INVALID_REQUEST, MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../../AppConstants";
+import {LoggerService} from "../../logger.service";
+import {LogBody} from "../../models/log-body";
 
 @Component({
 	selector: 'app-register',
@@ -11,6 +13,7 @@ import {MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../
 	styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+	private readonly FILE_NAME = "register.component.ts"
 	registerForm!: FormGroup;
 	// password visibility
 	passwordImg = "assets/hide.png";
@@ -21,7 +24,7 @@ export class RegisterComponent implements OnInit {
 
 	invalidRequest: boolean = false;
 
-	constructor(private router: Router, private authService: AuthService, private emailValidator: EmailValidator) {
+	constructor(private router: Router, private authService: AuthService, private emailValidator: EmailValidator, private logger: LoggerService) {
 	}
 
 	ngOnInit(): void {
@@ -90,10 +93,11 @@ export class RegisterComponent implements OnInit {
 							{state: {email: response.email, codeId: response.codeId}}).then();
 					},
 					error: (error) => {
-						// const obj = JSON.parse(JSON.stringify(error));
-						// console.log(obj.error);
+						this.logger.error(new LogBody(this.FILE_NAME,
+							`Got error when register form submitted. Form: ${JSON.stringify(registerData)}. Error: ${JSON.stringify(error)}`))
+							.subscribe();
+						sessionStorage.setItem(INVALID_REQUEST, "true")
 						this.router.navigateByUrl('/').then();
-						console.log("What did you do? SMH.");
 					}
 				}
 			);
