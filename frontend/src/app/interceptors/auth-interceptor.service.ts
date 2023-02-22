@@ -1,14 +1,17 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {catchError, Observable, of, throwError} from 'rxjs';
-import {AUTH_TOKEN, DISABLED_ACCOUNT, INVALID_CREDENTIALS, INVALID_SESSION} from "../AppConstants";
+import {DISABLED_ACCOUNT, INVALID_CREDENTIALS, INVALID_SESSION} from "../AppConstants";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
+import {LoggerService} from "../logger.service";
+import {LogBody} from "../models/log-body";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+	private readonly FILE_NAME = "auth-interceptor.servuce.ts"
 
-	constructor(private router: Router, private authService: AuthService) {
+	constructor(private router: Router, private authService: AuthService, private logger: LoggerService) {
 	}
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -22,9 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
 			})
 			return next.handle(clonedRequest).pipe(catchError(x => this.handleAuthError(x)));
 		}
-		else {
-			return next.handle(request).pipe(catchError(x => this.handleAuthError(x)));
-		}
+		return next.handle(request).pipe(catchError(x => this.handleAuthError(x)));
 	}
 
 	private handleAuthError(err: HttpErrorResponse): Observable<any> {
@@ -45,7 +46,10 @@ export class AuthInterceptor implements HttpInterceptor {
 					this.handleInvalidCredentials(err)
 				}
 				else {
-					console.log("AuthInterceptor: UNAUTHORIZED: UNKNOWN ERROR: " + JSON.stringify(err))
+					this.logger.error(new LogBody(this.FILE_NAME,
+						"Unhandled/Unknown unauthorized error",
+						`Error: ${JSON.stringify(err)}`)
+					).subscribe()
 					this.authService.logout()
 					this.router.navigateByUrl("/").then()
 				}
@@ -57,7 +61,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
 	private handleDisabledAccount(error: HttpErrorResponse) {
 		const email = error.error.email
-		console.log("1 AuthInterceptor: UNAUTHORIZED, DISABLED: " + error.error)
 		this.authService.logout() // shouldn't really do anything since the user isn't logged-in anyway
 		sessionStorage.setItem(DISABLED_ACCOUNT, "true")
 
@@ -65,12 +68,15 @@ export class AuthInterceptor implements HttpInterceptor {
 			{
 				next: (response) => {
 					if (response.email !== email) { // random safeguard
-						console.log("AuthInterceptor: sendVerificationCode: email mismatch")
+						this.logger.error(new LogBody(this.FILE_NAME, "Email in response is different from entered email",
+							`Response: ${JSON.stringify(response)}\nEmail: ${email}`)).subscribe()
 						this.router.navigate(['/login']).then()
+						return
 					}
 					else {
 						this.router.navigateByUrl('/register/verify',
 							{state: {email: response.email, codeId: response.codeId}}).then();
+						return
 					}
 				}
 			}
@@ -78,7 +84,9 @@ export class AuthInterceptor implements HttpInterceptor {
 	}
 
 	private handleInvalidCredentials(error: HttpErrorResponse) {
-		console.log("Error: " + error.error.error)
+		this.logger.error(new LogBody(this.FILE_NAME, "Invalid credentials",
+			`Error: ${JSON.stringify(error.error)}`)
+		).subscribe()
 		sessionStorage.setItem(INVALID_CREDENTIALS, "true")
 		// refresh page https://stackoverflow.com/a/49509706
 		this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>

@@ -5,6 +5,8 @@ import {MatchingPasswords} from "../../register/validator";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../services/auth.service";
 import {PasswordResetData} from "../../../models/password-reset-data";
+import {LoggerService} from "../../../logger.service";
+import {LogBody} from "../../../models/log-body";
 
 @Component({
 	selector: 'app-confirm-reset',
@@ -12,6 +14,7 @@ import {PasswordResetData} from "../../../models/password-reset-data";
 	styleUrls: ['./confirm-reset.component.scss']
 })
 export class ConfirmResetComponent implements OnInit {
+	private readonly FILE_NAME = "confirm-reset.component.ts"
 	confirmResetForm!: FormGroup;
 	private confirmToken = "";
 	// password visibility
@@ -21,11 +24,11 @@ export class ConfirmResetComponent implements OnInit {
 	confirmPasswordImg = "assets/hide.png";
 	confirmPasswordVisible = false;
 
-	constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService) {
+	constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private logger: LoggerService) {
 	}
 
 
-	formSubmitted() {
+	formSubmitted()  {
 		const passwordResetData: PasswordResetData = {
 			token: this.confirmToken,
 			email: this.email?.value,
@@ -37,7 +40,6 @@ export class ConfirmResetComponent implements OnInit {
 		this.authService.confirmPasswordReset(passwordResetData).subscribe(
 			{
 				next: (response) => {
-					console.log("IN NEXT")
 					if (response.message) { // reset success
 						sessionStorage.setItem(PASSWORD_CHANGED, "true")
 						this.router.navigate(['/login']).then()
@@ -45,23 +47,34 @@ export class ConfirmResetComponent implements OnInit {
 				},
 				error: (error) => {
 					const errorMessage = error.error;
-					console.log("IN ERROR: " + JSON.stringify(errorMessage))
 					if (errorMessage.token) {
-						console.log("Reset response token: " + errorMessage.token)
+						this.logger.debug(new LogBody(this.FILE_NAME,
+							"Incorrect token: ",
+							`forgotPasswordData: ${JSON.stringify(passwordResetData)}\nerror: ${JSON.stringify(error)}`)
+						).subscribe()
 						sessionStorage.setItem(INVALID_RESET_LINK, "true")
 						this.router.navigate(['/']).then()
 					}
 					else if (errorMessage.email) {
 						this.email?.setErrors({incorrect: true});
-						console.log("Reset response email: " + errorMessage.email)
+						this.logger.debug(new LogBody(this.FILE_NAME,
+							"Incorrect email: ",
+							`forgotPasswordData: ${JSON.stringify(passwordResetData)}\nerror: ${JSON.stringify(error)}`)
+						).subscribe()
 					}
 					else if (errorMessage.password || errorMessage.confirmPassword) {
+						this.logger.debug(new LogBody(this.FILE_NAME,
+							"Incorrect passwords: ",
+							`forgotPasswordData: ${JSON.stringify(passwordResetData)}\nerror: ${JSON.stringify(error)}`)
+						).subscribe()
 						sessionStorage.setItem(INVALID_REQUEST, "true")
 						this.router.navigate(['/']).then()
-						console.log("Reset response password: " + errorMessage.password)
 					}
-					else{
-						console.log("UNHANDLED ERROR: " + JSON.stringify(errorMessage))
+					else {
+						this.logger.error(new LogBody(this.FILE_NAME,
+							"Unhandled Error while confirming reset password: ",
+							`forgotPasswordData: ${JSON.stringify(passwordResetData)}\n error: ${JSON.stringify(error)}`)
+						).subscribe()
 						sessionStorage.setItem(INVALID_REQUEST, "true")
 						this.router.navigate(['/']).then()
 					}
@@ -112,14 +125,13 @@ export class ConfirmResetComponent implements OnInit {
 					return;
 				}
 				this.confirmToken = token;
-				console.log("Token: " + token)
 				this.authService.verifyPasswordResetCode(token).subscribe(
 					(response) => {
 						if (response === EXPIRED) {
 							sessionStorage.setItem(INVALID_RESET_LINK, "true")
 							this.router.navigate(['/']).then()
+							return;
 						}
-						console.log("Email: " + response)
 					}
 				)
 			}

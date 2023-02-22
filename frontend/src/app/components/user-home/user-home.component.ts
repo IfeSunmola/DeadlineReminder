@@ -5,6 +5,8 @@ import {AccountService} from "../../services/account.service";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {NORMAL_LOGOUT, VERIFIED_SUCCESS, VERIFIED_SUCCESS_LOGIN_MESSAGE} from "../../AppConstants";
+import {LogBody} from "../../models/log-body";
+import {LoggerService} from "../../logger.service";
 
 @Component({
 	selector: 'app-user-home',
@@ -12,12 +14,13 @@ import {NORMAL_LOGOUT, VERIFIED_SUCCESS, VERIFIED_SUCCESS_LOGIN_MESSAGE} from ".
 	styleUrls: ['./user-home.component.scss']
 })
 export class UserHomeComponent implements OnInit {
+	private readonly FILE_NAME = "user-home.component.ts"
 	userInfo: AccountInfo | undefined;
 	// verification successful, user has been logged in
 	verifiedSuccess = false
 	readonly VERIFIED_SUCCESS_MESSAGE = VERIFIED_SUCCESS_LOGIN_MESSAGE
 
-	constructor(private accountService: AccountService, private authService: AuthService, private router: Router) {
+	constructor(private accountService: AccountService, private authService: AuthService, private router: Router, private logger: LoggerService) {
 	}
 
 	openNewDeadlineModal(content: NewDeadlineComponent) {
@@ -32,7 +35,10 @@ export class UserHomeComponent implements OnInit {
 			{
 				next: (response) => {
 					this.userInfo = response
-					console.log("Response: " + JSON.stringify(this.userInfo))
+					this.logger.debug(new LogBody(this.FILE_NAME,
+						"Got account info",
+						`AccountInfo: ${JSON.stringify(response)}`)
+					).subscribe()
 				},
 			}
 		)
