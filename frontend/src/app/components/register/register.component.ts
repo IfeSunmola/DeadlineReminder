@@ -94,8 +94,9 @@ export class RegisterComponent implements OnInit {
 					},
 					error: (error) => {
 						this.logger.error(new LogBody(this.FILE_NAME,
-							`Got error when register form submitted. Form: ${JSON.stringify(registerData)}. Error: ${JSON.stringify(error)}`))
-							.subscribe();
+							`Got error when register form submitted.`,
+							`Form: ${JSON.stringify(registerData)}. Error: ${JSON.stringify(error)}`)
+						).subscribe();
 						sessionStorage.setItem(INVALID_REQUEST, "true")
 						this.router.navigateByUrl('/').then();
 					}

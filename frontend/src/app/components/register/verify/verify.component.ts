@@ -13,6 +13,8 @@ import {
 	VERIFIED_SUCCESS,
 	VERIFY_CODE_LENGTH, VERIFY_CODE_SENT, VERIFY_CODE_SENT_SUCCESS
 } from "../../../AppConstants";
+import {LoggerService} from "../../../logger.service";
+import {LogBody} from "../../../models/log-body";
 
 @Component({
 	selector: 'app-verify',
@@ -20,6 +22,7 @@ import {
 	styleUrls: ['./verify.component.scss']
 })
 export class VerifyComponent implements OnInit {
+	private readonly FILE_NAME = "verify.component.ts"
 	userEmail: string = "";
 	codeId: number = -1;
 	verifyForm!: FormGroup;
@@ -30,12 +33,13 @@ export class VerifyComponent implements OnInit {
 	verifyCodeSent = false;
 	readonly VERIFY_CODE_SENT_SUCCESS = VERIFY_CODE_SENT_SUCCESS;
 
-	constructor(private router: Router, private authService: AuthService) {
+	constructor(private router: Router, private authService: AuthService, private logger: LoggerService) {
 		this.userEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
 		this.codeId = this.router.getCurrentNavigation()?.extras.state?.['codeId'];
 		// if this.userEmail is null, then the user is trying to access this page directly
 		// and should be redirected to the register page
 		if (this.userEmail == null || this.codeId == null) {
+			this.logger.debug(new LogBody(this.FILE_NAME, "User is trying to access this page directly")).subscribe();
 			this.router.navigateByUrl('/register').then();
 		}
 	}
@@ -69,6 +73,11 @@ export class VerifyComponent implements OnInit {
 		if (typeof this.codeId == undefined || !this.codeId || typeof this.userEmail == undefined || !this.userEmail) {
 			// code id wasn't gotten for some reason or the user email is not in the email field
 			// shouldn't execute if nothing fishy is going on
+			this.logger.error(new LogBody(
+				this.FILE_NAME,
+				`codeId or userEmail is null or undefined`,
+				`VerifyCodeData: ${JSON.stringify(verifyCodeData)}`
+			)).subscribe();
 			this.router.navigateByUrl('/register').then();
 		}
 
@@ -83,15 +92,18 @@ export class VerifyComponent implements OnInit {
 					}
 					else if (message === INCORRECT) {
 						this.code?.setErrors({incorrect: true});
-						console.log("Incorrect code");
 					}
 					else if (message === EXPIRED) {
 						this.code?.setErrors({expired: true});
 					}
 					else {
 						sessionStorage.setItem(INVALID_REQUEST, "true");
+						this.logger.error(new LogBody(
+							this.FILE_NAME,
+							`Unhandled response from server`,
+							`Message: ${message}, Response: ${JSON.stringify(response)}`
+						)).subscribe();
 						this.router.navigateByUrl('/').then();
-						console.log("Something funny happened: " + response);
 					}
 				},
 			}
@@ -107,7 +119,11 @@ export class VerifyComponent implements OnInit {
 			{
 				next: (response) => {
 					if (response.email !== this.userEmail) { // random safeguard
-						console.log("VerifyComponent: sendVerificationCode: email mismatch")
+						this.logger.debug(new LogBody(
+							this.FILE_NAME,
+							`Email mismatch between response and user email`,
+							`Response: ${JSON.stringify(response)}`
+						)).subscribe();
 						this.router.navigate(['/login']).then()
 					}
 					else {
