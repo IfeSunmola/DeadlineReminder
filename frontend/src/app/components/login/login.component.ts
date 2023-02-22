@@ -16,6 +16,8 @@ import {
 	PASSWORD_RESET,
 	PASSWORD_RESET_MESSAGE,
 } from "../../AppConstants";
+import {LoggerService} from "../../logger.service";
+import {LogBody} from "../../models/log-body";
 
 @Component({
 	selector: 'app-login',
@@ -23,6 +25,7 @@ import {
 	styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+	private readonly FILE_NAME = "login.component.ts"
 	loginForm!: FormGroup
 	//password visibility
 	passwordImg = "assets/hide.png";
@@ -47,7 +50,7 @@ export class LoginComponent implements OnInit {
 	passwordChanged = false
 	readonly PASSWORD_CHANGED_MESSAGE = PASSWORD_CHANGED_MESSAGE
 
-	constructor(private authService: AuthService, private router: Router) {
+	constructor(private authService: AuthService, private router: Router, private logger: LoggerService) {
 		this.passwordResetEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
 	}
 
@@ -58,7 +61,10 @@ export class LoginComponent implements OnInit {
 		this.authService.login(loginData).subscribe(
 			{
 				next: (response) => { // invalid login will be caught by AuthInterceptor
-					console.log("Response: " + JSON.stringify(response))
+					this.logger.debug(new LogBody(this.FILE_NAME,
+						"Login Success: ",
+						`Response: ${JSON.stringify(response)}`)
+					).subscribe()
 					this.authService.setAuthToken(response.token)
 					this.router.navigate(['/me']).then()
 				},
