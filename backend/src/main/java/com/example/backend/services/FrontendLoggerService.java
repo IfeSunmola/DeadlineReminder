@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class FrontendLoggerService {
 	private final FrontEndLoggerRepo loggerRepo;
 
-	public void saveToLog(LogBody logBody) {
-		loggerRepo.save(logBody);
+	public LogBody saveToLog(LogBody logBody) {
+		return loggerRepo.save(logBody);
 	}
 }

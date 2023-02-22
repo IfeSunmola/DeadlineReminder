@@ -23,4 +23,6 @@ public class LogBody {
 	private String logLevel;
 	private String fileName;
 	private String message;
+	@Column(length = 20000)
+	private String attachment;
 }
