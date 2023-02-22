@@ -10,6 +10,9 @@ export const MIN_PASSWORD_LENGTH = 8
 export const MAX_PASSWORD_LENGTH = 250
 export const MAX_NICKNAME_LENGTH = 10
 export const AUTH_TOKEN = "AuthToken"
+// verification code sent success
+export const VERIFY_CODE_SENT = "verifyCodeSent"
+export const VERIFY_CODE_SENT_SUCCESS = "Verification code has been sent"
 // verification success
 export const VERIFIED_SUCCESS = "verificationSuccess"
 export const VERIFIED_SUCCESS_LOGIN_MESSAGE = "Your account has been verified, you have been logged in"

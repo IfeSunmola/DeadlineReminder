@@ -11,7 +11,7 @@ import {
 	INVALID_REQUEST,
 	SUCCESS,
 	VERIFIED_SUCCESS,
-	VERIFY_CODE_LENGTH
+	VERIFY_CODE_LENGTH, VERIFY_CODE_SENT, VERIFY_CODE_SENT_SUCCESS
 } from "../../../AppConstants";
 
 @Component({
@@ -26,6 +26,9 @@ export class VerifyComponent implements OnInit {
 	// user is disabled
 	disabledAccount: boolean = false;
 	readonly DISABLED_ACCOUNT_MESSAGE = DISABLED_ACCOUNT_MESSAGE
+	// verification code was resent
+	verifyCodeSent = false;
+	readonly VERIFY_CODE_SENT_SUCCESS = VERIFY_CODE_SENT_SUCCESS;
 
 	constructor(private router: Router, private authService: AuthService) {
 		this.userEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
@@ -40,6 +43,9 @@ export class VerifyComponent implements OnInit {
 	ngOnInit(): void {
 		this.disabledAccount = sessionStorage.getItem(DISABLED_ACCOUNT) === "true";
 		sessionStorage.removeItem(DISABLED_ACCOUNT);
+
+		this.verifyCodeSent = sessionStorage.getItem(VERIFY_CODE_SENT) === "true";
+		sessionStorage.removeItem(VERIFY_CODE_SENT);
 
 		this.verifyForm = new FormGroup({
 			userEmail: new FormControl(
@@ -94,5 +100,24 @@ export class VerifyComponent implements OnInit {
 
 	get code() {
 		return this.verifyForm.get('code');
+	}
+
+	resendButtonClicked() {
+		this.authService.sendVerificationCode(this.userEmail).subscribe(
+			{
+				next: (response) => {
+					if (response.email !== this.userEmail) { // random safeguard
+						console.log("VerifyComponent: sendVerificationCode: email mismatch")
+						this.router.navigate(['/login']).then()
+					}
+					else {
+						sessionStorage.setItem(VERIFY_CODE_SENT, "true")
+						// page refresh
+						this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
+							this.router.navigate(["/register/verify"], {state: {email: this.userEmail, codeId: response.codeId}}).then())
+					}
+				}
+			}
+		)
 	}
 }

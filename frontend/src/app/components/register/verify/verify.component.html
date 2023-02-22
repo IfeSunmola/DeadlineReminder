@@ -5,6 +5,10 @@
 		<ngb-alert *ngIf="disabledAccount" type="primary" [dismissible]="false" class="text-center mb-4">
 			{{DISABLED_ACCOUNT_MESSAGE}}
 		</ngb-alert>
+
+		<ngb-alert *ngIf="verifyCodeSent" type="primary" [dismissible]="false" class="text-center mb-4">
+			{{VERIFY_CODE_SENT_SUCCESS}}
+		</ngb-alert>
 		<!--End messages-->
 
 		<h2 class="fs-1 text-center mb-4 ">Verify your account</h2>
@@ -34,7 +38,7 @@
 			</div>
 		</form>
 		<div class="mt-4 w-100 text-center">
-			Didn't get the code/code has expired? <a class="link-info">Resend it</a>
+			Didn't get the code/code has expired? <a class="link-info" style="cursor: pointer" (click)="resendButtonClicked()">Resend it</a>
 		</div>
 	</div>
 </div>
