@@ -29,7 +29,10 @@ public class SecurityConfig {
 	private final AppProperties appProps;
 	private static final String[] WHITELISTED_URLS = {
 			"/auth/**",
-			"/frontend/log"
+			"/frontend/log/debug",
+			"/frontend/log/info",
+			"/frontend/log/warn",
+			"/frontend/log/error"
 	};
 
 	@Bean
