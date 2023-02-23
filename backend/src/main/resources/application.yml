@@ -1,0 +1,4 @@
+# using application-dev.yml
+spring:
+  profiles:
+    active: dev
