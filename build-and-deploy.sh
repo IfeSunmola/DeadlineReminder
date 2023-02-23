@@ -5,6 +5,7 @@ az acr login --name ifesunmola
 arg=$1
 
 run_backend(){
+      read -rp "BACKEND - Did you change application.yml to use prod profile?"
       echo "Building backend img..."
       (cd backend || exit; docker build --no-cache  -t ifesunmola.azurecr.io/backend .)
       echo "Backend img built"
@@ -13,7 +14,7 @@ run_backend(){
 }
 
 run_frontend(){
-      read -rp "Did you change the api link in AppConstants.ts?"
+      read -rp "FRONTEND - Did you change the api link in AppConstants.ts?"
       echo "Building frontend img..."
       (cd frontend || exit; docker build --no-cache -t ifesunmola.azurecr.io/frontend .)
       echo "Frontend img built"
