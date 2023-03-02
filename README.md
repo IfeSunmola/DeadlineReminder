@@ -1,5 +1,9 @@
 # Deadline Reminder
 
+[Read March 1st update](#march-1st-update)
+
+----
+
 ## If you're running locally, you need:
 
 1. Java 17
@@ -22,4 +26,15 @@
 
 ## Other IDEs
 
-1. The process should be similar with both angular and spring boot 
+1. The process should be similar with both angular and spring boot
+
+----
+
+## March 1st update
+
+1. I have the layout/plan/logic for implementing the main feature of the site. But, time is the issue.
+   I think I would be able to get it done if I could dedicate a day to it.
+
+2. I've also decided to switch to Kotlin for everything spring related. I won't be rewriting/converting
+   existing java code to kotlin, but any new files will be created in Kotlin. 
+
