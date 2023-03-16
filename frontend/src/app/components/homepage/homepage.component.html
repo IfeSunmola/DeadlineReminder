@@ -1,24 +1,22 @@
-<div class="container-fluid center-in-screen">
-	<div class="w-100 text-center">
+<div class="center-in-screen">
+	<div class="text-center">
 		<!--Start messages-->
-		<ngb-alert *ngIf="invalidRequest" type="primary" [dismissible]="false" class="text-center mb-4">
+		<ngb-alert *ngIf="invalidRequest" type="primary" [dismissible]="false" class="">
 			{{INVALID_REQUEST_MESSAGE}}
 		</ngb-alert>
 
-		<ngb-alert *ngIf="invalidResetLink" type="primary" [dismissible]="false" class="text-center mb-4">
+		<ngb-alert *ngIf="invalidResetLink" type="primary" [dismissible]="false" class="">
 			{{INVALID_RESET_LINK_MESSAGE}}
 		</ngb-alert>
 
-		<h2 class="text-center">Receive regular reminders about upcoming deadlines and still miss it because you where being lazy</h2>
+		<h2 class="mat-headline-5">Receive regular reminders about upcoming deadlines and still miss it because you where being lazy</h2>
 
-		<div class="row gy-3 mt-md-3 text-center">
-			<div class="col-12">
-				<button routerLink="login" class="bg-primary text-light btn btn-lg">Log in</button>
-			</div>
-			<div class="col-12">
-				<button routerLink="register" class="bg-primary text-light  btn btn-lg">Create An Account</button>
-			</div>
+		<div style="margin-bottom: 1.5rem">
+			<button routerLink="register" mat-raised-button color="primary">Login</button>
+		</div>
+		<div>
+			<button routerLink="login" mat-raised-button>Create An Account</button>
 		</div>
 	</div>
+	<router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>
