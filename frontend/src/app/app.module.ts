@@ -20,6 +20,10 @@ import {ResetPasswordComponent} from './components/reset-password/reset-password
 import {ConfirmResetComponent} from './components/reset-password/confirm-reset/confirm-reset.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { WelcomeMsgComponent } from './components/welcome-msg/welcome-msg.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
 	declarations: [
@@ -44,6 +48,10 @@ import { WelcomeMsgComponent } from './components/welcome-msg/welcome-msg.compon
 		FormsModule,
 		ReactiveFormsModule,
 		HttpClientModule,
+		BrowserAnimationsModule,
+		MatToolbarModule,
+		MatIconModule,
+		MatButtonModule,
 	],
 	providers: [
 		{
