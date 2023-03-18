@@ -33,6 +33,10 @@ body {
 
 .mat-mdc-snack-bar-container {
   // Using custom colors: https://stackoverflow.com/a/74704599/18902234
+  &.default {
+    white-space: pre-wrap; // force new line: https://stackoverflow.com/a/61404124/18902234
+  }
+
   &.error-snackbar {
     --mat-mdc-snack-bar-button-color: #f8dada;
     --mdc-snackbar-container-color: #cf080b;
