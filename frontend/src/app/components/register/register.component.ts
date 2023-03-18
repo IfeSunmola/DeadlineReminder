@@ -11,7 +11,7 @@ import {SnackbarService} from "../../services/snackbar.service";
 @Component({
 	selector: 'app-register',
 	templateUrl: './register.component.html',
-	styleUrls: ['./register.component.scss']
+	styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
 	private readonly FILE_NAME = "register.component.ts"
@@ -22,6 +22,8 @@ export class RegisterComponent implements OnInit {
 	// confirmPassword visibility
 	confirmPasswordImg = "assets/hide.png";
 	confirmPasswordVisible = false;
+	hidePass = true;
+	hideConfirmPass = true;
 
 	constructor(private router: Router, private authService: AuthService, private emailValidator: EmailValidator, private logger: LoggerService,
 				private snackbarService: SnackbarService) {
@@ -70,7 +72,7 @@ export class RegisterComponent implements OnInit {
 					]
 				),
 				acceptedTerms: new FormControl(
-					false,
+					true,
 					[
 						Validators.requiredTrue
 					]
@@ -80,6 +82,11 @@ export class RegisterComponent implements OnInit {
 	}
 
 	formSubmitted() {
+		if (this.registerForm.invalid) {
+			this.snackbarService.new("Good people fill out forms correctly", "OK")
+			return;
+		}
+
 		const registerData = this.registerForm.value;
 		this.authService.registerUser(registerData)
 			.subscribe(
