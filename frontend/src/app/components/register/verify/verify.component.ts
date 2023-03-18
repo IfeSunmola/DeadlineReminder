@@ -5,16 +5,16 @@ import {Router} from "@angular/router";
 import {VerifyCodeData} from "../../../models/verify-code-data";
 import {
 	DISABLED_ACCOUNT,
-	DISABLED_ACCOUNT_MESSAGE,
+	DISABLED_ACCOUNT_MSG,
 	EXPIRED,
 	INCORRECT,
-	INVALID_REQUEST,
-	SUCCESS,
-	VERIFIED_SUCCESS,
-	VERIFY_CODE_LENGTH, VERIFY_CODE_SENT, VERIFY_CODE_SENT_SUCCESS
+	INVALID_REQUEST_MSG,
+	SUCCESS, VERIFIED_SUCCESS_LOGIN_MSG,
+	VERIFY_CODE_LENGTH, VERIFY_CODE_SENT_SUCCESS,
 } from "../../../AppConstants";
 import {LoggerService} from "../../../logger.service";
 import {LogBody} from "../../../models/log-body";
+import {SnackbarService} from "../../../services/snackbar.service";
 
 @Component({
 	selector: 'app-verify',
@@ -28,12 +28,9 @@ export class VerifyComponent implements OnInit {
 	verifyForm!: FormGroup;
 	// user is disabled
 	disabledAccount: boolean = false;
-	readonly DISABLED_ACCOUNT_MESSAGE = DISABLED_ACCOUNT_MESSAGE
-	// verification code was resent
-	verifyCodeSent = false;
-	readonly VERIFY_CODE_SENT_SUCCESS = VERIFY_CODE_SENT_SUCCESS;
+	readonly DISABLED_ACCOUNT_MESSAGE = DISABLED_ACCOUNT_MSG
 
-	constructor(private router: Router, private authService: AuthService, private logger: LoggerService) {
+	constructor(private router: Router, private authService: AuthService, private logger: LoggerService, private snackbarService: SnackbarService) {
 		this.userEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
 		this.codeId = this.router.getCurrentNavigation()?.extras.state?.['codeId'];
 		// if this.userEmail is null, then the user is trying to access this page directly
@@ -47,9 +44,6 @@ export class VerifyComponent implements OnInit {
 	ngOnInit(): void {
 		this.disabledAccount = sessionStorage.getItem(DISABLED_ACCOUNT) === "true";
 		sessionStorage.removeItem(DISABLED_ACCOUNT);
-
-		this.verifyCodeSent = sessionStorage.getItem(VERIFY_CODE_SENT) === "true";
-		sessionStorage.removeItem(VERIFY_CODE_SENT);
 
 		this.verifyForm = new FormGroup({
 			userEmail: new FormControl(
@@ -86,9 +80,9 @@ export class VerifyComponent implements OnInit {
 				next: (response) => {
 					const message = response.message;
 					if (message === SUCCESS) { // if success, then token was included
-						sessionStorage.setItem(VERIFIED_SUCCESS, "true");
 						this.authService.setAuthToken(response.token);
 						this.router.navigateByUrl('/me').then();
+						this.snackbarService.new(VERIFIED_SUCCESS_LOGIN_MSG, "OK")
 					}
 					else if (message === INCORRECT) {
 						this.code?.setErrors({incorrect: true});
@@ -97,13 +91,13 @@ export class VerifyComponent implements OnInit {
 						this.code?.setErrors({expired: true});
 					}
 					else {
-						sessionStorage.setItem(INVALID_REQUEST, "true");
 						this.logger.error(new LogBody(
 							this.FILE_NAME,
 							`Unhandled response from server`,
 							`Message: ${message}, Response: ${JSON.stringify(response)}`
 						)).subscribe();
 						this.router.navigateByUrl('/').then();
+						this.snackbarService.new(INVALID_REQUEST_MSG, "OK")
 					}
 				},
 			}
@@ -127,10 +121,10 @@ export class VerifyComponent implements OnInit {
 						this.router.navigate(['/login']).then()
 					}
 					else {
-						sessionStorage.setItem(VERIFY_CODE_SENT, "true")
 						// page refresh
 						this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
 							this.router.navigate(["/register/verify"], {state: {email: this.userEmail, codeId: response.codeId}}).then())
+						this.snackbarService.new(VERIFY_CODE_SENT_SUCCESS, "OK")
 					}
 				}
 			}

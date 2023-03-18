@@ -1,12 +1,6 @@
 <app-new-deadline #newDeadlineComponentRef></app-new-deadline> <!--Is shown when the user clicks add new deadline-->
 
 <div class="container-fluid">
-	<!--Start messages-->
-	<ngb-alert *ngIf="verifiedSuccess" type="primary" [dismissible]="false" class="text-center mt-3  mb-3">
-		{{VERIFIED_SUCCESS_MESSAGE}}
-	</ngb-alert>
-	<!--End messages-->
-
 	<div class="row mt-3 text-center">
 		<div class="col">
 			<div ngbDropdown placement="bottom" class="d-inline-block">

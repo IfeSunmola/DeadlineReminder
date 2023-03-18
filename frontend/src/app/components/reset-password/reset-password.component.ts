@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {PASSWORD_RESET} from "../../AppConstants";
 import {AuthService} from "../../services/auth.service";
+import {SnackbarService} from "../../services/snackbar.service";
+import {INVALID_REQUEST_MSG, PASSWORD_RESET_MSG} from "../../AppConstants";
 
 @Component({
 	selector: 'app-reset-password',
@@ -12,16 +13,16 @@ import {AuthService} from "../../services/auth.service";
 export class ResetPasswordComponent implements OnInit {
 	resetPasswordForm!: FormGroup;
 
-	constructor(private router: Router, private authService: AuthService) {
+	constructor(private router: Router, private authService: AuthService, private snackbarService: SnackbarService) {
 	}
 
 	formSubmitted() {
-		sessionStorage.setItem(PASSWORD_RESET, 'true');
 		this.authService.sendPasswordResetMail(this.email?.value).subscribe(
 			{
 				next: () => {
-					sessionStorage.setItem(PASSWORD_RESET, 'true');
-					this.router.navigate(['/login'], {state: {email: this.email?.value}}).then();
+					this.router.navigate(['/login']).then();
+					const msg = PASSWORD_RESET_MSG.replace("$userEmail", this.email?.value)
+					this.snackbarService.new(msg, "OK")
 				},
 			}
 		)

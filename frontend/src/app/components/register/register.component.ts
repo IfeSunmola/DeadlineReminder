@@ -3,9 +3,10 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailValidator, MatchingPasswords} from "./validator";
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
-import {INVALID_REQUEST, MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../../AppConstants";
+import {INVALID_REQUEST_MSG, MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../../AppConstants";
 import {LoggerService} from "../../logger.service";
 import {LogBody} from "../../models/log-body";
+import {SnackbarService} from "../../services/snackbar.service";
 
 @Component({
 	selector: 'app-register',
@@ -22,16 +23,11 @@ export class RegisterComponent implements OnInit {
 	confirmPasswordImg = "assets/hide.png";
 	confirmPasswordVisible = false;
 
-	invalidRequest: boolean = false;
-
-	constructor(private router: Router, private authService: AuthService, private emailValidator: EmailValidator, private logger: LoggerService) {
+	constructor(private router: Router, private authService: AuthService, private emailValidator: EmailValidator, private logger: LoggerService,
+				private snackbarService: SnackbarService) {
 	}
 
 	ngOnInit(): void {
-		// show any error messages, clear after so it disappears on refresh
-		this.invalidRequest = sessionStorage.getItem('invalidRequest') === 'true';
-		sessionStorage.removeItem('invalidRequest');
-
 		//TODO: Remove default values
 		this.registerForm = new FormGroup({
 				nickname: new FormControl(
@@ -97,8 +93,8 @@ export class RegisterComponent implements OnInit {
 							`Got error when register form submitted.`,
 							`Form: ${JSON.stringify(registerData)}. Error: ${JSON.stringify(error)}`)
 						).subscribe();
-						sessionStorage.setItem(INVALID_REQUEST, "true")
 						this.router.navigateByUrl('/').then();
+						this.snackbarService.new(INVALID_REQUEST_MSG, "OK")
 					}
 				}
 			);

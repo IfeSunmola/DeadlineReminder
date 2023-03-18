@@ -1,17 +1,24 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {catchError, Observable, of, throwError} from 'rxjs';
-import {DISABLED_ACCOUNT, INVALID_CREDENTIALS, INVALID_SESSION} from "../AppConstants";
+import {
+	DISABLED_ACCOUNT,
+	DISABLED_ACCOUNT_MSG,
+	INVALID_CREDENTIALS_MSG,
+	INVALID_RESET_LINK_MSG,
+	INVALID_SESSION_MSG
+} from "../AppConstants";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
 import {LoggerService} from "../logger.service";
 import {LogBody} from "../models/log-body";
+import {SnackbarService} from "../services/snackbar.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-	private readonly FILE_NAME = "auth-interceptor.servuce.ts"
+	private readonly FILE_NAME = "auth-interceptor.service.ts"
 
-	constructor(private router: Router, private authService: AuthService, private logger: LoggerService) {
+	constructor(private router: Router, private authService: AuthService, private logger: LoggerService, private snackbarService: SnackbarService) {
 	}
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -32,9 +39,10 @@ export class AuthInterceptor implements HttpInterceptor {
 		// https://stackoverflow.com/a/50970853
 		if (err.status === 401 || err.status === 403) {
 			if (err.error === null) { // no error message inside "error" json -> Request could not reach the backend controller because of invalid jwt
-				sessionStorage.setItem(INVALID_SESSION, "true")
+				// user was already logged in but the jwt became invalid
 				this.authService.logout()
 				this.router.navigateByUrl("/login").then()
+				this.snackbarService.new(INVALID_SESSION_MSG, "OK")
 			}
 			else { // request reached the backend controller
 				// All 401s and 403 that reached backend controller should have an "error" json value
@@ -42,7 +50,7 @@ export class AuthInterceptor implements HttpInterceptor {
 				if (errorMessage === DISABLED_ACCOUNT) {
 					this.handleDisabledAccount(err)
 				}
-				else if (errorMessage == INVALID_CREDENTIALS) {
+				else if (errorMessage == INVALID_CREDENTIALS_MSG) {
 					this.handleInvalidCredentials(err)
 				}
 				else {
@@ -62,7 +70,7 @@ export class AuthInterceptor implements HttpInterceptor {
 	private handleDisabledAccount(error: HttpErrorResponse) {
 		const email = error.error.email
 		this.authService.logout() // shouldn't really do anything since the user isn't logged-in anyway
-		sessionStorage.setItem(DISABLED_ACCOUNT, "true")
+		this.snackbarService.new(DISABLED_ACCOUNT_MSG, "OK")
 
 		this.authService.sendVerificationCode(email).subscribe(
 			{
@@ -87,7 +95,7 @@ export class AuthInterceptor implements HttpInterceptor {
 		this.logger.error(new LogBody(this.FILE_NAME, "Invalid credentials",
 			`Error: ${JSON.stringify(error.error)}`)
 		).subscribe()
-		sessionStorage.setItem(INVALID_CREDENTIALS, "true")
+		this.snackbarService.new(INVALID_CREDENTIALS_MSG, "OK")
 		// refresh page https://stackoverflow.com/a/49509706
 		this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
 			this.router.navigate(["/login"]));

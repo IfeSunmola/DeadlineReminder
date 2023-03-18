@@ -1,12 +1,20 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {EXPIRED, INVALID_REQUEST, INVALID_RESET_LINK, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH, PASSWORD_CHANGED} from "../../../AppConstants";
+import {
+	EXPIRED,
+	INVALID_REQUEST_MSG,
+	INVALID_RESET_LINK_MSG,
+	MAX_PASSWORD_LENGTH,
+	MIN_PASSWORD_LENGTH,
+	PASSWORD_CHANGED_MSG
+} from "../../../AppConstants";
 import {MatchingPasswords} from "../../register/validator";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../services/auth.service";
 import {PasswordResetData} from "../../../models/password-reset-data";
 import {LoggerService} from "../../../logger.service";
 import {LogBody} from "../../../models/log-body";
+import {SnackbarService} from "../../../services/snackbar.service";
 
 @Component({
 	selector: 'app-confirm-reset',
@@ -24,11 +32,12 @@ export class ConfirmResetComponent implements OnInit {
 	confirmPasswordImg = "assets/hide.png";
 	confirmPasswordVisible = false;
 
-	constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private logger: LoggerService) {
+	constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private logger: LoggerService,
+				private snackbarService: SnackbarService) {
 	}
 
 
-	formSubmitted()  {
+	formSubmitted() {
 		const passwordResetData: PasswordResetData = {
 			token: this.confirmToken,
 			email: this.email?.value,
@@ -41,8 +50,8 @@ export class ConfirmResetComponent implements OnInit {
 			{
 				next: (response) => {
 					if (response.message) { // reset success
-						sessionStorage.setItem(PASSWORD_CHANGED, "true")
 						this.router.navigate(['/login']).then()
+						this.snackbarService.new(PASSWORD_CHANGED_MSG, "OK")
 					}
 				},
 				error: (error) => {
@@ -52,8 +61,8 @@ export class ConfirmResetComponent implements OnInit {
 							"Incorrect token: ",
 							`forgotPasswordData: ${JSON.stringify(passwordResetData)}\nerror: ${JSON.stringify(error)}`)
 						).subscribe()
-						sessionStorage.setItem(INVALID_RESET_LINK, "true")
 						this.router.navigate(['/']).then()
+						this.snackbarService.new(INVALID_RESET_LINK_MSG, "OK")
 					}
 					else if (errorMessage.email) {
 						this.email?.setErrors({incorrect: true});
@@ -67,16 +76,16 @@ export class ConfirmResetComponent implements OnInit {
 							"Incorrect passwords: ",
 							`forgotPasswordData: ${JSON.stringify(passwordResetData)}\nerror: ${JSON.stringify(error)}`)
 						).subscribe()
-						sessionStorage.setItem(INVALID_REQUEST, "true")
 						this.router.navigate(['/']).then()
+						this.snackbarService.new(INVALID_REQUEST_MSG, "OK")
 					}
 					else {
 						this.logger.error(new LogBody(this.FILE_NAME,
 							"Unhandled Error while confirming reset password: ",
 							`forgotPasswordData: ${JSON.stringify(passwordResetData)}\n error: ${JSON.stringify(error)}`)
 						).subscribe()
-						sessionStorage.setItem(INVALID_REQUEST, "true")
 						this.router.navigate(['/']).then()
+						this.snackbarService.new(INVALID_REQUEST_MSG, "OK")
 					}
 				}
 			}
@@ -120,16 +129,16 @@ export class ConfirmResetComponent implements OnInit {
 			params => {
 				const token = params['token'];
 				if (!token) { // token does not exist
-					sessionStorage.setItem(INVALID_REQUEST, "true")
 					this.router.navigate(['/']).then()
+					this.snackbarService.new(INVALID_REQUEST_MSG, "OK")
 					return;
 				}
 				this.confirmToken = token;
 				this.authService.verifyPasswordResetCode(token).subscribe(
 					(response) => {
 						if (response === EXPIRED) {
-							sessionStorage.setItem(INVALID_RESET_LINK, "true")
 							this.router.navigate(['/']).then()
+							this.snackbarService.new(INVALID_RESET_LINK_MSG, "OK")
 							return;
 						}
 					}

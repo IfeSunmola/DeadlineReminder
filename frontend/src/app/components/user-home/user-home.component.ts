@@ -4,9 +4,10 @@ import {AccountInfo} from "../../models/account-info";
 import {AccountService} from "../../services/account.service";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
-import {NORMAL_LOGOUT, VERIFIED_SUCCESS, VERIFIED_SUCCESS_LOGIN_MESSAGE} from "../../AppConstants";
 import {LogBody} from "../../models/log-body";
 import {LoggerService} from "../../logger.service";
+import {SnackbarService} from "../../services/snackbar.service";
+import {INVALID_RESET_LINK_MSG, NORMAL_LOGOUT_MSG} from "../../AppConstants";
 
 @Component({
 	selector: 'app-user-home',
@@ -16,11 +17,9 @@ import {LoggerService} from "../../logger.service";
 export class UserHomeComponent implements OnInit {
 	private readonly FILE_NAME = "user-home.component.ts"
 	userInfo: AccountInfo | undefined;
-	// verification successful, user has been logged in
-	verifiedSuccess = false
-	readonly VERIFIED_SUCCESS_MESSAGE = VERIFIED_SUCCESS_LOGIN_MESSAGE
 
-	constructor(private accountService: AccountService, private authService: AuthService, private router: Router, private logger: LoggerService) {
+	constructor(private accountService: AccountService, private authService: AuthService, private router: Router, private logger: LoggerService,
+				private snackbarService: SnackbarService) {
 	}
 
 	openNewDeadlineModal(content: NewDeadlineComponent) {
@@ -28,9 +27,6 @@ export class UserHomeComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.verifiedSuccess = sessionStorage.getItem(VERIFIED_SUCCESS) === "true"
-		sessionStorage.removeItem(VERIFIED_SUCCESS)
-
 		this.accountService.getAccount().subscribe(
 			{
 				next: (response) => {
@@ -54,7 +50,7 @@ export class UserHomeComponent implements OnInit {
 
 	logoutClicked() {
 		this.authService.logout();
-		sessionStorage.setItem(NORMAL_LOGOUT, "true");
 		this.router.navigateByUrl(`/login`).then();
+		this.snackbarService.new(NORMAL_LOGOUT_MSG, "OK")
 	}
 }

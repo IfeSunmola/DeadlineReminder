@@ -1,32 +1,5 @@
-<!--<div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 80vh">-->
 <div class="container-fluid center-in-screen">
 	<div>
-		<!--Start messages-->
-		<ngb-alert *ngIf="normalLogout" type="primary" [dismissible]="false" class="text-center mb-4">
-			{{NORMAL_LOGOUT_MESSAGE}}
-		</ngb-alert>
-
-		<ngb-alert *ngIf="loginNeeded" type="primary" [dismissible]="false" class="text-center mb-4">
-			{{LOGIN_NEEDED_MESSAGE}}
-		</ngb-alert>
-
-		<ngb-alert *ngIf="invalidSession" type="primary" [dismissible]="false" class="text-center mb-4">
-			{{INVALID_SESSION_MESSAGE}}
-		</ngb-alert>
-
-		<ngb-alert *ngIf="invalidCredentials" type="primary" [dismissible]="false" class="text-center mb-4">
-			{{INVALID_CREDENTIALS_MESSAGE}}
-		</ngb-alert>
-
-		<ngb-alert *ngIf="passwordReset" type="primary" [dismissible]="false" class="text-center mb-4">
-			{{PASSWORD_RESET_MESSAGE.replace('$userEmail', passwordResetEmail)}}
-		</ngb-alert>
-
-		<ngb-alert *ngIf="passwordChanged" type="primary" [dismissible]="false" class="text-center mb-4">
-			{{PASSWORD_CHANGED_MESSAGE}}
-		</ngb-alert>
-		<!--End messages-->
-
 		<h1 class="mat-headline-4 header-text">Sign in to your account</h1>
 		<form [formGroup]="loginForm" (ngSubmit)="formSubmitted()" method="post">
 			<div class="login-container">
