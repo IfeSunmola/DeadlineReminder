@@ -18,6 +18,7 @@ import {
 } from "../../AppConstants";
 import {LoggerService} from "../../logger.service";
 import {LogBody} from "../../models/log-body";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
 	selector: 'app-login',
@@ -27,9 +28,6 @@ import {LogBody} from "../../models/log-body";
 export class LoginComponent implements OnInit {
 	private readonly FILE_NAME = "login.component.ts"
 	loginForm!: FormGroup
-	//password visibility
-	passwordImg = "assets/hide.png";
-	passwordVisible = false
 	// user logged out normally
 	normalLogout = false;
 	readonly NORMAL_LOGOUT_MESSAGE = NORMAL_LOGOUT_MESSAGE
@@ -50,11 +48,17 @@ export class LoginComponent implements OnInit {
 	passwordChanged = false
 	readonly PASSWORD_CHANGED_MESSAGE = PASSWORD_CHANGED_MESSAGE
 
-	constructor(private authService: AuthService, private router: Router, private logger: LoggerService) {
+	hide = true;
+
+	constructor(private authService: AuthService, private router: Router, private logger: LoggerService, private snackbar: MatSnackBar) {
 		this.passwordResetEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
 	}
 
 	formSubmitted() {
+		if (this.loginForm.invalid) {
+			this.snackbar.open("How would you feel if I sent you an empty form to process?", "😔", {duration: 10000})
+			return;
+		}
 		this.authService.deleteAuthToken()
 		const loginData: LoginData = {email: this.email?.value, password: this.password?.value, stayLoggedIn: this.stayLoggedIn?.value}
 
@@ -135,16 +139,5 @@ export class LoginComponent implements OnInit {
 
 	resetPasswordClicked() {
 		this.router.navigate(['/reset-password']).then()
-	}
-
-	togglePasswordVisibility() {
-		if (this.passwordImg === "assets/hide.png") {
-			this.passwordImg = "assets/show.png";
-			this.passwordVisible = true
-		}
-		else {
-			this.passwordImg = "assets/hide.png";
-			this.passwordVisible = false
-		}
 	}
 }
