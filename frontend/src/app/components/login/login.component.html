@@ -1,8 +1,8 @@
-<div class="container-fluid center-in-screen">
+<div class="center-in-screen">
 	<div>
 		<h1 class="mat-headline-4 header-text">Sign in to your account</h1>
 		<form [formGroup]="loginForm" (ngSubmit)="formSubmitted()" method="post">
-			<div class="login-container">
+			<div class="email-container">
 				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
 					<mat-label>Email</mat-label>
 					<input matInput placeholder="john@example.com" [formControlName]="'email'" required>
