@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {SnackbarService} from "../../services/snackbar.service";
-import {INVALID_REQUEST_MSG, PASSWORD_RESET_MSG} from "../../AppConstants";
+import {PASSWORD_RESET_MSG} from "../../AppConstants";
 
 @Component({
 	selector: 'app-reset-password',
@@ -17,6 +17,11 @@ export class ResetPasswordComponent implements OnInit {
 	}
 
 	formSubmitted() {
+		if (this.resetPasswordForm.invalid) {
+			this.snackbarService.new("I'm pretty sure you have an email", "Got it")
+			return;
+		}
+
 		this.authService.sendPasswordResetMail(this.email?.value).subscribe(
 			{
 				next: () => {

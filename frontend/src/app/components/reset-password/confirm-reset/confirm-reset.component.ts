@@ -25,19 +25,19 @@ export class ConfirmResetComponent implements OnInit {
 	private readonly FILE_NAME = "confirm-reset.component.ts"
 	confirmResetForm!: FormGroup;
 	private confirmToken = "";
-	// password visibility
-	passwordImg = "assets/hide.png";
-	passwordVisible = false
-	// confirmPassword visibility
-	confirmPasswordImg = "assets/hide.png";
-	confirmPasswordVisible = false;
+	hidePassword = true;
 
-	constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private logger: LoggerService,
-				private snackbarService: SnackbarService) {
+	constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService,
+				private logger: LoggerService, private snackbarService: SnackbarService) {
 	}
 
 
 	formSubmitted() {
+		if (this.confirmResetForm.invalid) {
+			this.snackbarService.new("Hmm, I wonder if there's an error message showing", "")
+			return;
+		}
+
 		const passwordResetData: PasswordResetData = {
 			token: this.confirmToken,
 			email: this.email?.value,
@@ -158,27 +158,4 @@ export class ConfirmResetComponent implements OnInit {
 	get confirmPassword() {
 		return this.confirmResetForm.get('confirmPassword');
 	}
-
-	togglePasswordVisibility() {
-		if (this.passwordImg === "assets/hide.png") {
-			this.passwordImg = "assets/show.png";
-			this.passwordVisible = true
-		}
-		else {
-			this.passwordImg = "assets/hide.png";
-			this.passwordVisible = false
-		}
-	}
-
-	toggleConfirmPasswordVisibility() {
-		if (this.confirmPasswordImg === "assets/hide.png") {
-			this.confirmPasswordImg = "assets/show.png";
-			this.confirmPasswordVisible = true
-		}
-		else {
-			this.confirmPasswordImg = "assets/hide.png";
-			this.confirmPasswordVisible = false
-		}
-	}
-
 }

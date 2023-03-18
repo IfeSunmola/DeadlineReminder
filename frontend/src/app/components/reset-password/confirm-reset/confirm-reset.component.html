@@ -1,54 +1,51 @@
-<div class="container-fluid center-in-screen">
+<div class="center-in-screen">
 	<div>
-		<h1 class="fs-1 text-center">Password Reset</h1>
-		<form [formGroup]="confirmResetForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post">
+		<h1 class="mat-headline-4 header-text">Reset your password</h1>
+		<form [formGroup]="confirmResetForm" (ngSubmit)="formSubmitted()" method="post">
 			<!--Start Email-->
-			<div class="col-md-12">
-				<label for="email" class="orm-label">Email</label>
-				<input [formControlName]="'email'" type="email" class="form-control " id="email">
-				<ng-container *ngIf="email?.errors && (email?.dirty || email?.touched)">
-					<span class="text-danger" *ngIf="email?.errors?.['required']">Email is required</span>
-					<span class="text-danger" *ngIf="email?.errors?.['email']">Enter a valid email</span>
-					<span class="text-danger" *ngIf="email?.errors?.['incorrect']">Incorrect Email</span>
-				</ng-container>
+			<div class="email-container">
+				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
+					<mat-label>Email</mat-label>
+					<input matInput placeholder="john@example.com" [formControlName]="'email'" required>
+					<mat-error *ngIf="email?.errors?.['required']">Email is required</mat-error>
+					<mat-error *ngIf="email?.errors?.['email']">Enter a valid email</mat-error>
+					<mat-error *ngIf="email?.errors?.['incorrect']">Incorrect Email</mat-error>
+				</mat-form-field>
 			</div>
 			<!--End Email-->
 
 			<!--Start Password-->
-			<div class="col-md-12">
-				<label for="password" class="form-label">Password</label>
-				<div class="input-group flex-nowrap col-md-12 ">
-					<input [formControlName]="'password'" [type]="passwordVisible ? 'text' : 'password'" class="form-control" id="password">
-					<span class="input-group-text">
-						<img (click)="togglePasswordVisibility()" alt="show/hide-icon" width="24" height="24" [src]="passwordImg">
-					</span>
-				</div>
-				<ng-container *ngIf="password?.errors && (password?.dirty || password?.touched)">
-					<span class="text-danger" *ngIf="password?.errors?.['required']">Password is required</span>
-					<span class="text-danger" *ngIf="password?.errors?.['minlength']">Keep Typing...</span>
-					<span class="text-danger" *ngIf="password?.errors?.['maxlength']">Why's your password that long?</span>
-				</ng-container>
+			<div class="password-container">
+				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
+					<mat-label>Password</mat-label>
+					<input matInput [type]="hidePassword ? 'password' : 'text'" [formControlName]="'password'">
+					<button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+							[attr.aria-pressed]="hidePassword">
+						<mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+					</button>
+					<mat-error *ngIf="password?.errors?.['required']">Password is required</mat-error>
+					<mat-error *ngIf="password?.errors?.['minlength']">Keep Typing...</mat-error>
+					<mat-error *ngIf="password?.errors?.['maxlength']">Why's your password that long?</mat-error>
+				</mat-form-field>
 			</div>
 			<!--End Password-->
 
 			<!--Start Confirm Password-->
-			<div class="col-md-12">
-				<label for="confirmPassword" class="form-label">Confirm Password</label>
-				<div class="input-group flex-nowrap col-md-12 ">
-					<input [formControlName]="'confirmPassword'" [type]="confirmPasswordVisible ? 'text' : 'password'" class="form-control"
-						   id="confirmPassword">
-					<span class="input-group-text">
-						<img (click)="toggleConfirmPasswordVisibility()" alt="show/hide-icon" width="24" height="24" [src]="confirmPasswordImg">
-					</span>
-				</div>
-				<ng-container *ngIf="confirmResetForm?.errors && (confirmPassword?.dirty || confirmPassword?.touched)">
-					<span class="text-danger" *ngIf="confirmResetForm?.hasError('passwordsNotMatching')">Passwords must match</span>
-				</ng-container>
+			<div class="confirm-password-container">
+				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
+					<mat-label>Confirm Password</mat-label>
+					<input matInput [type]="hidePassword ? 'password' : 'text'" [formControlName]="'confirmPassword'">
+					<button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+							[attr.aria-pressed]="hidePassword">
+						<mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+					</button>
+					<mat-error *ngIf="confirmResetForm?.hasError('passwordsNotMatching')">Passwords must match</mat-error>
+				</mat-form-field>
 			</div>
 			<!--End Confirm Password-->
 
-			<div class="col-12 text-center">
-				<button [disabled]="confirmResetForm.invalid" type="submit" class="btn btn-primary btn-lg">Reset Password</button>
+			<div class="submit-btn-container text-center">
+				<button type="submit" mat-raised-button color="primary">Reset Password</button>
 			</div>
 		</form>
 	</div>
