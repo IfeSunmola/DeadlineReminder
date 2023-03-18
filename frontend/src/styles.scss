@@ -25,3 +25,21 @@ body {
   align-items: center;
   min-height: 80vh;
 }
+
+
+.blue-snackbar {
+  background: #2196F3;
+}
+
+.mat-mdc-snack-bar-container {
+  // Using custom colors: https://stackoverflow.com/a/74704599/18902234
+  &.error-snackbar {
+    --mat-mdc-snack-bar-button-color: #f8dada;
+    --mdc-snackbar-container-color: #cf080b;
+    --mdc-snackbar-supporting-text-color: #f7f7f7;
+  }
+
+  //--mat-mdc-snack-bar-button-color: red;
+  //--mdc-snackbar-container-color: black;
+  //--mdc-snackbar-supporting-text-color: yellow;
+}

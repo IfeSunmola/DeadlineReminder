@@ -18,7 +18,7 @@ import {
 } from "../../AppConstants";
 import {LoggerService} from "../../logger.service";
 import {LogBody} from "../../models/log-body";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {SnackbarService} from "../../services/snackbar.service";
 
 @Component({
 	selector: 'app-login',
@@ -50,13 +50,13 @@ export class LoginComponent implements OnInit {
 
 	hide = true;
 
-	constructor(private authService: AuthService, private router: Router, private logger: LoggerService, private snackbar: MatSnackBar) {
+	constructor(private authService: AuthService, private router: Router, private logger: LoggerService, private snackbarService: SnackbarService) {
 		this.passwordResetEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
 	}
 
 	formSubmitted() {
 		if (this.loginForm.invalid) {
-			this.snackbar.open("How would you feel if I sent you an empty form to process?", "😔", {duration: 10000})
+			this.snackbarService.new("How would you feel if I sent you an empty form to process?", "😔", 10000, "default")
 			return;
 		}
 		this.authService.deleteAuthToken()
