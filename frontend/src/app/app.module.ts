@@ -24,6 +24,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatInputModule} from "@angular/material/input";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
 	declarations: [
@@ -52,6 +55,9 @@ import {MatButtonModule} from "@angular/material/button";
 		MatToolbarModule,
 		MatIconModule,
 		MatButtonModule,
+		MatSnackBarModule,
+		MatInputModule,
+		MatSlideToggleModule
 	],
 	providers: [
 		{

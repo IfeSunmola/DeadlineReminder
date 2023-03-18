@@ -3,18 +3,14 @@
 		<app-navbar></app-navbar>
 		<router-outlet></router-outlet>
 		<app-loading></app-loading>
-		<app-welcome-msg></app-welcome-msg>
 	</div>
 </ng-container>
 
 
 <ng-container *ngIf="!hasValidScreen">
-	<div class="center-in-screen">
-		<div id="desktop-frame">
-			<app-navbar></app-navbar>
-			<router-outlet></router-outlet>
-			<app-loading></app-loading>
-			<app-welcome-msg></app-welcome-msg>
-		</div>
+	<div id="desktop-frame">
+		<app-navbar></app-navbar>
+		<router-outlet></router-outlet>
+		<app-loading></app-loading>
 	</div>
 </ng-container>
