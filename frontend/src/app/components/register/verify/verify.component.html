@@ -1,40 +1,39 @@
-<div class="container-fluid center-in-screen">
+<div class="center-in-screen">
 	<div>
+		<h1 class="mat-headline-4 header-text">Verify your account</h1>
+		<h2 class=" header-text">A verification code has been sent to your email</h2>
 
-		<!--Start messages-->
-		<ngb-alert *ngIf="disabledAccount" type="primary" [dismissible]="false" class="text-center mb-4">
-			{{DISABLED_ACCOUNT_MESSAGE}}
-		</ngb-alert>
-		<!--End messages-->
-
-		<h2 class="fs-1 text-center mb-4 ">Verify your account</h2>
-		<h4 class="fs-6 text-center mb-4">A verification code has been sent to your email</h4>
-
-		<form [formGroup]="verifyForm" (ngSubmit)="formSubmitted()" class="row g-3" method="post" novalidate>
-			<div class="col-md-12">
-				<label for="userEmail" class="form-label">Your email</label>
-				<input formControlName="userEmail" readonly type="email" class="form-control" id="userEmail">
+		<form [formGroup]="verifyForm" (ngSubmit)="formSubmitted()" method="post" novalidate>
+			<!--Start your email-->
+			<div class="email-container">
+				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
+					<mat-label>Your Email</mat-label>
+					<input type="email" matInput readonly placeholder="john@example.com" formControlName="userEmail" required>
+				</mat-form-field>
 			</div>
+			<!--End your email-->
 
-			<div class="col-md-12">
-				<label for="code" class="form-label">Verification Code</label>
-				<input formControlName="code" type="email" class="form-control" id="code">
-
-				<ng-container *ngIf="code?.errors && (code?.dirty || code?.touched)">
-					<span class="text-danger" *ngIf="code?.errors?.['required']">Code is required</span>
-					<span class="text-danger" *ngIf="code?.errors?.['minlength'] || code?.errors?.['maxlength']">Invalid Code</span>
-					<span class="text-danger" *ngIf="code?.errors?.['incorrect']">Incorrect Code</span>
-					<span class="text-danger" *ngIf="code?.errors?.['expired']">That code has expired hehe</span>
-				</ng-container>
-
+			<!--Start code-->
+			<div class="code-container">
+				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
+					<mat-label>Verification Code</mat-label>
+					<input type="text" matInput placeholder="john@example.com" formControlName="code" required>
+					<mat-error *ngIf="code?.errors?.['required']">Code is required</mat-error>
+					<mat-error *ngIf="code?.errors?.['minlength'] || code?.errors?.['maxlength']">Invalid Code</mat-error>
+					<mat-error *ngIf="code?.errors?.['incorrect']">Incorrect Code</mat-error>
+					<mat-error *ngIf="code?.errors?.['expired']">That code has expired hehe</mat-error>
+				</mat-form-field>
 			</div>
+			<!--End code-->
 
-			<div class="col-12 text-center">
-				<button [disabled]="verifyForm.invalid" type="submit" class="btn btn-primary btn-lg">Continue</button>
+			<!--Submit button-->
+			<div class="continue-btn-container text-center">
+				<button type="submit" mat-raised-button color="primary">Continue</button>
 			</div>
 		</form>
-		<div class="mt-4 w-100 text-center">
-			Didn't get the code/code has expired? <a class="link-info" style="cursor: pointer" (click)="resendButtonClicked()">Resend it</a>
+		<div class="resend-container text-center" style="margin-top: 0.5rem">
+			Didn't get the code/code has expired?
+			<a mat-button color="accent" class="link" (click)="resendButtonClicked()">Resend it</a>
 		</div>
 	</div>
 </div>

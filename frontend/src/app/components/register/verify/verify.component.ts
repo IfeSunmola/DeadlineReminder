@@ -4,13 +4,13 @@ import {AuthService} from "../../../services/auth.service";
 import {Router} from "@angular/router";
 import {VerifyCodeData} from "../../../models/verify-code-data";
 import {
-	DISABLED_ACCOUNT,
-	DISABLED_ACCOUNT_MSG,
 	EXPIRED,
 	INCORRECT,
 	INVALID_REQUEST_MSG,
-	SUCCESS, VERIFIED_SUCCESS_LOGIN_MSG,
-	VERIFY_CODE_LENGTH, VERIFY_CODE_SENT_SUCCESS,
+	SUCCESS,
+	VERIFIED_SUCCESS_LOGIN_MSG,
+	VERIFY_CODE_LENGTH,
+	VERIFY_CODE_SENT_SUCCESS,
 } from "../../../AppConstants";
 import {LoggerService} from "../../../services/logger.service";
 import {LogBody} from "../../../models/log-body";
@@ -26,9 +26,6 @@ export class VerifyComponent implements OnInit {
 	userEmail: string = "";
 	codeId: number = -1;
 	verifyForm!: FormGroup;
-	// user is disabled
-	disabledAccount: boolean = false;
-	readonly DISABLED_ACCOUNT_MESSAGE = DISABLED_ACCOUNT_MSG
 
 	constructor(private router: Router, private authService: AuthService, private logger: LoggerService, private snackbarService: SnackbarService) {
 		this.userEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
@@ -42,9 +39,6 @@ export class VerifyComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.disabledAccount = sessionStorage.getItem(DISABLED_ACCOUNT) === "true";
-		sessionStorage.removeItem(DISABLED_ACCOUNT);
-
 		this.verifyForm = new FormGroup({
 			userEmail: new FormControl(
 				this.userEmail
@@ -63,6 +57,10 @@ export class VerifyComponent implements OnInit {
 	}
 
 	formSubmitted() {
+		if (this.verifyForm.invalid) {
+			this.snackbarService.new("I can see some errors", "")
+			return;
+		}
 		const verifyCodeData: VerifyCodeData = {codeId: this.codeId, userEmail: this.userEmail, codeFromUser: this.code?.value};
 		if (typeof this.codeId == undefined || !this.codeId || typeof this.userEmail == undefined || !this.userEmail) {
 			// code id wasn't gotten for some reason or the user email is not in the email field
