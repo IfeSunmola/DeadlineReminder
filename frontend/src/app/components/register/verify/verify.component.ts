@@ -12,7 +12,7 @@ import {
 	SUCCESS, VERIFIED_SUCCESS_LOGIN_MSG,
 	VERIFY_CODE_LENGTH, VERIFY_CODE_SENT_SUCCESS,
 } from "../../../AppConstants";
-import {LoggerService} from "../../../logger.service";
+import {LoggerService} from "../../../services/logger.service";
 import {LogBody} from "../../../models/log-body";
 import {SnackbarService} from "../../../services/snackbar.service";
 

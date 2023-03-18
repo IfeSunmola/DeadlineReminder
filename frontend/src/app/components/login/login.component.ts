@@ -3,7 +3,7 @@ import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {LoginData} from "../../models/login-data";
-import {LoggerService} from "../../logger.service";
+import {LoggerService} from "../../services/logger.service";
 import {LogBody} from "../../models/log-body";
 import {SnackbarService} from "../../services/snackbar.service";
 

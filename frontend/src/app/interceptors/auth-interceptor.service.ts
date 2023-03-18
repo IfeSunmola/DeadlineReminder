@@ -1,16 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {catchError, Observable, of, throwError} from 'rxjs';
-import {
-	DISABLED_ACCOUNT,
-	DISABLED_ACCOUNT_MSG,
-	INVALID_CREDENTIALS_MSG,
-	INVALID_RESET_LINK_MSG,
-	INVALID_SESSION_MSG
-} from "../AppConstants";
+import {DISABLED_ACCOUNT, DISABLED_ACCOUNT_MSG, INVALID_CREDENTIALS_MSG, INVALID_SESSION_MSG} from "../AppConstants";
 import {Router} from "@angular/router";
 import {AuthService} from "../services/auth.service";
-import {LoggerService} from "../logger.service";
+import {LoggerService} from "../services/logger.service";
 import {LogBody} from "../models/log-body";
 import {SnackbarService} from "../services/snackbar.service";
 

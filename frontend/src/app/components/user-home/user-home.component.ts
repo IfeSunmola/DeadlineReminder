@@ -5,9 +5,9 @@ import {AccountService} from "../../services/account.service";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {LogBody} from "../../models/log-body";
-import {LoggerService} from "../../logger.service";
+import {LoggerService} from "../../services/logger.service";
 import {SnackbarService} from "../../services/snackbar.service";
-import {INVALID_RESET_LINK_MSG, NORMAL_LOGOUT_MSG} from "../../AppConstants";
+import {NORMAL_LOGOUT_MSG} from "../../AppConstants";
 
 @Component({
 	selector: 'app-user-home',

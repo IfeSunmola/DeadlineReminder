@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Observable} from 'rxjs';
 import {AuthService} from "../services/auth.service";
-import {LoggerService} from "../logger.service";
+import {LoggerService} from "../services/logger.service";
 import {LogBody} from "../models/log-body";
 import {SnackbarService} from "../services/snackbar.service";
-import {INVALID_RESET_LINK_MSG, LOGIN_NEEDED_MSG} from "../AppConstants";
+import {LOGIN_NEEDED_MSG} from "../AppConstants";
 
 
 @Injectable({
