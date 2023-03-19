@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
-import {LoadingService} from "../services/loading.service";
+import {SpinnerService} from "../services/spinner.service";
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
 
-	constructor(private loadingService: LoadingService) {
+	constructor(private loadingService: SpinnerService) {
 	}
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {

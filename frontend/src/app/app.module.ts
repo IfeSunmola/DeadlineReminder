@@ -14,7 +14,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {VerifyComponent} from './components/register/verify/verify.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./interceptors/auth-interceptor.service";
-import {LoadingComponent} from './components/loading/loading.component';
+import {SpinnerComponent} from './components/loading/spinner.component';
 import {LoadingInterceptor} from "./interceptors/loading.interceptor";
 import {ResetPasswordComponent} from './components/reset-password/reset-password.component';
 import {ConfirmResetComponent} from './components/reset-password/confirm-reset/confirm-reset.component';
@@ -27,6 +27,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatInputModule} from "@angular/material/input";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 @NgModule({
 	declarations: [
@@ -38,7 +40,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 		UserHomeComponent,
 		NewDeadlineComponent,
 		VerifyComponent,
-		LoadingComponent,
+		SpinnerComponent,
 		ResetPasswordComponent,
 		ConfirmResetComponent,
   PageNotFoundComponent,
@@ -57,7 +59,9 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 		MatButtonModule,
 		MatSnackBarModule,
 		MatInputModule,
-		MatSlideToggleModule
+		MatSlideToggleModule,
+		MatProgressSpinnerModule,
+		MatProgressBarModule
 	],
 	providers: [
 		{

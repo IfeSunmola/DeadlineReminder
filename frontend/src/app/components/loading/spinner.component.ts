@@ -1,15 +1,15 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {LoadingService} from "../../services/loading.service";
+import {SpinnerService} from "../../services/spinner.service";
 
 @Component({
 	selector: 'app-loading',
-	templateUrl: './loading.component.html',
-	styleUrls: ['./loading.component.scss']
+	templateUrl: './spinner.component.html',
+	styleUrls: ['./spinner.component.scss']
 })
-export class LoadingComponent implements OnInit {
+export class SpinnerComponent implements OnInit {
 	showSpinner = false;
 
-	constructor(private loadingService: LoadingService, private cdRef: ChangeDetectorRef) {
+	constructor(private loadingService: SpinnerService, private cdRef: ChangeDetectorRef) {
 	}
 
 	ngOnInit(): void {
