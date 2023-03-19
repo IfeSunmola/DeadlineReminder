@@ -3,7 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HomepageComponent} from './components/homepage/homepage.component';
 import {NavbarComponent} from './components/navbar/navbar.component';
 import {LoginComponent} from './components/login/login.component';
@@ -19,7 +18,6 @@ import {LoadingInterceptor} from "./interceptors/loading.interceptor";
 import {ResetPasswordComponent} from './components/reset-password/reset-password.component';
 import {ConfirmResetComponent} from './components/reset-password/confirm-reset/confirm-reset.component';
 import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
-import {WelcomeMsgComponent} from './components/welcome-msg/welcome-msg.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
@@ -52,12 +50,10 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 		ResetPasswordComponent,
 		ConfirmResetComponent,
 		PageNotFoundComponent,
-		WelcomeMsgComponent,
 	],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
-		NgbModule,
 		FormsModule,
 		ReactiveFormsModule,
 		HttpClientModule,
