@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Option} from "../Option";
 import {MatDialogRef} from "@angular/material/dialog";
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import {TimesService} from "../../../services/times.service";
+import {Observable} from "rxjs";
 
 @Component({
 	selector: 'app-new-deadline',
@@ -14,9 +16,9 @@ export class NewDeadlineComponent implements OnInit {
 	// Form Data
 	formData!: FormGroup
 	timeOptions: Option[] = [] // e.g. 30 Minutes, 1 Hour, 2 Hours, etc.
-	times: string[] = []; // e.g. 7:00 AM, 7:30 AM, 8:00 AM, etc.
+	times: Observable<{ name: string }[]> | undefined;
 
-	constructor(private dialogRef: MatDialogRef<NewDeadlineComponent>) {
+	constructor(private dialogRef: MatDialogRef<NewDeadlineComponent>, private timesService: TimesService) {
 	}
 
 	ngOnInit(): void {
@@ -27,19 +29,20 @@ export class NewDeadlineComponent implements OnInit {
 		this.minDate = new Date(today.getFullYear(), currentMonth, currentDay + 1)
 		this.maxDate = new Date(today.getFullYear(), currentMonth + 2, currentDay)
 
+		// save the observable, will be used in html. For 7:00 PM, 8:00 PM, etc.
+		this.times = this.timesService.dueTimes
 
-		this.times = ["7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
-			"11:00 AM", "11:30 AM", "12:00 PM (Noon)", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM",
-			"4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM", "9:00 PM",
-			"9:30 PM", "10:00 PM", "10:30 PM", "11:00 PM", "11:30 PM", "12:00 AM (Midnight)"]
-
-		this.timeOptions = [
-			new Option("30 Minutes", true),
-			new Option("1 Hour", true),
-			new Option("2 Hours", false),
-			new Option("3 Hours", false),
-			new Option("4 Hours", false),
-		]
+		// for the reminder times, e.g. 30 Minutes, 1 Hour, 2 Hours, etc.
+		this.timesService.reminderTimes.subscribe(times => {
+			this.timeOptions = times.map(time => new Option(time.name, time.checkedByDefault)) // used in html to get all the options
+			this.formData.patchValue( // used get the pre-selected options
+				{
+					options: this.timeOptions.filter(option => option.isChecked).map(
+						option => option.name
+					)
+				}
+			)
+		})
 
 		this.formData = new FormGroup(
 			{
@@ -70,14 +73,12 @@ export class NewDeadlineComponent implements OnInit {
 					}
 				),
 				options: new FormControl(
-					this.timeOptions.filter(option => option.isChecked).map(
-						option => option.name
-					),
+					[], // the pre-selected options will be updated when the timeOptions are loaded above
 					{
 						validators: [
 							Validators.required,
 							this.optionsValidator() // make sure at least one option is selected
-						]
+						],
 					},
 				),
 				otherPeopleSee: new FormControl(
@@ -119,8 +120,8 @@ export class NewDeadlineComponent implements OnInit {
 
 	optionsValidator(): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {
+			console.log(control.value)
 			return control.value.length > 0 ? null : {optionsNotSelected: true};
 		};
 	}
-
 }
