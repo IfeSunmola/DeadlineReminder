@@ -10,9 +10,9 @@ import {
 } from "../../../AppConstants";
 import {MatchingPasswords} from "../../register/validator";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "../../../services/auth.service";
+import {AuthService} from "../../../services/http/auth.service";
 import {PasswordResetData} from "../../../models/password-reset-data";
-import {LoggerService} from "../../../services/logger.service";
+import {LoggerService} from "../../../services/http/logger.service";
 import {LogBody} from "../../../models/log-body";
 import {SnackbarService} from "../../../services/snackbar.service";
 

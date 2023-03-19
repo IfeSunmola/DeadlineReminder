@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {API_URL, AUTH_TOKEN} from "../AppConstants";
-import {RegisterUserResponse} from "../models/register-user-response";
-import {VerifyCodeData} from "../models/verify-code-data";
-import {LoginData} from "../models/login-data";
-import {RegisterData} from "../models/register-data";
-import {GenerateTokenResponse} from "../models/generate-token-response";
-import {PasswordResetData} from "../models/password-reset-data";
+import {API_URL, AUTH_TOKEN} from "../../AppConstants";
+import {RegisterUserResponse} from "../../models/register-user-response";
+import {VerifyCodeData} from "../../models/verify-code-data";
+import {LoginData} from "../../models/login-data";
+import {RegisterData} from "../../models/register-data";
+import {GenerateTokenResponse} from "../../models/generate-token-response";
+import {PasswordResetData} from "../../models/password-reset-data";
 
 @Injectable({
 	providedIn: 'root'

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {AccountInfo} from "../../models/account-info";
-import {AccountService} from "../../services/account.service";
-import {AuthService} from "../../services/auth.service";
+import {AccountService} from "../../services/http/account.service";
+import {AuthService} from "../../services/http/auth.service";
 import {Router} from "@angular/router";
 import {LogBody} from "../../models/log-body";
-import {LoggerService} from "../../services/logger.service";
+import {LoggerService} from "../../services/http/logger.service";
 import {SnackbarService} from "../../services/snackbar.service";
 import {NORMAL_LOGOUT_MSG} from "../../AppConstants";
 import {MatDialog} from "@angular/material/dialog";

@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {EmailValidator, MatchingPasswords} from "./validator";
 import {Router} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../services/http/auth.service";
 import {INVALID_REQUEST_MSG, MAX_NICKNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH} from "../../AppConstants";
-import {LoggerService} from "../../services/logger.service";
+import {LoggerService} from "../../services/http/logger.service";
 import {LogBody} from "../../models/log-body";
 import {SnackbarService} from "../../services/snackbar.service";
 

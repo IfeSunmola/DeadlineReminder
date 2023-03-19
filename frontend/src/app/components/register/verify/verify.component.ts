@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../../../services/auth.service";
+import {AuthService} from "../../../services/http/auth.service";
 import {Router} from "@angular/router";
 import {VerifyCodeData} from "../../../models/verify-code-data";
 import {
@@ -12,7 +12,7 @@ import {
 	VERIFY_CODE_LENGTH,
 	VERIFY_CODE_SENT_SUCCESS,
 } from "../../../AppConstants";
-import {LoggerService} from "../../../services/logger.service";
+import {LoggerService} from "../../../services/http/logger.service";
 import {LogBody} from "../../../models/log-body";
 import {SnackbarService} from "../../../services/snackbar.service";
 

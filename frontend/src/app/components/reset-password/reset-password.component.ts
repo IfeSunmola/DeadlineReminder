@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../services/http/auth.service";
 import {SnackbarService} from "../../services/snackbar.service";
 import {PASSWORD_RESET_MSG} from "../../AppConstants";
 

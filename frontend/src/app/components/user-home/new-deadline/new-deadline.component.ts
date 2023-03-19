@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Option} from "../Option";
 import {MatDialogRef} from "@angular/material/dialog";
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
-import {TimesService} from "../../../services/times.service";
+import {TimesService} from "../../../services/http/times.service";
 import {Observable} from "rxjs";
 
 @Component({
