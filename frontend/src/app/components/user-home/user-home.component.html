@@ -1,17 +1,12 @@
 <app-new-deadline #newDeadlineComponentRef></app-new-deadline> <!--Is shown when the user clicks add new deadline-->
 
-<div class="container-fluid">
-	<div class="row mt-3 text-center">
-		<div class="col">
-			<div ngbDropdown placement="bottom" class="d-inline-block">
-				<button type="button" class="text-bg-dark btn btn-outline-dark" id="userOptionsDropdown" ngbDropdownToggle>
-					Hi, {{nickname}}
-				</button>
-				<div ngbDropdownMenu aria-labelledby="user options dropdown">
-					<button ngbDropdownItem (click)="openNewDeadlineModal(newDeadlineComponentRef)">Create new deadline</button>
-					<button ngbDropdownItem (click)="logoutClicked()">Logout</button>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="text-center hi-user">
+	<button color="accent" mat-raised-button [matMenuTriggerFor]="menu">
+		<mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+		Hi, {{nickname}}
+	</button>
+	<mat-menu #menu="matMenu">
+		<button mat-menu-item (click)="openNewDeadlineModal(newDeadlineComponentRef)">Create new deadline</button>
+		<button mat-menu-item (click)="logoutClicked()">Logout</button>
+	</mat-menu>
 </div>

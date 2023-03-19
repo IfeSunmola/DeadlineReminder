@@ -29,6 +29,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatMenuModule} from "@angular/material/menu";
 
 @NgModule({
 	declarations: [
@@ -61,7 +62,8 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 		MatInputModule,
 		MatSlideToggleModule,
 		MatProgressSpinnerModule,
-		MatProgressBarModule
+		MatProgressBarModule,
+		MatMenuModule
 	],
 	providers: [
 		{
