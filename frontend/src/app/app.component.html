@@ -1,4 +1,4 @@
-<ng-container *ngIf="hasValidScreen">
+<ng-container *ngIf="smallScreen">
 	<div>
 		<app-navbar></app-navbar>
 		<router-outlet></router-outlet>
@@ -7,7 +7,7 @@
 </ng-container>
 
 
-<ng-container *ngIf="!hasValidScreen">
+<ng-container *ngIf="!smallScreen">
 	<div id="desktop-frame">
 		<app-navbar></app-navbar>
 		<router-outlet></router-outlet>
