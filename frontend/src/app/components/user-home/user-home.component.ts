@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {NewDeadlineComponent} from "./new-deadline/new-deadline.component";
 import {AccountInfo} from "../../models/account-info";
 import {AccountService} from "../../services/account.service";
 import {AuthService} from "../../services/auth.service";
@@ -8,6 +7,8 @@ import {LogBody} from "../../models/log-body";
 import {LoggerService} from "../../services/logger.service";
 import {SnackbarService} from "../../services/snackbar.service";
 import {NORMAL_LOGOUT_MSG} from "../../AppConstants";
+import {MatDialog} from "@angular/material/dialog";
+import {NewDeadlineComponent} from "./new-deadline/new-deadline.component";
 
 @Component({
 	selector: 'app-user-home',
@@ -18,12 +19,8 @@ export class UserHomeComponent implements OnInit {
 	private readonly FILE_NAME = "user-home.component.ts"
 	userInfo: AccountInfo | undefined;
 
-	constructor(private accountService: AccountService, private authService: AuthService, private router: Router, private logger: LoggerService,
-				private snackbarService: SnackbarService) {
-	}
-
-	openNewDeadlineModal(content: NewDeadlineComponent) {
-		content.openModal();
+	constructor(private accountService: AccountService, private authService: AuthService, private router: Router,
+				private logger: LoggerService, private snackbarService: SnackbarService, private dialog: MatDialog) {
 	}
 
 	ngOnInit(): void {
@@ -52,5 +49,18 @@ export class UserHomeComponent implements OnInit {
 		this.authService.logout();
 		this.router.navigateByUrl(`/login`).then();
 		this.snackbarService.new(NORMAL_LOGOUT_MSG, "OK")
+	}
+
+	openNewDeadline() {
+		const dialogRef = this.dialog.open(
+			NewDeadlineComponent, {
+				width: '25rem',
+				autoFocus: false,
+			}
+		);
+
+		dialogRef.afterClosed().subscribe(result => {
+			console.log(`Dialog result: ${JSON.stringify(result)}`);
+		});
 	}
 }

@@ -18,9 +18,9 @@ import {SpinnerComponent} from './components/loading/spinner.component';
 import {LoadingInterceptor} from "./interceptors/loading.interceptor";
 import {ResetPasswordComponent} from './components/reset-password/reset-password.component';
 import {ConfirmResetComponent} from './components/reset-password/confirm-reset/confirm-reset.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { WelcomeMsgComponent } from './components/welcome-msg/welcome-msg.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {PageNotFoundComponent} from './components/page-not-found/page-not-found.component';
+import {WelcomeMsgComponent} from './components/welcome-msg/welcome-msg.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
@@ -30,6 +30,13 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatMenuModule} from "@angular/material/menu";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatSelectModule} from "@angular/material/select";
+import {MatChipsModule} from "@angular/material/chips";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+
 
 @NgModule({
 	declarations: [
@@ -44,8 +51,8 @@ import {MatMenuModule} from "@angular/material/menu";
 		SpinnerComponent,
 		ResetPasswordComponent,
 		ConfirmResetComponent,
-  PageNotFoundComponent,
-  WelcomeMsgComponent,
+		PageNotFoundComponent,
+		WelcomeMsgComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -63,7 +70,13 @@ import {MatMenuModule} from "@angular/material/menu";
 		MatSlideToggleModule,
 		MatProgressSpinnerModule,
 		MatProgressBarModule,
-		MatMenuModule
+		MatMenuModule,
+		MatDialogModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		MatSelectModule,
+		MatChipsModule,
+		MatCheckboxModule
 	],
 	providers: [
 		{

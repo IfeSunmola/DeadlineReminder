@@ -1,76 +1,52 @@
-<ng-template #modalRef let-modal>
-	<div class="bg-body">
-		<div class="modal-header">
-			<div class="d-flex justify-content-center w-100">
-				<h4 class="modal-title text-center " id="modal-basic-title">Add New Deadline</h4>
-			</div>
-
-			<button type="button" class="btn-close btn-close-light" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+<h1 class="text-center" mat-dialog-title>Add New Deadline</h1>
+<div mat-dialog-content>
+	<form [formGroup]="formData" method="post">
+		<div class="title-container">
+			<mat-form-field hideRequiredMarker=true class="width-100" appearance="fill">
+				<mat-label>Title</mat-label>
+				<input formControlName="title" matInput #input maxlength="25" placeholder="Ex. Research essay">
+				<mat-hint align="end">{{input.value.length}}/25</mat-hint>
+				<mat-error *ngIf="title?.hasError('maxlength')">You're being naughty</mat-error>
+				<mat-error *ngIf="title?.hasError('minlength')">Keep typing...</mat-error>
+				<mat-error *ngIf="title?.hasError('required')">Title is required</mat-error>
+			</mat-form-field>
 		</div>
 
-		<div class="modal-body">
-			<form method="post" (ngSubmit)="onSubmit(modal, newDeadlineForm)" #newDeadlineForm id="newDeadlineForm">
-				<!--Start Title-->
-				<div class="mb-3 row">
-					<label for="deadlineTitle" class="col-sm-3 col-form-label">Title</label>
-					<div class="col-sm-9">
-						<input [(ngModel)]="title" name="title" ngbAutoFocus type="text" class="form-control" id="deadlineTitle"
-							   placeholder="Research Essay">
-					</div>
-				</div>
-				<!--End Title-->
-
-				<!--Start Date-->
-				<div class="mb-3 row">
-					<label class="col-sm-3 col-form-label">Due Date</label>
-					<div class="col-sm-9">
-						<input (keydown)="d.open()" [(ngModel)]="dueDate" name="datePicker" autocomplete="off" ngbDatepicker #d="ngbDatepicker"
-							   (click)="d.toggle()"
-							   class="form-control"
-							   [minDate]="minDate" placeholder="Due On..."/>
-					</div>
-				</div>
-				<!--End Date-->
-
-				<!--Start Time-->
-				<div class="mb-3 row time-picker">
-					<label class="col-sm-3 col-form-label">Time</label>
-					<div class="col-sm-9">
-						<ngb-timepicker [(ngModel)]="dueTime" name="timePicker" [meridian]="true"
-										[spinners]="false"></ngb-timepicker>
-					</div>
-				</div>
-				<!--End Time-->
-
-				<!--Start How early ...-->
-				<div class="mb-3 row text-center">
-					<div class="col">
-						How early do you want to be reminded?
-					</div>
-				</div>
-				<!--End How early ...-->
-
-				<!--Start showing checkboxes-->
-				<div class="mb-3 row gy-2">
-					<div class="col-6 col-sm-4" *ngFor="let option of options">
-						<div class="row">
-							<div class="col-1">
-								<input [checked]="option.isChecked" class="form-check-input bg-dark" type="checkbox" id="{{option.name}}"
-									   value="{{option.name}}">
-							</div>
-							<div class="col">
-								<label class="form-check-label" for="{{option.name}}">{{option.name}}</label>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--End showing checkboxes-->
-			</form>
+		<div class="due-date-container">
+			<mat-form-field hideRequiredMarker=true appearance="fill" class="width-100">
+				<mat-label>Due Date</mat-label>
+				<input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="dp" formControlName="dueDate">
+				<mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+				<mat-datepicker #dp color="accent" disabled="false"></mat-datepicker>
+				<mat-error *ngIf="dueDate?.hasError('required')">Valid date is required</mat-error>
+			</mat-form-field>
 		</div>
 
-		<div class="modal-footer d-flex justify-content-evenly">
-			<button type="submit" form="newDeadlineForm" class="btn btn-primary btn-lg">Save</button>
-			<button type="button" class="btn btn-outline-light btn-lg" (click)="modal.close('Cancel Button')">Cancel</button>
+		<div class="due-time-container">
+			<mat-form-field hideRequiredMarker=true appearance="fill" class="width-100">
+				<mat-label>Due Time</mat-label>
+				<mat-select formControlName="dueTime">
+					<mat-option>--</mat-option>
+					<mat-option *ngFor="let time of times" [value]="time">{{time}}</mat-option>
+				</mat-select>
+				<mat-error *ngIf="dueTime?.hasError('required')">Time is required</mat-error>
+			</mat-form-field>
 		</div>
-	</div>
-</ng-template>
+
+		<div class="options-container">
+			<h3 class="remind-text">How early do you want to be reminded?</h3>
+			<mat-error class="text-center" *ngIf="options?.hasError('optionsNotSelected')">Make a selection</mat-error>
+			<mat-chip-listbox formControlName="options" multiple aria-label="Time selection">
+				<mat-chip-option *ngFor="let option of timeOptions" [selected]="option.isChecked">{{option.name}}</mat-chip-option>
+			</mat-chip-listbox>
+		</div>
+
+		<div class="other-people-container text-center">
+			<mat-checkbox formControlName="otherPeopleSee" color="primary">Let other people see this deadline</mat-checkbox>
+		</div>
+	</form>
+</div>
+<div mat-dialog-actions class="dialog-actions">
+	<button mat-button (click)="cancelClicked()">Cancel</button>
+	<button mat-raised-button color="accent" (click)="saveClicked()">Save</button>
+</div>
