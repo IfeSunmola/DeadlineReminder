@@ -14,7 +14,10 @@ run_backend(){
 }
 
 run_frontend(){
-      read -rp "FRONTEND - Did you change the api link in AppConstants.ts?"
+      message="
+      FRONTEND - Did you change the api link in AppConstants.ts?
+      Did you update the annoying status message?"
+      read -rp "$message"
       echo "Building frontend img..."
       (cd frontend || exit; docker build --no-cache -t ifesunmola.azurecr.io/frontend .)
       echo "Frontend img built"
