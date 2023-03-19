@@ -14,6 +14,7 @@ import java.util.Optional;
  */
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Long> {
+	@Query("select a from Account a where upper(a.email) = upper(?1)")
 	Optional<Account> findByEmail(String email);
 
 	@Query("select (count(a) > 0) from Account a where upper(a.email) = upper(?1)")
