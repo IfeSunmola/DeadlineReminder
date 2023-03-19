@@ -7,7 +7,7 @@ import {LoadingService} from "../../services/loading.service";
 	styleUrls: ['./loading.component.scss']
 })
 export class LoadingComponent implements OnInit {
-	showLoader = false;
+	showSpinner = false;
 
 	constructor(private loadingService: LoadingService, private cdRef: ChangeDetectorRef) {
 	}
@@ -18,7 +18,7 @@ export class LoadingComponent implements OnInit {
 
 	private init() {
 		this.loadingService.loadingObserver.subscribe((status) => {
-			this.showLoader = status === 'start'
+			this.showSpinner = status === 'start'
 			this.cdRef.detectChanges()
 		})
 	}

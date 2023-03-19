@@ -1,9 +1,7 @@
-<ng-container *ngIf="showLoader">
+<ng-container *ngIf="showSpinner">
 	<div class="overlay">
-		<div class="lds-facebook center-spinner overlay">
-			<div></div>
-			<div></div>
-			<div></div>
+		<div class="center-spinner">
+			<mat-spinner color="accent"></mat-spinner>
 		</div>
 	</div>
 </ng-container>
