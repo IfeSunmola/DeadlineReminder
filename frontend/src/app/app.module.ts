@@ -34,6 +34,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatSelectModule} from "@angular/material/select";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { SnackbarComponent } from './components/snackbar/snackbar.component';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 		ResetPasswordComponent,
 		ConfirmResetComponent,
 		PageNotFoundComponent,
+  SnackbarComponent,
 	],
 	imports: [
 		BrowserModule,

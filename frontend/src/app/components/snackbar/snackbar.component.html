@@ -1,0 +1,11 @@
+<div id="container">
+	<p id="title" matSnackBarLabel>{{title}}</p>
+
+	<p id="body" *ngFor="let message of messages" matSnackBarLabel [innerHTML]="message"></p>
+
+	<div id="action-btn-container" matSnackBarActions>
+		<button matSnackBarAction mat-raised-button color="accent" (click)="actionClicked()">
+			{{action}}
+		</button>
+	</div>
+</div>
