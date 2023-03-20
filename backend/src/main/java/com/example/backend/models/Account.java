@@ -26,6 +26,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class Account {
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name = "account_id")
 	private Long accountId;
 
 	protected Account() {
@@ -38,7 +39,7 @@ public class Account {
 	private String email;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // don't ever send password to client
-	@NonNull
+	@NonNull @ToString.Exclude
 	private String password;
 
 	@NonNull
@@ -66,6 +67,4 @@ public class Account {
 	public int hashCode() {
 		return getClass().hashCode();
 	}
-
-
 }

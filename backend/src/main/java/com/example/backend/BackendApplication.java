@@ -1,9 +1,9 @@
 package com.example.backend;
 
-import com.example.backend.models.DueTime;
-import com.example.backend.models.ReminderTime;
-import com.example.backend.repos.DueTimeRepo;
-import com.example.backend.repos.ReminderTimeRepo;
+import com.example.backend.models.constants.DueTime;
+import com.example.backend.models.constants.ReminderTime;
+import com.example.backend.repos.constants.DueTimeRepo;
+import com.example.backend.repos.constants.ReminderTimeRepo;
 import com.example.backend.security.AppProperties;
 import com.example.backend.services.AccountService;
 import com.example.backend.services.AuthService;
@@ -45,11 +45,11 @@ public class BackendApplication implements CommandLineRunner {
 
 		// add the reminder times
 		if (reminderTimeRepo.findAll().isEmpty()) {
-			reminderTimeRepo.save(new ReminderTime("30 minutes", false));
-			reminderTimeRepo.save(new ReminderTime("1 hour", true));
-			reminderTimeRepo.save(new ReminderTime("2 hours", false));
-			reminderTimeRepo.save(new ReminderTime("3 hours", false));
-			reminderTimeRepo.save(new ReminderTime("4 hours", true));
+			reminderTimeRepo.save(new ReminderTime("30 minutes", false, 30));
+			reminderTimeRepo.save(new ReminderTime("1 hour", true, 60));
+			reminderTimeRepo.save(new ReminderTime("2 hours", false, 120));
+			reminderTimeRepo.save(new ReminderTime("3 hours", false, 180));
+			reminderTimeRepo.save(new ReminderTime("4 hours", true, 240));
 		}
 
 		// add the due times
