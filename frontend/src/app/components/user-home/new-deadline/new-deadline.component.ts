@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {Option} from "../Option";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 import {TimesService} from "../../../services/http/times.service";
 import {Observable} from "rxjs";
+import {DeadlineService} from "../../../services/http/deadline.service";
+import {NewDeadline} from "../../../models/new-deadline";
 
 @Component({
 	selector: 'app-new-deadline',
@@ -18,7 +20,9 @@ export class NewDeadlineComponent implements OnInit {
 	timeOptions: Option[] = [] // e.g. 30 Minutes, 1 Hour, 2 Hours, etc.
 	times: Observable<{ name: string }[]> | undefined;
 
-	constructor(private dialogRef: MatDialogRef<NewDeadlineComponent>, private timesService: TimesService) {
+	constructor(private dialogRef: MatDialogRef<NewDeadlineComponent>, private timesService: TimesService,
+				private deadlineService: DeadlineService,
+				@Inject(MAT_DIALOG_DATA) private userEmail: string) {
 	}
 
 	ngOnInit(): void {
@@ -47,7 +51,7 @@ export class NewDeadlineComponent implements OnInit {
 		this.formData = new FormGroup(
 			{
 				title: new FormControl(
-					"",
+					"This is a test",
 					{
 						validators: [
 							Validators.required,
@@ -57,7 +61,7 @@ export class NewDeadlineComponent implements OnInit {
 					}
 				),
 				dueDate: new FormControl(
-					"",
+					this.minDate,
 					{
 						validators: [
 							Validators.required
@@ -65,7 +69,7 @@ export class NewDeadlineComponent implements OnInit {
 					}
 				),
 				dueTime: new FormControl(
-					"",
+					"7:30 AM",
 					{
 						validators: [
 							Validators.required
@@ -104,6 +108,10 @@ export class NewDeadlineComponent implements OnInit {
 		return this.formData.get('options');
 	}
 
+	get otherPeopleSee() {
+		return this.formData.get('otherPeopleSee');
+	}
+
 	cancelClicked() {
 		this.dialogRef.close()
 		console.log("Cancel clicked")
@@ -112,15 +120,27 @@ export class NewDeadlineComponent implements OnInit {
 	saveClicked() {
 		if (this.formData.invalid) {
 			this.formData.markAllAsTouched()
+			console.log("Failed save clicked")
 			return;
 		}
-		this.dialogRef.close(this.formData.value)
 		console.log("Save clicked")
+		const newDeadline = new NewDeadline(
+			this.title?.value, this.dueDate?.value, this.dueTime?.value,
+			this.otherPeopleSee?.value, this.userEmail, this.options?.value
+		)
+
+		this.deadlineService.saveDeadline(newDeadline).subscribe(
+			{
+				next: (response) => {
+					console.log(response)
+				}
+			}
+		)
+		this.dialogRef.close(this.formData.value)
 	}
 
 	optionsValidator(): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {
-			console.log(control.value)
 			return control.value.length > 0 ? null : {optionsNotSelected: true};
 		};
 	}
