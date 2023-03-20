@@ -83,6 +83,7 @@ export class RegisterComponent implements OnInit {
 
 	formSubmitted() {
 		if (this.registerForm.invalid) {
+			this.registerForm.markAllAsTouched();
 			this.snackbarService.new("Good people fill out forms correctly", "OK")
 			return;
 		}
@@ -125,27 +126,5 @@ export class RegisterComponent implements OnInit {
 
 	get acceptedTerms() {
 		return this.registerForm.get('acceptedTerms');
-	}
-
-	togglePasswordVisibility() {
-		if (this.passwordImg === "assets/hide.png") {
-			this.passwordImg = "assets/show.png";
-			this.passwordVisible = true
-		}
-		else {
-			this.passwordImg = "assets/hide.png";
-			this.passwordVisible = false
-		}
-	}
-
-	toggleConfirmPasswordVisibility() {
-		if (this.confirmPasswordImg === "assets/hide.png") {
-			this.confirmPasswordImg = "assets/show.png";
-			this.confirmPasswordVisible = true
-		}
-		else {
-			this.confirmPasswordImg = "assets/hide.png";
-			this.confirmPasswordVisible = false
-		}
 	}
 }

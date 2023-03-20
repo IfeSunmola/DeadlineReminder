@@ -25,7 +25,6 @@ export class ConfirmResetComponent implements OnInit {
 	private readonly FILE_NAME = "confirm-reset.component.ts"
 	confirmResetForm!: FormGroup;
 	private confirmToken = "";
-	hidePassword = true;
 
 	constructor(private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService,
 				private logger: LoggerService, private snackbarService: SnackbarService) {
@@ -34,6 +33,7 @@ export class ConfirmResetComponent implements OnInit {
 
 	formSubmitted() {
 		if (this.confirmResetForm.invalid) {
+			this.confirmResetForm.markAllAsTouched()
 			this.snackbarService.new("Hmm, I wonder if there's an error message showing", "")
 			return;
 		}

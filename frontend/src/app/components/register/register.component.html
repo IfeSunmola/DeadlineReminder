@@ -26,32 +26,14 @@
 
 			<!--Start Password-->
 			<div class="password-container">
-				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
-					<mat-label>Password</mat-label>
-					<input matInput [type]="hidePass ? 'password' : 'text'" [formControlName]="'password'">
-					<button type="button" mat-icon-button matSuffix (click)="hidePass = !hidePass" [attr.aria-label]="'Hide password'"
-							[attr.aria-pressed]="hidePass">
-						<mat-icon>{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
-					</button>
-					<mat-error *ngIf="password?.errors?.['required']">Password is required</mat-error>
-					<mat-error *ngIf="password?.errors?.['minlength']">Keep Typing...</mat-error>
-					<mat-error *ngIf="password?.errors?.['maxlength']">Why's your password that long?</mat-error>
-				</mat-form-field>
+				<app-password-field label="Password" controlName="password" [fieldErrors]="password"></app-password-field>
 			</div>
 			<!--End Password-->
 
 			<!--Start Confirm Password-->
 			<div class="confirm-password-container">
-				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
-					<mat-label>Confirm Password</mat-label>
-					<input matInput [type]="hideConfirmPass ? 'password' : 'text'" formControlName="confirmPassword">
-					<button type="button" mat-icon-button matSuffix (click)="hideConfirmPass = !hideConfirmPass"
-							[attr.aria-label]="'Hide confirm password'"
-							[attr.aria-pressed]="hideConfirmPass">
-						<mat-icon>{{hideConfirmPass ? 'visibility_off' : 'visibility'}}</mat-icon>
-					</button>
-					<mat-error *ngIf="registerForm?.hasError('passwordsNotMatching')">Passwords must match</mat-error>
-				</mat-form-field>
+				<app-password-field [isConfirmPassword]="true" [formGroup]="registerForm" label="Confirm Password" controlName="confirmPassword"
+									[fieldErrors]="confirmPassword"></app-password-field>
 			</div>
 			<!--End Confirm Password-->
 

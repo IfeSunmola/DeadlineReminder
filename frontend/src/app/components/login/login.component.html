@@ -12,15 +12,7 @@
 			</div>
 
 			<div class="password-container">
-				<mat-form-field class="width-100" hideRequiredMarker=true appearance="fill">
-					<mat-label>Password</mat-label>
-					<input matInput [type]="hide ? 'password' : 'text'" [formControlName]="'password'">
-					<button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-							[attr.aria-pressed]="hide">
-						<mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-					</button>
-					<mat-error *ngIf="password?.errors?.['required']">Password is required</mat-error>
-				</mat-form-field>
+				<app-password-field label="Password" controlName="password" [fieldErrors]="password"></app-password-field>
 			</div>
 
 			<div class="remember-me-container">

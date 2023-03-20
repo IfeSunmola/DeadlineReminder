@@ -37,6 +37,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import {MatCardModule} from "@angular/material/card";
 import { DeadlineItemComponent } from './components/deadline-item/deadline-item.component';
+import { PasswordFieldComponent } from './components/password-field/password-field.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { DeadlineItemComponent } from './components/deadline-item/deadline-item.
 		PageNotFoundComponent,
   SnackbarComponent,
   DeadlineItemComponent,
+  PasswordFieldComponent,
 	],
 	imports: [
 		BrowserModule,
