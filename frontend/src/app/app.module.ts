@@ -35,6 +35,8 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { SnackbarComponent } from './components/snackbar/snackbar.component';
+import {MatCardModule} from "@angular/material/card";
+import { DeadlineItemComponent } from './components/deadline-item/deadline-item.component';
 
 
 @NgModule({
@@ -52,6 +54,7 @@ import { SnackbarComponent } from './components/snackbar/snackbar.component';
 		ConfirmResetComponent,
 		PageNotFoundComponent,
   SnackbarComponent,
+  DeadlineItemComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -74,7 +77,8 @@ import { SnackbarComponent } from './components/snackbar/snackbar.component';
 		MatNativeDateModule,
 		MatSelectModule,
 		MatChipsModule,
-		MatCheckboxModule
+		MatCheckboxModule,
+		MatCardModule
 	],
 	providers: [
 		{

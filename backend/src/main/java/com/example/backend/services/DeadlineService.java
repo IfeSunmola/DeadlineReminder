@@ -6,10 +6,12 @@ import com.example.backend.repos.DeadlineRepo;
 import com.example.backend.transfer_objects.NewDeadlineData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.time.ZoneOffset.UTC;
 
@@ -53,5 +55,19 @@ public class DeadlineService {
 		hour = ampm.contains("PM") ? hour + 12 : hour;
 
 		return localDateTime.withHour(hour).withMinute(minute).toInstant(UTC);
+	}
+
+	public List<Deadline> findByEmail(String email) {
+		email = email.toLowerCase();
+		var emailFromContext = SecurityContextHolder.getContext().getAuthentication().getName();
+		if (!email.equals(emailFromContext)) {
+			log.warn("Email passed is not the same as email from context");
+			return null;
+		}
+		Account owner = accountService.findByEmail(email);
+		if (owner == null) { // shouldn't happen.
+			return null;
+		}
+		return deadlineRepo.findDeadlineByOwner(owner);
 	}
 }

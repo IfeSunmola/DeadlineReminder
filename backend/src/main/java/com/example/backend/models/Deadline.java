@@ -1,5 +1,6 @@
 package com.example.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,9 +24,11 @@ public class Deadline {
 	@NonNull private Instant dueDateTime;
 	@NonNull private boolean otherPeopleSee;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "account_id", referencedColumnName = "account_id")
-	@NonNull private Account owner;
+	@NonNull @ToString.Exclude
+	@JsonIgnore
+	private Account owner;
 
 	private boolean isCompleted;
 
