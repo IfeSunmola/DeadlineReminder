@@ -56,6 +56,7 @@ export class UserHomeComponent implements OnInit {
 			NewDeadlineComponent, {
 				width: '25rem',
 				autoFocus: false,
+				data: this.userInfo?.email
 			}
 		);
 
