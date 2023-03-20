@@ -27,7 +27,7 @@
 				<mat-label>Due Time</mat-label>
 				<mat-select formControlName="dueTime">
 					<mat-option>--</mat-option>
-					<mat-option *ngFor="let time of times | async" [value]="time.name">{{time.name}}</mat-option>
+					<mat-option *ngFor="let time of times | async" [value]="time">{{time}}</mat-option>
 				</mat-select>
 				<mat-error *ngIf="dueTime?.hasError('required')">Time is required</mat-error>
 			</mat-form-field>
