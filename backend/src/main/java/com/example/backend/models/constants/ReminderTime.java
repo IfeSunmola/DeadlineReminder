@@ -1,4 +1,4 @@
-package com.example.backend.models;
+package com.example.backend.models.constants;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,9 +22,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReminderTime {
 	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long dueTimeId;
+	private Long reminderTimeId;
 
 	@NonNull private String name;
 
 	@NonNull private boolean checkedByDefault;
+
+	@NonNull private long timeInMinutes;
 }

@@ -1,9 +1,9 @@
 package com.example.backend.controllers;
 
-import com.example.backend.models.DueTime;
-import com.example.backend.models.ReminderTime;
-import com.example.backend.repos.DueTimeRepo;
-import com.example.backend.repos.ReminderTimeRepo;
+import com.example.backend.models.constants.DueTime;
+import com.example.backend.models.constants.ReminderTime;
+import com.example.backend.repos.constants.DueTimeRepo;
+import com.example.backend.repos.constants.ReminderTimeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +31,7 @@ public class TimesController {
 	}
 
 	@GetMapping("/due-times")
-	public List<DueTime> getDueTimes() {
-		//return dueTimeRepo.findAll().stream().map(DueTime::getName).toList();
-		return dueTimeRepo.findAll();
+	public List<String> getDueTimes() {
+		return dueTimeRepo.findAll().stream().map(DueTime::getName).toList();
 	}
 }

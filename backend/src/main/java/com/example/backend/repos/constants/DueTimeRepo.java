@@ -1,6 +1,6 @@
-package com.example.backend.repos;
+package com.example.backend.repos.constants;
 
-import com.example.backend.models.ReminderTime;
+import com.example.backend.models.constants.DueTime;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  * @author Ife Sunmola
  */
 @Repository
-public interface ReminderTimeRepo extends JpaRepository<ReminderTime, Long> {
+public interface DueTimeRepo extends JpaRepository<DueTime, Long> {
 
 }
