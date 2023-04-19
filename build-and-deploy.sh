@@ -11,6 +11,9 @@ run_backend(){
       echo "Backend img built"
       echo "Pushing backend img..."
       docker push ifesunmola.azurecr.io/backend
+      echo "Pushed to docker... restarting app service"
+      az webapp restart --name api-deadline-reminder --resource-group rg-deadline-reminder
+      echo "Done"
 }
 
 run_frontend(){
@@ -23,6 +26,9 @@ run_frontend(){
       echo "Frontend img built"
       echo "Pushing frontend img..."
       docker push ifesunmola.azurecr.io/frontend
+      echo "Pushed to docker... restarting app service"
+      az webapp restart --name deadline-reminder --resource-group rg-deadline-reminder
+      echo "Done"
 }
 
 if [ "$arg" = "frontend" ]; then
