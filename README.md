@@ -1,5 +1,7 @@
 # Deadline Reminder
 
+#### Development was paused on April 19, 2023, because I found something else to obsess over (compiler theory).
+
 [Read March 1st update](#march-1st-update)
 
 [Read March 19th update](#march-19th-update)
