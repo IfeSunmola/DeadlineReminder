@@ -1,4 +1,4 @@
-import 'package:deadline_reminder/pages/widgets.dart';
+import 'package:deadline_reminder/commons.dart';
 import 'package:flutter/material.dart';
 
 /*https: //www.youtube.com/watch?v=R_XjwaSOFmg*/
@@ -34,28 +34,34 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              width: double.infinity,
-              height: 100,
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (int page) => setState(() => _currentPage = page),
-                itemCount: items.length,
-                itemBuilder: (BuildContext context, int index) => carouselView(index),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: double.infinity,
+                height: 100,
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (int page) => setState(() => _currentPage = page),
+                  itemCount: items.length,
+                  itemBuilder: (BuildContext context, int index) => carouselView(index),
+                ),
               ),
-            ),
-            verticalSpace(15),
-            ElevatedButton(onPressed: () => {}, child: const Text('Get Started')),
-          ],
+              verticalSpace(15),
+              ElevatedButton(
+                  onPressed: () => {
+                        Navigator.pushReplacementNamed(context, "/home"), // disable going back
+                      },
+                  child: const Text('Get Started')),
+            ],
+          ),
         ),
       ),
     );
