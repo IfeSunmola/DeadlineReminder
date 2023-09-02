@@ -2,6 +2,32 @@ import 'package:deadline_reminder/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/*
+* Change this to use a different, more free format
+* */
+enum RemindDates {
+  thirtyMinutes(value: "30 minutes", time: Duration(minutes: 30)),
+  oneHour(value: "1 Hour", time: Duration(hours: 1)),
+  threeHours(value: "3 Hours", time: Duration(hours: 3)),
+  sixHours(value: "6 Hours", time: Duration(hours: 6)),
+  nineHours(value: "9 Hours", time: Duration(hours: 9)),
+  twelveHours(value: "12 Hours", time: Duration(hours: 12)),
+  fifteenHours(value: "15 Hours", time: Duration(hours: 15)),
+  eighteenHours(value: "18 Hours", time: Duration(hours: 18)),
+  oneDay(value: "1 Day", time: Duration(days: 1)),
+  twoDays(value: "2 Days", time: Duration(days: 2)),
+  threeDays(value: "3 Days", time: Duration(days: 3)),
+  fiveDays(value: "5 Days", time: Duration(days: 5));
+
+  const RemindDates({
+    required this.value,
+    required this.time,
+  });
+
+  final String value;
+  final Duration time;
+}
+
 class NewDeadlinePage extends StatefulWidget {
   const NewDeadlinePage({super.key});
 
@@ -11,21 +37,26 @@ class NewDeadlinePage extends StatefulWidget {
 
 class _NewDeadlinePageState extends State<NewDeadlinePage> {
   final _formKey = GlobalKey<FormState>();
-  var _isValidForm = false;
   static final minDate = DateTime.fromMicrosecondsSinceEpoch(0);
   final _dateController = TextEditingController(text: "Select date/time ...");
   var _chosenDateTime = minDate;
+  var selectedRemindDates = <RemindDates>{};
 
   @override
   void initState() {
     super.initState();
-    _dateController.addListener((){
+    selectedRemindDates.addAll([
+      RemindDates.thirtyMinutes,
+      RemindDates.threeHours,
+      RemindDates.sixHours,
+      RemindDates.oneDay
+    ]);
+    _dateController.addListener(() {
       if (_chosenDateTime != minDate) {
         final date = DateFormat("MMM dd, yyyy").format(_chosenDateTime);
         final time = DateFormat("hh:mm a").format(_chosenDateTime);
         _dateController.text = "$date at $time";
-      }
-      else {
+      } else {
         _dateController.text = "Select date/time ...";
       }
     });
@@ -38,24 +69,25 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
   }
 
   void _saveBtnPressed() {
-    if (_formKey.currentState!.validate()) { // do valid form stuff here
-      setState(() {
-        _isValidForm = true;
-      });
-    } else {
-      setState(() {
-        _isValidForm = false;
-      });
+    if (_formKey.currentState!.validate() && _filterChipValidator()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Saving ..."),
+          duration: Duration(seconds: 1),
+        ),
+      );
     }
   }
 
   Future pickDateTime() async {
     final today = DateTime.now();
     Future<TimeOfDay?> pickTime() => showTimePicker(
-      context: context,
-      initialTime: _chosenDateTime == minDate ? TimeOfDay.fromDateTime(today) : TimeOfDay.fromDateTime(_chosenDateTime),
-      initialEntryMode: TimePickerEntryMode.dialOnly,
-    );
+          context: context,
+          initialTime: _chosenDateTime == minDate
+              ? TimeOfDay.fromDateTime(today)
+              : TimeOfDay.fromDateTime(_chosenDateTime),
+          initialEntryMode: TimePickerEntryMode.dialOnly,
+        );
 
     DateTime? date = await showDatePicker(
       context: context,
@@ -76,7 +108,6 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
     });
   }
 
-
   String? _validateTitle(String value) {
     if (value.length < 3) {
       return "Keep typing ... ";
@@ -95,6 +126,10 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
     return null;
   }
 
+  bool _filterChipValidator() {
+    return selectedRemindDates.isNotEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -103,50 +138,85 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Add New Deadline"),
       ),
-      body: Form(
-        key: _formKey,
-        child: Center(
-          child: Column(
-            children: [
-              verticalSpace(20),
-              // Title field
-              SizedBox(
-                width: 300,
-                child: TextFormField(
-                  maxLength: 25,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    hintText: "Research Essay...",
-                    labelText: "Title",
-                    border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: Column(
+              children: [
+                verticalSpace(20),
+                // Title field
+                SizedBox(
+                  width: 350,
+                  child: TextFormField(
+                    maxLength: 25,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      hintText: "Research Essay...",
+                      labelText: "Title",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      return _validateTitle(value!);
+                    },
                   ),
-                  validator: (value) {
-                    return _validateTitle(value!);
-                  },
                 ),
-              ),
-              verticalSpace(20),
-              // Date time
-              SizedBox(
-                width: 300,
-                child: TextFormField(
-                  controller: _dateController,
-                  readOnly: true,
-                  onTap: () => {pickDateTime()},
-                  decoration: const InputDecoration(
-                    suffixIcon: Icon(Icons.calendar_today_rounded),
-                    labelText: "Due Date",
-                    border: OutlineInputBorder(),
+                verticalSpace(20),
+                // Date time
+                SizedBox(
+                  width: 350,
+                  child: TextFormField(
+                    controller: _dateController,
+                    readOnly: true,
+                    onTap: () => {pickDateTime()},
+                    decoration: const InputDecoration(
+                      suffixIcon: Icon(Icons.calendar_today_rounded),
+                      labelText: "Due Date",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (_) {
+                      return _validateDateTime();
+                    },
                   ),
-                  validator: (_) {
-                    return _validateDateTime();
-                  },
                 ),
-              ),
-              verticalSpace(20),
-              verticalSpace(20),
-              ElevatedButton(onPressed: () => {_saveBtnPressed()}, child: const Text("SAVE")),
-            ],
+                verticalSpace(20),
+                // How early do you want to be reminded?
+                const Text("How early do you want to be reminded?"),
+                verticalSpace(10),
+                SizedBox(
+                  width: 350,
+                  child: Wrap(
+                    spacing: 10,
+                    children: RemindDates.values.map((date) {
+                      return FilterChip(
+                        label: Text(date.value),
+                        selected: selectedRemindDates.contains(date),
+                        onSelected: (selected) {
+                          setState(() {
+                            if (selected) {
+                              selectedRemindDates.add(date);
+                            } else {
+                              selectedRemindDates.remove(date);
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+                verticalSpace(10),
+                Visibility(
+                  visible: !_filterChipValidator(),
+                  child: Text(
+                    "Select at least one",
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                ),
+                verticalSpace(20),
+                const SizedBox(height: 10.0),
+                FilledButton(onPressed: () => {_saveBtnPressed()}, child: const Text("SAVE")),
+              ],
+            ),
           ),
         ),
       ),
