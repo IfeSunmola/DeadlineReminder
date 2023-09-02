@@ -1,4 +1,5 @@
 import 'package:deadline_reminder/pages/home/homepage.dart';
+import 'package:deadline_reminder/pages/home/new_deadline_page.dart';
 import 'package:deadline_reminder/pages/landing.dart';
 import 'package:flutter/material.dart';
 
@@ -16,14 +17,11 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
-      // darkTheme: ThemeData(brightness: Brightness.dark),
-      // home: const LandingPage(
-      //   title: 'Deadline Reminder',
-      // ),
       initialRoute: "/",
       routes: {
         "/": (context) => const LandingPage(title: "Deadline Reminder"),
         "/home": (context) => const Homepage(),
+        "/new-deadline": (context) => const NewDeadlinePage(),
       },
     );
   }
