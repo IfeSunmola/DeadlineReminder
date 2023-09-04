@@ -37,22 +37,23 @@ class NewDeadlinePage extends StatefulWidget {
 
 class _NewDeadlinePageState extends State<NewDeadlinePage> {
   final _formKey = GlobalKey<FormState>();
-  static final minDate = DateTime.fromMicrosecondsSinceEpoch(0);
+  static final _minDate = DateTime.fromMicrosecondsSinceEpoch(0);
   final _dateController = TextEditingController(text: "Select date/time ...");
-  var _chosenDateTime = minDate;
-  var selectedRemindDates = <RemindDates>{};
+  final _titleController = TextEditingController();
+  var _chosenDateTime = _minDate;
+  final _selectedRemindDates = <RemindDates>{};
 
   @override
   void initState() {
     super.initState();
-    selectedRemindDates.addAll([
+    _selectedRemindDates.addAll([
       RemindDates.thirtyMinutes,
       RemindDates.threeHours,
       RemindDates.sixHours,
       RemindDates.oneDay
     ]);
     _dateController.addListener(() {
-      if (_chosenDateTime != minDate) {
+      if (_chosenDateTime != _minDate) {
         final date = DateFormat("MMM dd, yyyy").format(_chosenDateTime);
         final time = DateFormat("hh:mm a").format(_chosenDateTime);
         _dateController.text = "$date at $time";
@@ -83,7 +84,7 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
     final today = DateTime.now();
     Future<TimeOfDay?> pickTime() => showTimePicker(
           context: context,
-          initialTime: _chosenDateTime == minDate
+          initialTime: _chosenDateTime == _minDate
               ? TimeOfDay.fromDateTime(today)
               : TimeOfDay.fromDateTime(_chosenDateTime),
           initialEntryMode: TimePickerEntryMode.dialOnly,
@@ -91,7 +92,7 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
 
     DateTime? date = await showDatePicker(
       context: context,
-      initialDate: _chosenDateTime == minDate ? today : _chosenDateTime,
+      initialDate: _chosenDateTime == _minDate ? today : _chosenDateTime,
       firstDate: DateTime(today.year, today.month, today.day),
       lastDate: DateTime(2069),
       currentDate: today,
@@ -117,7 +118,7 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
   }
 
   String? _validateDateTime() {
-    if (_chosenDateTime == minDate || _dateController.text == "Select date/time ...") {
+    if (_chosenDateTime == _minDate || _dateController.text == "Select date/time ...") {
       return "Select a date/time";
     }
     if (_chosenDateTime.isBefore(DateTime.now().add(const Duration(hours: 6)))) {
@@ -127,7 +128,7 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
   }
 
   bool _filterChipValidator() {
-    return selectedRemindDates.isNotEmpty;
+    return _selectedRemindDates.isNotEmpty;
   }
 
   @override
@@ -149,13 +150,19 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
                 SizedBox(
                   width: 350,
                   child: TextFormField(
+                    controller: _titleController,
                     maxLength: 25,
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      hintText: "Research Essay...",
-                      labelText: "Title",
-                      border: OutlineInputBorder(),
-                    ),
+                    decoration: InputDecoration(
+                        hintText: "Research Essay...",
+                        labelText: "Title",
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            _titleController.clear();
+                          },
+                          icon: const Icon(Icons.clear),
+                        )),
                     validator: (value) {
                       return _validateTitle(value!);
                     },
@@ -190,13 +197,13 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
                     children: RemindDates.values.map((date) {
                       return FilterChip(
                         label: Text(date.value),
-                        selected: selectedRemindDates.contains(date),
+                        selected: _selectedRemindDates.contains(date),
                         onSelected: (selected) {
                           setState(() {
                             if (selected) {
-                              selectedRemindDates.add(date);
+                              _selectedRemindDates.add(date);
                             } else {
-                              selectedRemindDates.remove(date);
+                              _selectedRemindDates.remove(date);
                             }
                           });
                         },
