@@ -1,6 +1,11 @@
 import 'package:deadline_reminder/commons.dart';
+import 'package:deadline_reminder/database/deadlines_table.dart';
+import 'package:deadline_reminder/database/models/reminder.dart';
+import 'package:deadline_reminder/database/reminders_table.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../database/models/deadline.dart';
 
 /*
 * Change this to use a different, more free format
@@ -66,20 +71,36 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
   @override
   void dispose() {
     _dateController.dispose();
+    _titleController.dispose();
     super.dispose();
   }
 
-  void _saveBtnPressed() {
-    if (_formKey.currentState!.validate() && _filterChipValidator()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Saving ..."),
-          duration: Duration(seconds: 1),
-        ),
-      );
+  /// Async method to save deadline and remind dates to the database
+  /// Returns true if deadline and reminders were saved successfully
+  Future<bool> _saveDeadline() async {
+    var deadline = Deadline(_titleController.text, _chosenDateTime, DateTime.now(), DateTime.now());
+    var deadlineId = await DeadlinesTable.add(deadline);
+    if (deadlineId <= 0) {
+      // deadline could not be added, propagate back to caller
+      return false;
     }
+
+    var reminders = _selectedRemindDates
+        .map((date) => Reminder(deadlineId, _chosenDateTime.add(date.time)))
+        .toSet();
+    var totalAdded = 0;
+    for (var reminder in reminders) {
+      var reminderId = await RemindersTable.add(reminder);
+      if (reminderId > 0) {
+        totalAdded++;
+      }
+    }
+    // not all reminders where added if totalAdded != reminders.length
+    return totalAdded != reminders.length ? false : true;
   }
 
+  /// Async method that handles showing the date and time picker
+  /// The date/time is set IFF both date and time were selected
   Future pickDateTime() async {
     final today = DateTime.now();
     Future<TimeOfDay?> pickTime() => showTimePicker(
@@ -109,6 +130,7 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
     });
   }
 
+  /// To validate the deadline title. More code might be added as needed
   String? _validateTitle(String value) {
     if (value.length < 3) {
       return "Keep typing ... ";
@@ -117,6 +139,8 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
     }
   }
 
+  /// To validate the selected date and time.
+  /// six hours is the minimum time allowed
   String? _validateDateTime() {
     if (_chosenDateTime == _minDate || _dateController.text == "Select date/time ...") {
       return "Select a date/time";
@@ -127,8 +151,60 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
     return null;
   }
 
+  /// To validate the selected remind dates
   bool _filterChipValidator() {
     return _selectedRemindDates.isNotEmpty;
+  }
+
+  /// Returns a string with the deadline and reminders information
+  String getDeadlineInfo() {
+    var reminders = _selectedRemindDates.map((date) => _chosenDateTime.add(date.time)).toSet();
+    return "Title:\t\t\t\t\t\t\t\t${_titleController.text.trim()}\n"
+        "Due On:\t\t\t${DateFormat("MMM dd, yyyy, hh:mm a").format(_chosenDateTime)}\n"
+        "-\n"
+        "At the following dates/times, you will receive a reminder:\n"
+        "${reminders.map((date) => DateFormat("MMM dd, yyyy, hh:mm a").format(date)).join("\n")}";
+  }
+
+  /// Builds and shows a dialog with the deadline and reminders information
+  /// On save, the deadline and reminders are saved to the database
+  /// On cancel, the dialog is dismissed
+  Future<dynamic> buildShowDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Review deadline information'),
+        content: Text(getDeadlineInfo()),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, "Cancel"),
+            child: const Text("Cancel"),
+          ),
+          FilledButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: () async {
+              var deadlineSaved = await _saveDeadline();
+              if (!mounted) {
+                return; // https://dart.dev/tools/linter-rules/use_build_context_synchronously
+              }
+              if (deadlineSaved) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(createSnackBar("Reminder created successfully", 5));
+                Navigator.pop(context, "Save");
+              } else {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(createSnackBar("Could not create reminder, try again", 10));
+                Navigator.pop(context, "Cancel");
+              }
+              Navigator.pop(context); // back to deadlines tab
+            },
+            child: const Text("Save"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -221,7 +297,12 @@ class _NewDeadlinePageState extends State<NewDeadlinePage> {
                 ),
                 verticalSpace(20),
                 const SizedBox(height: 10.0),
-                FilledButton(onPressed: () => {_saveBtnPressed()}, child: const Text("SAVE")),
+                FilledButton(
+                    onPressed: () => {
+                          if (_formKey.currentState!.validate() && _filterChipValidator())
+                            {buildShowDialog(context)}
+                        },
+                    child: const Text("SAVE")),
               ],
             ),
           ),
