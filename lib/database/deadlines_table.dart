@@ -23,7 +23,10 @@ class DeadlinesTable {
     );
   }
 
-  static Future<int> deleteDeadline(int id) async {
+  static Future<int> delete(int? id) async {
+    if (id! <= -1) {
+      return -1;
+    }
     final db = await DbManager.db;
     return await db.delete(
       DbManager.deadlinesTable,
@@ -32,12 +35,12 @@ class DeadlinesTable {
     );
   }
 
-  static Future<List<Deadline>?> findAll() async {
+  static Future<List<Deadline>> findAll() async {
     final db = await DbManager.db;
-    final List<Map<String, dynamic>> deadlines = await db.query(DbManager.deadlinesTable);
-    if (deadlines.isEmpty) {
-      return null;
-    }
+    final List<Map<String, dynamic>> deadlines = await db.query(
+      DbManager.deadlinesTable,
+      orderBy: DbManager.dueDateTimeCol,
+    );
     return deadlines.map((deadline) => Deadline.fromJSON(deadline)).toList();
   }
 }

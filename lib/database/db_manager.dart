@@ -10,15 +10,15 @@ class DbManager {
 
   // deadlines table
   static const String deadlinesTable = "deadlines";
-  static const String _titleCol = "title";
-  static const String _dueDateTimeCol = "dueDateTime";
-  static const String _createdAtCol = "createdAt";
-  static const String _updatedAtCol = "updatedAt";
+  static const String titleCol = "title";
+  static const String dueDateTimeCol = "dueDateTime";
+  static const String createdAtCol = "createdAt";
+  static const String updatedAtCol = "updatedAt";
 
   // reminders table
   static const String remindersTable = "reminders";
-  static const String _deadlineIdCol = "deadlineId";
-  static const String _remindDateCol = "remindDate";
+  static const String deadlineIdCol = "deadlineId";
+  static const String remindDateCol = "remindDate";
 
   static Future<Database> get db async {
     return openDatabase(
@@ -28,19 +28,19 @@ class DbManager {
         await db.execute("""
           CREATE TABLE IF NOT EXISTS $deadlinesTable(
             $id INTEGER PRIMARY KEY,
-            $_titleCol TEXT NOT NULL,
-            $_dueDateTimeCol TEXT NOT NULL,
-            $_createdAtCol TEXT NOT NULL,
-            $_updatedAtCol TEXT NOT NULL
+            $titleCol TEXT NOT NULL,
+            $dueDateTimeCol TEXT NOT NULL,
+            $createdAtCol TEXT NOT NULL,
+            $updatedAtCol TEXT NOT NULL
           );
         """);
 
         await db.execute("""
           CREATE TABLE IF NOT EXISTS $remindersTable(
             $id INTEGER PRIMARY KEY,
-            $_deadlineIdCol INTEGER NOT NULL,
-            $_remindDateCol TEXT NOT NULL,
-            FOREIGN KEY ($_deadlineIdCol) REFERENCES $deadlinesTable($id)
+            $deadlineIdCol INTEGER NOT NULL,
+            $remindDateCol TEXT NOT NULL,
+            FOREIGN KEY ($deadlineIdCol) REFERENCES $deadlinesTable($id)
           )
         """);
       },

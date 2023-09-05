@@ -40,4 +40,19 @@ class RemindersTable {
     }
     return reminders.map((reminder) => Reminder.fromJSON(reminder)).toList();
   }
+
+  static Future <Reminder> findEarliest(int? deadlineId) async {
+    if (deadlineId == null || deadlineId <= 0) {
+      // TODO: Handle properly
+      throw Exception("Invalid deadlineId");
+    }
+    final db = await DbManager.db;
+    final reminder = await db.rawQuery("""
+      SELECT * FROM ${DbManager.remindersTable}
+      WHERE ${DbManager.deadlineIdCol} = $deadlineId
+      ORDER BY ${DbManager.remindDateCol}
+      LIMIT 1
+    """);
+    return Reminder.fromJSON(reminder.first);
+  }
 }
